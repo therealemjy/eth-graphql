@@ -1,4 +1,5 @@
 {
+  "name": "eth-graphql-repository",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -13,7 +14,6 @@
     "prettier": "^2.5.1",
     "turbo": "latest"
   },
-  "name": "turborepo-yarn",
   "packageManager": "yarn@1.22.19",
   "workspaces": [
     "example",
