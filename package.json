@@ -15,7 +15,7 @@
   "name": "turborepo-yarn",
   "packageManager": "yarn@1.22.19",
   "workspaces": [
-    "apps/*",
+    "example",
     "packages/*"
   ]
 }
