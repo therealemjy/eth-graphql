@@ -2,7 +2,7 @@ import { Contract, Provider } from 'ethcall';
 import { JsonRpcProvider } from 'ethers';
 import { GraphQLResolveInfo, Kind } from 'graphql';
 
-import createGraphQLSchema from './createGraphQLSchema';
+import generateGraphQlSchema from './generateGraphQlSchema';
 import BigIntScalar from './scalars/BigInt';
 import { Config, ContractCall, ContractConfig } from './types';
 
@@ -137,7 +137,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
   };
 
   return {
-    typeDefs: createGraphQLSchema(contracts),
+    typeDefs: generateGraphQlSchema(contracts),
     resolvers,
   };
 };

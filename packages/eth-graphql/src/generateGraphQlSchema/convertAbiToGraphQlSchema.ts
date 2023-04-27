@@ -35,7 +35,7 @@ const convertAbiToGraphQlSchema = (abi: ReadonlyArray<JsonFragment>) => {
 
       return [...acc, methodTypeDef];
     }, [])
-    .join('\n');
+    .join('\n  ');
 
   return schemaTypeDef;
 };

@@ -11,13 +11,6 @@ const createLink = (config: Config) => {
   // Load user config
   const contracts = loadUserConfig();
 
-  console.log(
-    createSchema({
-      config,
-      contracts,
-    }),
-  );
-
   return new ApolloLink(
     operation =>
       new Observable(observer => {

@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.12",
+    "eth-graphql": "*",
     "next": "latest",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "eth-graphql": "*"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/node": "^17.0.12",
