@@ -5,13 +5,9 @@ const BigIntScalar = new GraphQLScalarType({
   description: 'Custom scalar for BigInt values',
 
   serialize(value) {
-    if (
-      typeof value !== 'string' &&
-      typeof value !== 'number' &&
-      typeof value !== 'bigint'
-    ) {
+    if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'bigint') {
       throw new Error(
-        'GraphQL BigInt Scalar serializer expected a string, number or BigInt object'
+        'GraphQL BigInt Scalar serializer expected a string, number or BigInt object',
       );
     }
 
@@ -19,13 +15,9 @@ const BigIntScalar = new GraphQLScalarType({
   },
 
   parseValue(value) {
-    if (
-      typeof value !== 'string' &&
-      typeof value !== 'number' &&
-      typeof value !== 'bigint'
-    ) {
+    if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'bigint') {
       throw new Error(
-        'GraphQL BigInt Scalar serializer expected a string, number or BigInt object'
+        'GraphQL BigInt Scalar serializer expected a string, number or BigInt object',
       );
     }
 

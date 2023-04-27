@@ -6,7 +6,7 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "tsc": "turbo run tsc",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
     "publish-lib": "turbo run build lint && changeset version && changeset publish"
   },
   "devDependencies": {

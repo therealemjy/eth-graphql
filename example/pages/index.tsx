@@ -1,5 +1,5 @@
-import client from "../client";
-import { gql } from "@apollo/client/core";
+import client from '../client';
+import { gql } from '@apollo/client/core';
 
 export async function getStaticProps() {
   const { data } = await client.query({
@@ -18,7 +18,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      xvsBalance: "",
+      xvsBalance: '',
     },
   };
 }

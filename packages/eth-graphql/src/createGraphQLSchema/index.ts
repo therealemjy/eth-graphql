@@ -1,9 +1,9 @@
 // TODO: load from project root. Once this project made into a module, the
 // lib.contract.ts will be created by the user and located at the root of their
 // project
-import convertAbiToGraphQlSchema from "./convertAbiToGraphQlSchema";
-import { gql } from "@apollo/client/core";
-import { ContractConfig } from "@src/types";
+import convertAbiToGraphQlSchema from './convertAbiToGraphQlSchema';
+import { gql } from '@apollo/client/core';
+import { ContractConfig } from '@src/types';
 
 type TypeDefMapping = {
   Contracts: string;
@@ -18,13 +18,11 @@ const createGraphQLSchema = (contractConfigs: ContractConfig[]) => {
       [contractConfig.name]: convertAbiToGraphQlSchema(contractConfig.abi),
       Contracts:
         accTypeDefMapping.Contracts +
-        `${index > 0 ? "\n" : ""}${contractConfig.name}: ${
-          contractConfig.name
-        }!`,
+        `${index > 0 ? '\n' : ''}${contractConfig.name}: ${contractConfig.name}!`,
     }),
     {
-      Contracts: "",
-    }
+      Contracts: '',
+    },
   );
 
   const { Contracts, ...otherTypeDefs } = typeDefMapping;
@@ -34,13 +32,13 @@ const createGraphQLSchema = (contractConfigs: ContractConfig[]) => {
 
     ${Object.keys(otherTypeDefs)
       .map(
-        (typeDefName) => `
+        typeDefName => `
           type ${typeDefName} {
             ${typeDefMapping[typeDefName]}
           }
-        `
+        `,
       )
-      .join("")}
+      .join('')}
 
     type Contracts {
       ${Contracts}

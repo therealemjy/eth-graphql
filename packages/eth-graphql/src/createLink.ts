@@ -1,11 +1,11 @@
-import { ApolloLink, Observable } from "@apollo/client/core";
-import { graphql } from "graphql";
-import { print } from "graphql/language/printer";
-import { makeExecutableSchema } from "@graphql-tools/schema";
+import { ApolloLink, Observable } from '@apollo/client/core';
+import { graphql } from 'graphql';
+import { print } from 'graphql/language/printer';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 
-import loadUserConfig from "./loadUserConfig";
-import { Config } from "./types";
-import createSchema from "./createSchema";
+import loadUserConfig from './loadUserConfig';
+import { Config } from './types';
+import createSchema from './createSchema';
 
 const createLink = (config: Config) => {
   // Load user config
@@ -15,26 +15,26 @@ const createLink = (config: Config) => {
     createSchema({
       config,
       contracts,
-    })
+    }),
   );
 
   return new ApolloLink(
-    (operation) =>
-      new Observable((observer) => {
+    operation =>
+      new Observable(observer => {
         graphql({
           schema: makeExecutableSchema(
             createSchema({
               config,
               contracts,
-            })
+            }),
           ),
           source: print(operation.query),
           variableValues: operation.variables,
-        }).then((result) => {
+        }).then(result => {
           observer.next(result);
           observer.complete();
         });
-      })
+      }),
   );
 };
 
