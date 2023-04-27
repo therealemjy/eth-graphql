@@ -1,6 +1,6 @@
 import { cosmiconfigSync } from "cosmiconfig";
 
-const loadContracts = () => {
+const loadUserConfig = () => {
   // TODO: check contract config is valid
   try {
     const configFile = cosmiconfigSync("eth-graphql").search();
@@ -19,4 +19,4 @@ const loadContracts = () => {
   }
 };
 
-export default loadContracts;
+export default loadUserConfig;

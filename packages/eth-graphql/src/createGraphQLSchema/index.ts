@@ -3,7 +3,7 @@
 // project
 import convertAbiToGraphQlSchema from "./convertAbiToGraphQlSchema";
 import { gql } from "@apollo/client/core";
-import { ContractConfig } from "../types";
+import { ContractConfig } from "@src/types";
 
 type TypeDefMapping = {
   Contracts: string;

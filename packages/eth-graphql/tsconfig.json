@@ -1,5 +1,12 @@
 {
   "extends": "tsconfig/library.json",
   "include": ["."],
-  "exclude": ["dist", "build", "node_modules"]
+  "exclude": ["dist", "build", "node_modules"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["./src/*"],
+      "@bin/*": ["./bin/*"]
+    }
+  }
 }

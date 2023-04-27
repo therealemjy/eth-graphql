@@ -3,13 +3,13 @@ import { graphql } from "graphql";
 import { print } from "graphql/language/printer";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 
-import loadContracts from "./loadContracts";
+import loadUserConfig from "./loadUserConfig";
 import { Config } from "./types";
 import createSchema from "./createSchema";
 
 const createLink = (config: Config) => {
   // Load user config
-  const contracts = loadContracts();
+  const contracts = loadUserConfig();
 
   console.log(
     createSchema({
