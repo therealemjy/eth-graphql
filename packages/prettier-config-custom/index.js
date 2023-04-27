@@ -13,4 +13,7 @@ module.exports = {
   trailingComma: "all",
   useTabs: false,
   bracketSpacing: true,
+  importOrderSeparation: true,
+  importOrderSortSpecifiers: true,
+  importOrder: ["<THIRD_PARTY_MODULES>", "^@src/(.*)$", "^@bin/(.*)$", "^[./]"],
 };

@@ -1,11 +1,11 @@
 import { ApolloLink, Observable } from '@apollo/client/core';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import { graphql } from 'graphql';
 import { print } from 'graphql/language/printer';
-import { makeExecutableSchema } from '@graphql-tools/schema';
 
+import createSchema from './createSchema';
 import loadUserConfig from './loadUserConfig';
 import { Config } from './types';
-import createSchema from './createSchema';
 
 const createLink = (config: Config) => {
   // Load user config

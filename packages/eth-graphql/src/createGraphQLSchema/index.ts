@@ -1,9 +1,11 @@
 // TODO: load from project root. Once this project made into a module, the
 // lib.contract.ts will be created by the user and located at the root of their
 // project
-import convertAbiToGraphQlSchema from './convertAbiToGraphQlSchema';
 import { gql } from '@apollo/client/core';
+
 import { ContractConfig } from '@src/types';
+
+import convertAbiToGraphQlSchema from './convertAbiToGraphQlSchema';
 
 type TypeDefMapping = {
   Contracts: string;

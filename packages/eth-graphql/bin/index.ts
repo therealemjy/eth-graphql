@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 import loadUserConfig from '@src/loadUserConfig';
 
 // Script to generate the GraphQL schema from the user-defined config

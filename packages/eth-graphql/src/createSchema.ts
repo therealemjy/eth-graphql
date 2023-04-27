@@ -1,11 +1,10 @@
-import { JsonRpcProvider } from 'ethers';
 import { Contract, Provider } from 'ethcall';
+import { JsonRpcProvider } from 'ethers';
 import { GraphQLResolveInfo, Kind } from 'graphql';
 
-import BigIntScalar from './scalars/BigInt';
-
-import { ContractCall, Config, ContractConfig } from './types';
 import createGraphQLSchema from './createGraphQLSchema';
+import BigIntScalar from './scalars/BigInt';
+import { Config, ContractCall, ContractConfig } from './types';
 
 interface CreateSchemaInput {
   config: Config;
