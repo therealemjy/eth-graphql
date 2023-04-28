@@ -11,7 +11,7 @@ const program = new Command();
 
 // Because JSON does not know how to handle BigInt values, we update the
 // prototype of BigInt so it returns a string when being parsed to JSON
-// @ts-ignore toJSON does exist on the prototype of BigInt
+// @ts-ignore
 BigInt.prototype.toJSON = function () {
   return this.toString();
 };
@@ -24,11 +24,15 @@ const GRAPHIQL_URL = `http://localhost:${PORT}${GRAPHIQL_ROUTE}`;
 program
   .option('--rpcProviderUrl', 'URL of the RPC provider to use with GraphiQL')
   .action((_str, options) => {
+    // TODO: check user is running a recent enough version of Node, otherwise
+    // the error "Unexpected identifier" will be returned when making any query
+    // using the GraphiQL interface
+
     // Build schema
     const contracts = loadUserConfig();
     const schema = createSchema({
       config: {
-        rpcProviderUrl: options.first,
+        rpcProviderUrl: options.args[0],
       },
       contracts,
     });
