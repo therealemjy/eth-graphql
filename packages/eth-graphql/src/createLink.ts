@@ -1,5 +1,4 @@
 import { ApolloLink, Observable } from '@apollo/client/core';
-import { makeExecutableSchema } from '@graphql-tools/schema';
 import { graphql } from 'graphql';
 import { print } from 'graphql/language/printer';
 
@@ -15,12 +14,10 @@ const createLink = (config: Config) => {
     operation =>
       new Observable(observer => {
         graphql({
-          schema: makeExecutableSchema(
-            createSchema({
-              config,
-              contracts,
-            }),
-          ),
+          schema: createSchema({
+            config,
+            contracts,
+          }),
           source: print(operation.query),
           variableValues: operation.variables,
         }).then(result => {

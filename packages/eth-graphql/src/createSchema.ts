@@ -1,9 +1,9 @@
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import type { Contract } from 'ethcall';
 import { JsonRpcProvider } from 'ethers';
 import { GraphQLResolveInfo, Kind } from 'graphql';
 
 import generateGraphQlSchema from './generateGraphQlSchema';
-import getEthCall from './getEthCall';
 import BigIntScalar from './scalars/BigInt';
 import { Config, ContractCall, ContractConfig } from './types';
 
@@ -37,7 +37,11 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
           throw new Error('Only one Contracts query is supported');
         }
 
-        const { Provider, Contract } = await getEthCall();
+        // Because the library ethcall is a pure ESM module, it cannot be imported
+        // regularly in this library since it would require it to be an ESM module as
+        // well; limiting its compatibility with other projects that wish to use it. For
+        // that reason, we import it dynamically
+        const { Provider, Contract } = await import('ethcall');
 
         const fieldNode = fieldNodes[0];
 
@@ -139,10 +143,10 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
     },
   };
 
-  return {
+  return makeExecutableSchema({
     typeDefs: generateGraphQlSchema(contracts),
     resolvers,
-  };
+  });
 };
 
 export default createSchema;
