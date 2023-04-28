@@ -2,11 +2,19 @@
   "name": "eth-graphql",
   "version": "0.0.1",
   "license": "MIT",
-  "main": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "bin": "./dist/cli.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
-    "build": "tsup ./src/index.ts ./src/cli.ts --format esm,cjs --dts",
+    "build": "tsup ./src/index.ts ./src/cli.ts --format esm,cjs --dts --clean",
     "dev": "npm run build -- --watch",
     "lint": "eslint \"**/*.ts*\"",
     "tsc": "tsc"
@@ -25,6 +33,7 @@
     "eslint": "^7.32.0",
     "eslint-config-custom": "*",
     "prettier-config-custom": "*",
+    "rollup": "^3.21.0",
     "tsconfig": "*",
     "tsup": "^6.7.0",
     "typescript": "^4.5.2"

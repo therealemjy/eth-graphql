@@ -1,8 +1,9 @@
-import { Contract, Provider } from 'ethcall';
+import type { Contract } from 'ethcall';
 import { JsonRpcProvider } from 'ethers';
 import { GraphQLResolveInfo, Kind } from 'graphql';
 
 import generateGraphQlSchema from './generateGraphQlSchema';
+import getEthCall from './getEthCall';
 import BigIntScalar from './scalars/BigInt';
 import { Config, ContractCall, ContractConfig } from './types';
 
@@ -12,28 +13,6 @@ interface CreateSchemaInput {
 }
 
 const createSchema = ({ config, contracts }: CreateSchemaInput) => {
-  // Generate contract mapping. An instance of each contract is created for each
-  // chain supported and mapped to the corresponding chain id
-  const contractMapping = contracts.reduce<{
-    [contractName: string]: {
-      [chainId: number]: Contract;
-    };
-  }>(
-    (contractsAcc, { name, address, abi }) => ({
-      ...contractsAcc,
-      [name]: Object.keys(address).reduce<{
-        [chainId: number]: Contract;
-      }>(
-        (chainIdsAcc, chainId) => ({
-          ...chainIdsAcc,
-          [chainId]: new Contract(address[Number(chainId)], abi),
-        }),
-        {},
-      ),
-    }),
-    {},
-  );
-
   const provider = new JsonRpcProvider(config.rpcProviderUrl);
 
   // Generate resolvers
@@ -58,7 +37,31 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
           throw new Error('Only one Contracts query is supported');
         }
 
+        const { Provider, Contract } = await getEthCall();
+
         const fieldNode = fieldNodes[0];
+
+        // Generate contract mapping. An instance of each contract is created
+        // for each chain supported and mapped to the corresponding chain id
+        const contractMapping = contracts.reduce<{
+          [contractName: string]: {
+            [chainId: number]: Contract;
+          };
+        }>(
+          (contractsAcc, { name, address, abi }) => ({
+            ...contractsAcc,
+            [name]: Object.keys(address).reduce<{
+              [chainId: number]: Contract;
+            }>(
+              (chainIdsAcc, chainId) => ({
+                ...chainIdsAcc,
+                [chainId]: new Contract(address[Number(chainId)], abi),
+              }),
+              {},
+            ),
+          }),
+          {},
+        );
 
         // Go through Contracts node to extract requests to make
         const calls = fieldNode.selectionSet!.selections.reduce<ContractCall[]>(

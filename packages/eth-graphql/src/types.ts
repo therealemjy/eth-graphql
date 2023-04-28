@@ -1,6 +1,5 @@
-import { Call } from 'ethcall';
+import type { Call } from 'ethcall';
 import type { JsonFragment } from 'ethers';
-import { DocumentNode } from 'graphql';
 
 export interface ContractConfig {
   name: string;
