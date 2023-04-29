@@ -5,7 +5,6 @@ import { ContractConfig } from './types';
 const USER_CONFIG_FILE_NAME = 'eth-graphql';
 
 const loadUserConfig = () => {
-  // TODO: check contract config is valid
   try {
     const configFile = cosmiconfigSync(USER_CONFIG_FILE_NAME).search();
 
@@ -13,7 +12,11 @@ const loadUserConfig = () => {
       throw new Error(`${USER_CONFIG_FILE_NAME} config file not found`);
     }
 
-    // TODO: validate config
+    // TODO: validate config Rules:
+    // - each contract must have all field defined and at least one address
+    //   property
+    // - each contract name must be unique
+    // - each contract must have the same address properties
 
     return configFile.config.default as ContractConfig[];
   } catch (error) {

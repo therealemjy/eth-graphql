@@ -43,6 +43,8 @@ type Query {
 }
 `;
 
+  console.log(generatedGraphQlSchema);
+
   return generatedGraphQlSchema;
 };
 

@@ -1,11 +1,35 @@
-import type { JsonFragment } from 'ethers';
+import type { JsonFragment, JsonFragmentType } from 'ethers';
 
-const getGraphQlInputType = (item: JsonFragment) => {
-  const inputTypeDef = (item.inputs || [])
-    .map(input => {
-      const type = 'String!'; // TODO: handle all input types, including tuples, arrays etc.
-      return `${input.name}: ${type}`;
-    })
+// const formatType = ({ type, isArray }: { type: string; isArray: boolean }) => {
+//   if (isArray) {
+//     return `[${type}!]!`;
+//   }
+
+//   return `${type}!`;
+// };
+
+const formatAbiTypeToGraphQl = (abiItemType: JsonFragmentType) => {
+  let graphQlType = 'String!';
+
+  if (!abiItemType.type) {
+    return graphQlType;
+  }
+
+  const abiType = abiItemType.type.split('[]')[0];
+  const isArray = abiType.slice(-2) === '[]';
+
+  if (abiType === 'bool') {
+    graphQlType = 'Boolean!';
+  } else if (abiType === 'tuple') {
+    graphQlType = 'String!'; // TODO: get tuple name
+  }
+
+  return isArray ? `[${graphQlType}]!` : graphQlType;
+};
+
+const getGraphQlInputTypes = (abiItem: JsonFragment) => {
+  const inputTypeDef = (abiItem.inputs || [])
+    .map(input => `${input.name}: ${formatAbiTypeToGraphQl(input)}`)
     .join(', ');
 
   // Wrap input type in parenthesis if it contains at least one parameter,
@@ -13,7 +37,7 @@ const getGraphQlInputType = (item: JsonFragment) => {
   return inputTypeDef && `(${inputTypeDef})`;
 };
 
-const getGraphQlOutputType = () => 'BigInt!'; // TODO: handle all input types, including custom types and scalars
+const getGraphQlOutputTypes = (_abiItem: JsonFragment) => 'BigInt!'; // TODO: handle all input types, including custom types and scalars
 
 const convertAbiToGraphQlSchema = (abi: ReadonlyArray<JsonFragment>) => {
   const schemaTypeDef = abi
@@ -28,8 +52,8 @@ const convertAbiToGraphQlSchema = (abi: ReadonlyArray<JsonFragment>) => {
 
       // TODO: handle function overloading
 
-      const inputTypeDef = getGraphQlInputType(abiItem);
-      const outputTypeDef = getGraphQlOutputType();
+      const inputTypeDef = getGraphQlInputTypes(abiItem);
+      const outputTypeDef = getGraphQlOutputTypes(abiItem);
 
       const methodTypeDef = `${abiItem.name}${inputTypeDef}: ${outputTypeDef}`;
 
