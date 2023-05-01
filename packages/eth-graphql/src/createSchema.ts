@@ -9,10 +9,10 @@ import {
   GraphQLInt,
   GraphQLList,
   GraphQLObjectType,
+  GraphQLOutputType,
   GraphQLResolveInfo,
   GraphQLSchema,
   GraphQLString,
-  GraphQLType,
   Kind,
   ThunkObjMap,
 } from 'graphql';
@@ -20,12 +20,13 @@ import {
 import { BigIntScalar } from './scalars';
 import { Config, ContractCall, ContractConfig } from './types';
 
-interface SharedGraphQlInputTypes {
-  [key: string]: GraphQLInputType;
-}
-
-interface SharedGraphQlOutputTypes {
-  [key: string]: GraphQLType;
+interface SharedGraphQlTypes {
+  inputs: {
+    [key: string]: GraphQLInputType;
+  };
+  outputs: {
+    [key: string]: GraphQLOutputType;
+  };
 }
 
 const generateGraphQlTypeName = (componentInternalType: string) =>
@@ -35,61 +36,80 @@ const generateGraphQlTypeName = (componentInternalType: string) =>
 
 // Based on a given component, return the corresponding shared GraphQL input
 // type if it exists or create onw then return it
-const upSetSharedGraphQlInputType = ({
+function upSetSharedGraphQlInputType<TIsInput extends boolean>({
+  isInput,
   component,
   sharedGraphQlTypes,
 }: {
+  isInput: TIsInput;
   component: JsonFragmentType;
-  sharedGraphQlTypes: SharedGraphQlInputTypes;
-}) => {
-  const sharedGraphQlTypeName = `${generateGraphQlTypeName(component.internalType!)}Input`;
+  sharedGraphQlTypes: SharedGraphQlTypes;
+}) {
+  let sharedGraphQlTypeName = generateGraphQlTypeName(component.internalType!);
 
-  if (!sharedGraphQlTypes[sharedGraphQlTypeName]) {
-    sharedGraphQlTypes[sharedGraphQlTypeName] = new GraphQLInputObjectType({
-      name: sharedGraphQlTypeName,
-      fields: component.components!.reduce<ThunkObjMap<GraphQLInputFieldConfig>>(
-        (accComponentGraphqlTypes, component, componentIndex) => ({
-          ...accComponentGraphqlTypes,
-          [component.name || componentIndex]: {
-            type: generateGraphqlType({
-              component,
-              sharedGraphQlTypes,
-            }),
-          },
-        }),
-        {},
-      ),
-    });
+  // Add suffix if type is an input to prevent a potential duplicate with an
+  // output
+  if (isInput) {
+    sharedGraphQlTypeName += 'Input';
   }
 
-  return sharedGraphQlTypes[sharedGraphQlTypeName];
-};
+  if (!sharedGraphQlTypes[isInput ? 'inputs' : 'outputs'][sharedGraphQlTypeName]) {
+    sharedGraphQlTypes[isInput ? 'inputs' : 'outputs'][sharedGraphQlTypeName] = isInput
+      ? new GraphQLInputObjectType({
+          name: sharedGraphQlTypeName,
+          fields: component.components!.reduce<ThunkObjMap<GraphQLInputFieldConfig>>(
+            (accComponentGraphqlTypes, component, componentIndex) => ({
+              ...accComponentGraphqlTypes,
+              [component.name || componentIndex]: {
+                type: generateGraphqlType({
+                  isInput,
+                  component,
+                  sharedGraphQlTypes,
+                }),
+              },
+            }),
+            {},
+          ),
+        })
+      : new GraphQLObjectType({
+          name: sharedGraphQlTypeName,
+          fields: component.components!.reduce<ThunkObjMap<GraphQLFieldConfig<any, any, any>>>(
+            (accComponentGraphqlTypes, component, componentIndex) => ({
+              ...accComponentGraphqlTypes,
+              [component.name || componentIndex]: {
+                type: generateGraphqlType({
+                  isInput,
+                  component,
+                  sharedGraphQlTypes,
+                }) as GraphQLOutputType,
+              },
+            }),
+            {},
+          ),
+        });
+  }
 
-const generateGraphQlOutputType = ({
-  components,
-}: {
-  components: ReadonlyArray<JsonFragmentType>;
-  sharedGraphQlTypes: SharedGraphQlOutputTypes;
-}) => {
-  // TODO: handle all types
+  return sharedGraphQlTypes[isInput ? 'inputs' : 'outputs'][sharedGraphQlTypeName];
+}
 
-  return BigIntScalar;
-};
-
-const generateGraphqlType = ({
+function generateGraphqlType<TIsInput extends boolean>({
+  isInput,
   component,
   sharedGraphQlTypes,
 }: {
+  isInput: TIsInput;
   component: JsonFragmentType;
-  sharedGraphQlTypes: SharedGraphQlInputTypes; // TODO: handle output types as well
-}) => {
-  let graphQlType: GraphQLInputType = BigIntScalar;
+  sharedGraphQlTypes: SharedGraphQlTypes;
+}) {
+  // TODO: improve type
+  let graphQlType: any = BigIntScalar;
 
   const componentType = component.type?.replace('[]', '');
 
   // Handle tuples
   if (componentType === 'tuple' && component.internalType) {
     graphQlType = upSetSharedGraphQlInputType({
+      isInput,
       component,
       sharedGraphQlTypes,
     });
@@ -105,6 +125,30 @@ const generateGraphqlType = ({
   }
 
   return graphQlType;
+}
+
+const generateGraphQlOutputType = ({
+  components,
+  sharedGraphQlTypes,
+}: {
+  components: ReadonlyArray<JsonFragmentType>;
+  sharedGraphQlTypes: SharedGraphQlTypes;
+}) => {
+  if (components.length === 1) {
+    return generateGraphqlType({
+      isInput: false,
+      component: components[0],
+      sharedGraphQlTypes,
+    });
+  }
+
+  return components.map(component =>
+    generateGraphqlType({
+      isInput: false,
+      component,
+      sharedGraphQlTypes,
+    }),
+  );
 };
 
 interface CreateSchemaInput {
@@ -115,8 +159,10 @@ interface CreateSchemaInput {
 const createSchema = ({ config, contracts }: CreateSchemaInput) => {
   const provider = new JsonRpcProvider(config.rpcProviderUrl);
 
-  const sharedGraphQlInputTypes: SharedGraphQlInputTypes = {};
-  const sharedGraphQlOutputTypes: SharedGraphQlOutputTypes = {};
+  const sharedGraphQlTypes: SharedGraphQlTypes = {
+    inputs: {},
+    outputs: {},
+  };
 
   const contractsType = new GraphQLObjectType({
     name: 'contracts',
@@ -146,7 +192,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                 const contractField: GraphQLFieldConfig<any, any, any> = {
                   type: generateGraphQlOutputType({
                     components: abiItemOutputs,
-                    sharedGraphQlTypes: sharedGraphQlOutputTypes,
+                    sharedGraphQlTypes,
                   }),
                   resolve: (_obj: { [key: string]: unknown }) => _obj[abiItemName],
                 };
@@ -161,8 +207,9 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                       // Fallback to using index if input does not have a name
                       [input.name || inputIndex]: {
                         type: generateGraphqlType({
+                          isInput: true,
                           component: input,
-                          sharedGraphQlTypes: sharedGraphQlInputTypes,
+                          sharedGraphQlTypes,
                         }),
                       },
                     }),
