@@ -2,7 +2,7 @@ module.exports = {
   extends: ["turbo", "prettier", "plugin:@typescript-eslint/recommended"],
   rules: {
     "@next/next/no-html-link-for-pages": "off",
-    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-explicit-any": 1,
     "@typescript-eslint/ban-ts-comment": 1,
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": [

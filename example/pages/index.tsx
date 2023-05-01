@@ -6,7 +6,7 @@ export async function getStaticProps() {
   const { data } = await client.query({
     query: gql`
       query GetPools {
-        Contracts(chainId: 97) {
+        contracts(chainId: 97) {
           XVS {
             balanceOf(_owner: "0x11cbEA7E8FfF39942075128ee7de77C06822f4de")
           }
