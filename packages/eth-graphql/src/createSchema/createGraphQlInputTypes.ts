@@ -2,6 +2,7 @@ import { JsonFragmentType } from 'ethers';
 import { GraphQLFieldConfig, GraphQLInputObjectType } from 'graphql';
 
 import createGraphQlType from './createGraphQlType';
+import formatToFieldName from './formatToFieldName';
 import { SharedGraphQlTypes } from './types';
 
 const createGraphQlInputTypes = ({
@@ -14,8 +15,10 @@ const createGraphQlInputTypes = ({
   components.reduce<GraphQLFieldConfig<unknown, unknown, unknown>['args']>(
     (accArgs, component, componentIndex) => ({
       ...accArgs,
-      // Fallback to using index if input does not have a name
-      [component.name || componentIndex]: {
+      [formatToFieldName({
+        name: component.name,
+        index: componentIndex,
+      })]: {
         type: createGraphQlType({
           isInput: true,
           component,

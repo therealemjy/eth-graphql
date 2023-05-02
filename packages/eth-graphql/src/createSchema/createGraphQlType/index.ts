@@ -12,6 +12,7 @@ import {
 } from 'graphql';
 
 import { BigIntScalar } from '../../scalars';
+import formatToFieldName from '../formatToFieldName';
 import { SharedGraphQlTypes } from '../types';
 import createGraphQlTypeName from './createGraphQlTypeName';
 
@@ -41,7 +42,7 @@ function getOrSetSharedGraphQlType({
           fields: (component.components || []).reduce<ThunkObjMap<GraphQLInputFieldConfig>>(
             (accComponentGraphqlTypes, component, componentIndex) => ({
               ...accComponentGraphqlTypes,
-              [component.name || componentIndex]: {
+              [formatToFieldName({ name: component.name, index: componentIndex })]: {
                 type: createGraphQlType({
                   isInput,
                   component,
@@ -59,7 +60,7 @@ function getOrSetSharedGraphQlType({
           >(
             (accComponentGraphqlTypes, component, componentIndex) => ({
               ...accComponentGraphqlTypes,
-              [component.name || componentIndex]: {
+              [formatToFieldName({ name: component.name, index: componentIndex })]: {
                 type: createGraphQlType({
                   isInput,
                   component,

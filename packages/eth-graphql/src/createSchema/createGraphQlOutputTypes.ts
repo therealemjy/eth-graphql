@@ -2,6 +2,7 @@ import { JsonFragment } from 'ethers';
 import { GraphQLFieldConfig, GraphQLObjectType, GraphQLOutputType, ThunkObjMap } from 'graphql';
 
 import createGraphQlType from './createGraphQlType';
+import formatToFieldName from './formatToFieldName';
 import { SharedGraphQlTypes } from './types';
 
 const createGraphQlOutputTypes = ({
@@ -30,7 +31,7 @@ const createGraphQlOutputTypes = ({
       (accArgs, component, componentIndex) => ({
         ...accArgs,
         // Fallback to using index if input does not have a name
-        [component.name || componentIndex]: {
+        [formatToFieldName({ name: component.name, index: componentIndex })]: {
           type: createGraphQlType({
             isInput: false,
             component,

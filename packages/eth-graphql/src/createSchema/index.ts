@@ -15,6 +15,7 @@ import { Config, ContractCall, ContractConfig } from '../types';
 import createGraphQlInputTypes from './createGraphQlInputTypes';
 import createGraphQlOutputTypes from './createGraphQlOutputTypes';
 import formatGraphQlArgs from './formatGraphQlArgs';
+import formatToFieldName from './formatToFieldName';
 import { SharedGraphQlTypes } from './types';
 
 interface CreateSchemaInput {
@@ -57,7 +58,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                 // TODO: handle function overloading
 
                 // Fallback to using index if method does not have a name
-                const abiItemName = abiItem.name || abiItemIndex;
+                const abiItemName = formatToFieldName({ name: abiItem.name, index: abiItemIndex });
                 const abiInputs = abiItem.inputs || [];
 
                 const contractField: GraphQLFieldConfig<
@@ -220,6 +221,8 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
       },
     },
   });
+
+  console.log(queryType);
 
   return new GraphQLSchema({ query: queryType });
 };
