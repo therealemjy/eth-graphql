@@ -20,6 +20,7 @@ const createGraphQlOutputTypes = ({
 }) => {
   const abiItemOutputs = abiItem.outputs || [];
 
+  // Map single output to a single type
   if (abiItemOutputs.length === 1) {
     return createGraphQlType({
       isInput: false,
@@ -28,7 +29,7 @@ const createGraphQlOutputTypes = ({
     }) as GraphQLOutputType;
   }
 
-  // Map array outputs to an object
+  // Map array output to an object
   return new GraphQLNonNull(
     new GraphQLObjectType({
       name: `${abiItem.name!}Output`,

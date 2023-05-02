@@ -18,6 +18,9 @@ import formatGraphQlArgs from './formatGraphQlArgs';
 import formatToFieldName from './formatToFieldName';
 import { SharedGraphQlTypes } from './types';
 
+type SoliditySingleReturnValue = string | number | bigint | object;
+type SolidityReturnValue = SoliditySingleReturnValue | Array<SoliditySingleReturnValue>;
+
 interface CreateSchemaInput {
   config: Config;
   contracts: ContractConfig[];
@@ -43,7 +46,9 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
               name: contract.name,
               // Go through contract methods and build field types
               fields: contract.abi.reduce<
-                ThunkObjMap<GraphQLFieldConfig<{ [key: string]: unknown }, unknown, unknown>>
+                ThunkObjMap<
+                  GraphQLFieldConfig<{ [key: string]: SolidityReturnValue }, unknown, unknown>
+                >
               >((accContractFields, abiItem, abiItemIndex) => {
                 // Filter out items that aren't non-mutating functions
                 if (
@@ -62,7 +67,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                 const abiInputs = abiItem.inputs || [];
 
                 const contractField: GraphQLFieldConfig<
-                  { [key: string]: unknown },
+                  { [key: string]: SolidityReturnValue },
                   unknown,
                   unknown
                 > = {
@@ -70,9 +75,30 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                     abiItem,
                     sharedGraphQlTypes,
                   }),
-                  // TODO: handle multiple outputs (returned as an array of
-                  // values, mapped to an object in GraphQL schema)
-                  resolve: (_obj: { [key: string]: unknown }) => _obj[abiItemName],
+                  resolve: (_obj: { [key: string]: SolidityReturnValue }) => {
+                    const abiItemOutputs = abiItem.outputs || [];
+                    const data = _obj[abiItemName];
+
+                    if (abiItemOutputs.length === 1 || !Array.isArray(data)) {
+                      return data;
+                    }
+
+                    // If the output in the ABI contains multiple components, we
+                    // map them to an object, similarly to how they are mapped
+                    // in the GraphQL schema
+                    return abiItemOutputs.reduce<{
+                      [key: string]: SolidityReturnValue;
+                    }>(
+                      (accFormattedData, outputComponent, outputComponentIndex) => ({
+                        ...accFormattedData,
+                        [formatToFieldName({
+                          name: outputComponent.name,
+                          index: outputComponentIndex,
+                        })]: data[outputComponentIndex],
+                      }),
+                      {},
+                    );
+                  },
                 };
 
                 // Handle argument types
@@ -90,7 +116,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
               }, {}),
             }),
           ),
-          resolve: (_obj: { [key: string]: unknown }) => _obj[contract.name],
+          resolve: (_obj: { [key: string]: SolidityReturnValue }) => _obj[contract.name],
         },
       }),
       {},
@@ -198,12 +224,14 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
           );
 
           const ethCallProvider = new Provider(chainId, provider);
-          const multicallResults = await ethCallProvider.all(calls.map(({ call }) => call));
+          const multicallResults = await ethCallProvider.all<SolidityReturnValue>(
+            calls.map(({ call }) => call),
+          );
 
           // Shape and return results
           return multicallResults.reduce<{
             [contractName: string]: {
-              [methodName: string]: unknown;
+              [methodName: string]: SolidityReturnValue;
             };
           }>((accResults, result, index) => {
             const contractCall = calls[index];
@@ -221,8 +249,6 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
       },
     },
   });
-
-  console.log(queryType);
 
   return new GraphQLSchema({ query: queryType });
 };
