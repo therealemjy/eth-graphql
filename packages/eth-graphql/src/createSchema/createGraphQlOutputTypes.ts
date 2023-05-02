@@ -1,5 +1,11 @@
 import { JsonFragment } from 'ethers';
-import { GraphQLFieldConfig, GraphQLObjectType, GraphQLOutputType, ThunkObjMap } from 'graphql';
+import {
+  GraphQLFieldConfig,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLOutputType,
+  ThunkObjMap,
+} from 'graphql';
 
 import createGraphQlType from './createGraphQlType';
 import formatToFieldName from './formatToFieldName';
@@ -23,25 +29,27 @@ const createGraphQlOutputTypes = ({
   }
 
   // Map array outputs to an object
-  return new GraphQLObjectType({
-    name: `${abiItem.name!}Output`,
-    fields: abiItemOutputs.reduce<
-      ThunkObjMap<GraphQLFieldConfig<{ [key: string]: unknown }, unknown, unknown>>
-    >(
-      (accArgs, component, componentIndex) => ({
-        ...accArgs,
-        // Fallback to using index if input does not have a name
-        [formatToFieldName({ name: component.name, index: componentIndex })]: {
-          type: createGraphQlType({
-            isInput: false,
-            component,
-            sharedGraphQlTypes,
-          }) as GraphQLOutputType,
-        },
-      }),
-      {},
-    ),
-  });
+  return new GraphQLNonNull(
+    new GraphQLObjectType({
+      name: `${abiItem.name!}Output`,
+      fields: abiItemOutputs.reduce<
+        ThunkObjMap<GraphQLFieldConfig<{ [key: string]: unknown }, unknown, unknown>>
+      >(
+        (accArgs, component, componentIndex) => ({
+          ...accArgs,
+          // Fallback to using index if input does not have a name
+          [formatToFieldName({ name: component.name, index: componentIndex })]: {
+            type: createGraphQlType({
+              isInput: false,
+              component,
+              sharedGraphQlTypes,
+            }) as GraphQLNonNull<GraphQLOutputType>,
+          },
+        }),
+        {},
+      ),
+    }),
+  );
 };
 
 export default createGraphQlOutputTypes;

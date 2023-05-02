@@ -47,7 +47,7 @@ function getOrSetSharedGraphQlType({
                   isInput,
                   component,
                   sharedGraphQlTypes,
-                }) as GraphQLInputObjectType,
+                }) as GraphQLNonNull<GraphQLInputObjectType>,
               },
             }),
             {},
@@ -65,7 +65,7 @@ function getOrSetSharedGraphQlType({
                   isInput,
                   component,
                   sharedGraphQlTypes,
-                }) as GraphQLObjectType,
+                }) as GraphQLNonNull<GraphQLObjectType>,
               },
             }),
             {},
@@ -109,11 +109,7 @@ function createGraphQlType({
     graphQlType = new GraphQLList(graphQlType);
   }
 
-  if (isInput) {
-    graphQlType = new GraphQLNonNull(graphQlType);
-  }
-
-  return graphQlType;
+  return new GraphQLNonNull(graphQlType);
 }
 
 export default createGraphQlType;

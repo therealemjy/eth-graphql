@@ -1,5 +1,5 @@
 import { JsonFragmentType } from 'ethers';
-import { GraphQLFieldConfig, GraphQLInputObjectType } from 'graphql';
+import { GraphQLFieldConfig, GraphQLInputObjectType, GraphQLNonNull } from 'graphql';
 
 import createGraphQlType from './createGraphQlType';
 import formatToFieldName from './formatToFieldName';
@@ -23,7 +23,7 @@ const createGraphQlInputTypes = ({
           isInput: true,
           component,
           sharedGraphQlTypes,
-        }) as GraphQLInputObjectType,
+        }) as GraphQLNonNull<GraphQLInputObjectType>,
       },
     }),
     {},
