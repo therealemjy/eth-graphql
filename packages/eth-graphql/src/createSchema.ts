@@ -31,12 +31,12 @@ interface SharedGraphQlTypes {
 
 const generateGraphQlTypeName = (componentInternalType: string) =>
   // TODO: add prefix to make sure type name is unique within schema (in case
-  // generated schema is merged an existing one)
+  // generated schema is merged with an existing one)
   componentInternalType.replace('struct ', '').replace('[]', '').replace('.', '_');
 
 // Based on a given component, return the corresponding shared GraphQL input
 // type if it exists or create onw then return it
-function upSetSharedGraphQlInputType<TIsInput extends boolean>({
+function getOrSetSharedGraphQlInputType<TIsInput extends boolean>({
   isInput,
   component,
   sharedGraphQlTypes,
@@ -73,7 +73,9 @@ function upSetSharedGraphQlInputType<TIsInput extends boolean>({
         })
       : new GraphQLObjectType({
           name: sharedGraphQlTypeName,
-          fields: component.components!.reduce<ThunkObjMap<GraphQLFieldConfig<any, any, any>>>(
+          fields: component.components!.reduce<
+            ThunkObjMap<GraphQLFieldConfig<unknown, unknown, unknown>>
+          >(
             (accComponentGraphqlTypes, component, componentIndex) => ({
               ...accComponentGraphqlTypes,
               [component.name || componentIndex]: {
@@ -108,7 +110,7 @@ function generateGraphqlType<TIsInput extends boolean>({
 
   // Handle tuples
   if (componentType === 'tuple' && component.internalType) {
-    graphQlType = upSetSharedGraphQlInputType({
+    graphQlType = getOrSetSharedGraphQlInputType({
       isInput,
       component,
       sharedGraphQlTypes,
@@ -174,59 +176,62 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
           type: new GraphQLObjectType({
             name: contract.name,
             // Go through contract methods and build field types
-            fields: contract.abi.reduce<ThunkObjMap<GraphQLFieldConfig<any, any, any>>>(
-              (accContractFields, abiItem, abiItemIndex) => {
-                // Filter out items that aren't non-mutating functions
-                if (
-                  abiItem.type !== 'function' ||
-                  (abiItem.stateMutability !== 'view' && abiItem.stateMutability !== 'pure')
-                ) {
-                  return accContractFields;
-                }
+            fields: contract.abi.reduce<
+              ThunkObjMap<GraphQLFieldConfig<{ [key: string]: unknown }, unknown, unknown>>
+            >((accContractFields, abiItem, abiItemIndex) => {
+              // Filter out items that aren't non-mutating functions
+              if (
+                abiItem.type !== 'function' ||
+                (abiItem.stateMutability !== 'view' && abiItem.stateMutability !== 'pure')
+              ) {
+                return accContractFields;
+              }
 
-                // TODO: handle events
+              // TODO: handle events
 
-                // TODO: handle function overloading
+              // TODO: handle function overloading
 
-                // Fallback to using index if method does not have a name
-                const abiItemName = abiItem.name || abiItemIndex;
-                const abiItemOutputs = abiItem.outputs || [];
+              // Fallback to using index if method does not have a name
+              const abiItemName = abiItem.name || abiItemIndex;
+              const abiItemOutputs = abiItem.outputs || [];
 
-                const contractField: GraphQLFieldConfig<any, any, any> = {
-                  type: generateGraphQlOutputType({
-                    components: abiItemOutputs,
-                    sharedGraphQlTypes,
+              const contractField: GraphQLFieldConfig<
+                { [key: string]: unknown },
+                unknown,
+                unknown
+              > = {
+                type: generateGraphQlOutputType({
+                  components: abiItemOutputs,
+                  sharedGraphQlTypes,
+                }),
+                resolve: (_obj: { [key: string]: unknown }) => _obj[abiItemName],
+              };
+
+              // Handle argument types
+              if ((abiItem.inputs || []).length > 0) {
+                contractField.args = abiItem.inputs!.reduce<
+                  GraphQLFieldConfig<unknown, unknown, unknown>['args']
+                >(
+                  (accArgs, input, inputIndex) => ({
+                    ...accArgs,
+                    // Fallback to using index if input does not have a name
+                    [input.name || inputIndex]: {
+                      type: generateGraphqlType({
+                        isInput: true,
+                        component: input,
+                        sharedGraphQlTypes,
+                      }),
+                    },
                   }),
-                  resolve: (_obj: { [key: string]: unknown }) => _obj[abiItemName],
-                };
+                  {},
+                );
+              }
 
-                // Handle argument types
-                if ((abiItem.inputs || []).length > 0) {
-                  contractField.args = abiItem.inputs!.reduce<
-                    GraphQLFieldConfig<any, any, any>['args']
-                  >(
-                    (accArgs, input, inputIndex) => ({
-                      ...accArgs,
-                      // Fallback to using index if input does not have a name
-                      [input.name || inputIndex]: {
-                        type: generateGraphqlType({
-                          isInput: true,
-                          component: input,
-                          sharedGraphQlTypes,
-                        }),
-                      },
-                    }),
-                    {},
-                  );
-                }
-
-                return {
-                  ...accContractFields,
-                  [abiItemName]: contractField,
-                };
-              },
-              {},
-            ),
+              return {
+                ...accContractFields,
+                [abiItemName]: contractField,
+              };
+            }, {}),
           }),
           resolve: (_obj: { [key: string]: unknown }) => _obj[contract.name],
         },
@@ -319,6 +324,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                 }
 
                 // Extract arguments
+                // TODO: test if functions that accept a tuple as input work properly
                 const contractCallArguments = (callSelection.arguments || []).reduce<
                   ReadonlyArray<string | boolean>
                 >(
