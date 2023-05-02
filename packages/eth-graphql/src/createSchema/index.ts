@@ -1,157 +1,20 @@
 import type { Contract } from 'ethcall';
-import { JsonFragmentType, JsonRpcProvider } from 'ethers';
+import { JsonRpcProvider } from 'ethers';
 import {
-  GraphQLBoolean,
   GraphQLFieldConfig,
-  GraphQLInputFieldConfig,
-  GraphQLInputObjectType,
-  GraphQLInputType,
   GraphQLInt,
-  GraphQLList,
   GraphQLObjectType,
-  GraphQLOutputType,
   GraphQLResolveInfo,
   GraphQLSchema,
-  GraphQLString,
   Kind,
   ThunkObjMap,
 } from 'graphql';
 
-import { BigIntScalar } from './scalars';
-import { Config, ContractCall, ContractConfig } from './types';
-
-interface SharedGraphQlTypes {
-  inputs: {
-    [key: string]: GraphQLInputType;
-  };
-  outputs: {
-    [key: string]: GraphQLOutputType;
-  };
-}
-
-const generateGraphQlTypeName = (componentInternalType: string) =>
-  // TODO: add prefix to make sure type name is unique within schema (in case
-  // generated schema is merged with an existing one)
-  componentInternalType.replace('struct ', '').replace('[]', '').replace('.', '_');
-
-// Based on a given component, return the corresponding shared GraphQL input
-// type if it exists or create onw then return it
-function getOrSetSharedGraphQlInputType<TIsInput extends boolean>({
-  isInput,
-  component,
-  sharedGraphQlTypes,
-}: {
-  isInput: TIsInput;
-  component: JsonFragmentType;
-  sharedGraphQlTypes: SharedGraphQlTypes;
-}) {
-  let sharedGraphQlTypeName = generateGraphQlTypeName(component.internalType!);
-
-  // Add suffix if type is an input to prevent a potential duplicate with an
-  // output
-  if (isInput) {
-    sharedGraphQlTypeName += 'Input';
-  }
-
-  if (!sharedGraphQlTypes[isInput ? 'inputs' : 'outputs'][sharedGraphQlTypeName]) {
-    sharedGraphQlTypes[isInput ? 'inputs' : 'outputs'][sharedGraphQlTypeName] = isInput
-      ? new GraphQLInputObjectType({
-          name: sharedGraphQlTypeName,
-          fields: component.components!.reduce<ThunkObjMap<GraphQLInputFieldConfig>>(
-            (accComponentGraphqlTypes, component, componentIndex) => ({
-              ...accComponentGraphqlTypes,
-              [component.name || componentIndex]: {
-                type: generateGraphqlType({
-                  isInput,
-                  component,
-                  sharedGraphQlTypes,
-                }),
-              },
-            }),
-            {},
-          ),
-        })
-      : new GraphQLObjectType({
-          name: sharedGraphQlTypeName,
-          fields: component.components!.reduce<
-            ThunkObjMap<GraphQLFieldConfig<unknown, unknown, unknown>>
-          >(
-            (accComponentGraphqlTypes, component, componentIndex) => ({
-              ...accComponentGraphqlTypes,
-              [component.name || componentIndex]: {
-                type: generateGraphqlType({
-                  isInput,
-                  component,
-                  sharedGraphQlTypes,
-                }) as GraphQLOutputType,
-              },
-            }),
-            {},
-          ),
-        });
-  }
-
-  return sharedGraphQlTypes[isInput ? 'inputs' : 'outputs'][sharedGraphQlTypeName];
-}
-
-function generateGraphqlType<TIsInput extends boolean>({
-  isInput,
-  component,
-  sharedGraphQlTypes,
-}: {
-  isInput: TIsInput;
-  component: JsonFragmentType;
-  sharedGraphQlTypes: SharedGraphQlTypes;
-}) {
-  // TODO: improve type
-  let graphQlType: any = BigIntScalar;
-
-  const componentType = component.type?.replace('[]', '');
-
-  // Handle tuples
-  if (componentType === 'tuple' && component.internalType) {
-    graphQlType = getOrSetSharedGraphQlInputType({
-      isInput,
-      component,
-      sharedGraphQlTypes,
-    });
-  } else if (componentType === 'string' || componentType === 'address') {
-    graphQlType = GraphQLString;
-  } else if (componentType === 'bool') {
-    graphQlType = GraphQLBoolean;
-  }
-
-  // Detect if input is an array
-  if (component.type?.slice(-2) === '[]') {
-    graphQlType = new GraphQLList(graphQlType);
-  }
-
-  return graphQlType;
-}
-
-const generateGraphQlOutputType = ({
-  components,
-  sharedGraphQlTypes,
-}: {
-  components: ReadonlyArray<JsonFragmentType>;
-  sharedGraphQlTypes: SharedGraphQlTypes;
-}) => {
-  if (components.length === 1) {
-    return generateGraphqlType({
-      isInput: false,
-      component: components[0],
-      sharedGraphQlTypes,
-    });
-  }
-
-  return components.map(component =>
-    generateGraphqlType({
-      isInput: false,
-      component,
-      sharedGraphQlTypes,
-    }),
-  );
-};
+import { Config, ContractCall, ContractConfig } from '../types';
+import createGraphQlInputTypes from './createGraphQlInputTypes';
+import createGraphQlOutputTypes from './createGraphQlOutputTypes';
+import formatGraphQlArgs from './formatGraphQlArgs';
+import { SharedGraphQlTypes } from './types';
 
 interface CreateSchemaInput {
   config: Config;
@@ -193,6 +56,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
 
               // Fallback to using index if method does not have a name
               const abiItemName = abiItem.name || abiItemIndex;
+              const abiInputs = abiItem.inputs || [];
               const abiItemOutputs = abiItem.outputs || [];
 
               const contractField: GraphQLFieldConfig<
@@ -200,7 +64,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                 unknown,
                 unknown
               > = {
-                type: generateGraphQlOutputType({
+                type: createGraphQlOutputTypes({
                   components: abiItemOutputs,
                   sharedGraphQlTypes,
                 }),
@@ -208,23 +72,11 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
               };
 
               // Handle argument types
-              if ((abiItem.inputs || []).length > 0) {
-                contractField.args = abiItem.inputs!.reduce<
-                  GraphQLFieldConfig<unknown, unknown, unknown>['args']
-                >(
-                  (accArgs, input, inputIndex) => ({
-                    ...accArgs,
-                    // Fallback to using index if input does not have a name
-                    [input.name || inputIndex]: {
-                      type: generateGraphqlType({
-                        isInput: true,
-                        component: input,
-                        sharedGraphQlTypes,
-                      }),
-                    },
-                  }),
-                  {},
-                );
+              if (abiInputs.length > 0) {
+                contractField.args = createGraphQlInputTypes({
+                  components: abiInputs,
+                  sharedGraphQlTypes,
+                });
               }
 
               return {
@@ -323,17 +175,12 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                   return accContractCalls;
                 }
 
+                // console.log('callSelection.arguments', callSelection.arguments![1].value);
+
                 // Extract arguments
-                // TODO: test if functions that accept a tuple as input work properly
-                const contractCallArguments = (callSelection.arguments || []).reduce<
-                  ReadonlyArray<string | boolean>
-                >(
-                  (accArguments, argument) =>
-                    'value' in argument.value
-                      ? [...accArguments, argument.value.value]
-                      : accArguments,
-                  [],
-                );
+                const contractCallArguments = formatGraphQlArgs(callSelection.arguments || []);
+
+                console.log(contractCallArguments);
 
                 // Shape call
                 const contractCall: ContractCall = {
