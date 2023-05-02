@@ -1,27 +1,96 @@
 import { JsonFragmentType } from 'ethers';
-import { GraphQLBoolean, GraphQLList, GraphQLString } from 'graphql';
+import {
+  GraphQLBoolean,
+  GraphQLFieldConfig,
+  GraphQLInputFieldConfig,
+  GraphQLInputObjectType,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLString,
+  ThunkObjMap,
+} from 'graphql';
 
 import { BigIntScalar } from '../../scalars';
 import { SharedGraphQlTypes } from '../types';
-import getOrSetSharedGraphQlInputType from './getOrSetSharedGraphQlInputType';
+import createGraphQlTypeName from './createGraphQlTypeName';
 
-function createGraphQlType<TIsInput extends boolean>({
+function getOrSetSharedGraphQlType({
   isInput,
   component,
   sharedGraphQlTypes,
 }: {
-  isInput: TIsInput;
+  isInput: boolean;
   component: JsonFragmentType;
   sharedGraphQlTypes: SharedGraphQlTypes;
 }) {
-  // TODO: improve type
-  let graphQlType: any = BigIntScalar;
+  let sharedGraphQlTypeName = createGraphQlTypeName(component.internalType!);
+  // Add suffix if type is an input to prevent a potential duplicate with an
+  // output
+  if (isInput) {
+    sharedGraphQlTypeName += 'Input';
+  }
+
+  const keyType = isInput ? 'inputs' : 'outputs';
+
+  // Create new shared type if it does not exist already
+  if (!sharedGraphQlTypes[keyType][sharedGraphQlTypeName]) {
+    sharedGraphQlTypes[keyType][sharedGraphQlTypeName] = isInput
+      ? new GraphQLInputObjectType({
+          name: sharedGraphQlTypeName,
+          fields: (component.components || []).reduce<ThunkObjMap<GraphQLInputFieldConfig>>(
+            (accComponentGraphqlTypes, component, componentIndex) => ({
+              ...accComponentGraphqlTypes,
+              [component.name || componentIndex]: {
+                type: createGraphQlType({
+                  isInput,
+                  component,
+                  sharedGraphQlTypes,
+                }) as GraphQLInputObjectType,
+              },
+            }),
+            {},
+          ),
+        })
+      : new GraphQLObjectType({
+          name: sharedGraphQlTypeName,
+          fields: (component.components || []).reduce<
+            ThunkObjMap<GraphQLFieldConfig<unknown, unknown, unknown>>
+          >(
+            (accComponentGraphqlTypes, component, componentIndex) => ({
+              ...accComponentGraphqlTypes,
+              [component.name || componentIndex]: {
+                type: createGraphQlType({
+                  isInput,
+                  component,
+                  sharedGraphQlTypes,
+                }) as GraphQLObjectType,
+              },
+            }),
+            {},
+          ),
+        });
+  }
+
+  return sharedGraphQlTypes[keyType][sharedGraphQlTypeName];
+}
+
+function createGraphQlType({
+  isInput,
+  component,
+  sharedGraphQlTypes,
+}: {
+  isInput: boolean;
+  component: JsonFragmentType;
+  sharedGraphQlTypes: SharedGraphQlTypes;
+}) {
+  let graphQlType;
 
   const componentType = component.type?.replace('[]', '');
 
   // Handle tuples
   if (componentType === 'tuple' && component.internalType) {
-    graphQlType = getOrSetSharedGraphQlInputType({
+    graphQlType = getOrSetSharedGraphQlType({
       isInput,
       component,
       sharedGraphQlTypes,
@@ -30,6 +99,8 @@ function createGraphQlType<TIsInput extends boolean>({
     graphQlType = GraphQLString;
   } else if (componentType === 'bool') {
     graphQlType = GraphQLBoolean;
+  } else {
+    graphQlType = BigIntScalar;
   }
 
   // Detect if input is an array
@@ -37,6 +108,11 @@ function createGraphQlType<TIsInput extends boolean>({
     graphQlType = new GraphQLList(graphQlType);
   }
 
+  if (isInput) {
+    graphQlType = new GraphQLNonNull(graphQlType);
+  }
+
   return graphQlType;
 }
+
 export default createGraphQlType;

@@ -3,6 +3,7 @@ import { JsonRpcProvider } from 'ethers';
 import {
   GraphQLFieldConfig,
   GraphQLInt,
+  GraphQLNonNull,
   GraphQLObjectType,
   GraphQLResolveInfo,
   GraphQLSchema,
@@ -36,55 +37,58 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
       (accContracts, contract) => ({
         ...accContracts,
         [contract.name]: {
-          type: new GraphQLObjectType({
-            name: contract.name,
-            // Go through contract methods and build field types
-            fields: contract.abi.reduce<
-              ThunkObjMap<GraphQLFieldConfig<{ [key: string]: unknown }, unknown, unknown>>
-            >((accContractFields, abiItem, abiItemIndex) => {
-              // Filter out items that aren't non-mutating functions
-              if (
-                abiItem.type !== 'function' ||
-                (abiItem.stateMutability !== 'view' && abiItem.stateMutability !== 'pure')
-              ) {
-                return accContractFields;
-              }
+          type: new GraphQLNonNull(
+            new GraphQLObjectType({
+              name: contract.name,
+              // Go through contract methods and build field types
+              fields: contract.abi.reduce<
+                ThunkObjMap<GraphQLFieldConfig<{ [key: string]: unknown }, unknown, unknown>>
+              >((accContractFields, abiItem, abiItemIndex) => {
+                // Filter out items that aren't non-mutating functions
+                if (
+                  abiItem.type !== 'function' ||
+                  (abiItem.stateMutability !== 'view' && abiItem.stateMutability !== 'pure')
+                ) {
+                  return accContractFields;
+                }
 
-              // TODO: handle events
+                // TODO: handle events
 
-              // TODO: handle function overloading
+                // TODO: handle function overloading
 
-              // Fallback to using index if method does not have a name
-              const abiItemName = abiItem.name || abiItemIndex;
-              const abiInputs = abiItem.inputs || [];
-              const abiItemOutputs = abiItem.outputs || [];
+                // Fallback to using index if method does not have a name
+                const abiItemName = abiItem.name || abiItemIndex;
+                const abiInputs = abiItem.inputs || [];
 
-              const contractField: GraphQLFieldConfig<
-                { [key: string]: unknown },
-                unknown,
-                unknown
-              > = {
-                type: createGraphQlOutputTypes({
-                  components: abiItemOutputs,
-                  sharedGraphQlTypes,
-                }),
-                resolve: (_obj: { [key: string]: unknown }) => _obj[abiItemName],
-              };
+                const contractField: GraphQLFieldConfig<
+                  { [key: string]: unknown },
+                  unknown,
+                  unknown
+                > = {
+                  type: createGraphQlOutputTypes({
+                    abiItem,
+                    sharedGraphQlTypes,
+                  }),
+                  // TODO: handle multiple outputs (returned as an array of
+                  // values, mapped to an object in GraphQL schema)
+                  resolve: (_obj: { [key: string]: unknown }) => _obj[abiItemName],
+                };
 
-              // Handle argument types
-              if (abiInputs.length > 0) {
-                contractField.args = createGraphQlInputTypes({
-                  components: abiInputs,
-                  sharedGraphQlTypes,
-                });
-              }
+                // Handle argument types
+                if (abiInputs.length > 0) {
+                  contractField.args = createGraphQlInputTypes({
+                    components: abiInputs,
+                    sharedGraphQlTypes,
+                  });
+                }
 
-              return {
-                ...accContractFields,
-                [abiItemName]: contractField,
-              };
-            }, {}),
-          }),
+                return {
+                  ...accContractFields,
+                  [abiItemName]: contractField,
+                };
+              }, {}),
+            }),
+          ),
           resolve: (_obj: { [key: string]: unknown }) => _obj[contract.name],
         },
       }),
@@ -96,9 +100,9 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
     name: 'Query',
     fields: {
       contracts: {
-        type: contractsType,
+        type: new GraphQLNonNull(contractsType),
         args: {
-          chainId: { type: GraphQLInt },
+          chainId: { type: new GraphQLNonNull(GraphQLInt) },
         },
         resolve: async (
           _obj: unknown,
@@ -175,12 +179,8 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                   return accContractCalls;
                 }
 
-                // console.log('callSelection.arguments', callSelection.arguments![1].value);
-
                 // Extract arguments
                 const contractCallArguments = formatGraphQlArgs(callSelection.arguments || []);
-
-                console.log(contractCallArguments);
 
                 // Shape call
                 const contractCall: ContractCall = {

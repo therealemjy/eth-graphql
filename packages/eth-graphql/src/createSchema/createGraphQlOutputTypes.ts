@@ -1,30 +1,46 @@
-import { JsonFragmentType } from 'ethers';
+import { JsonFragment } from 'ethers';
+import { GraphQLFieldConfig, GraphQLObjectType, GraphQLOutputType, ThunkObjMap } from 'graphql';
 
 import createGraphQlType from './createGraphQlType';
 import { SharedGraphQlTypes } from './types';
 
 const createGraphQlOutputTypes = ({
-  components,
+  abiItem,
   sharedGraphQlTypes,
 }: {
-  components: ReadonlyArray<JsonFragmentType>;
+  abiItem: JsonFragment;
   sharedGraphQlTypes: SharedGraphQlTypes;
 }) => {
-  if (components.length === 1) {
+  const abiItemOutputs = abiItem.outputs || [];
+
+  if (abiItemOutputs.length === 1) {
     return createGraphQlType({
       isInput: false,
-      component: components[0],
+      component: abiItemOutputs[0],
       sharedGraphQlTypes,
-    });
+    }) as GraphQLOutputType;
   }
 
-  return components.map(component =>
-    createGraphQlType({
-      isInput: false,
-      component,
-      sharedGraphQlTypes,
-    }),
-  );
+  // Map array outputs to an object
+  return new GraphQLObjectType({
+    name: `${abiItem.name!}Output`,
+    fields: abiItemOutputs.reduce<
+      ThunkObjMap<GraphQLFieldConfig<{ [key: string]: unknown }, unknown, unknown>>
+    >(
+      (accArgs, component, componentIndex) => ({
+        ...accArgs,
+        // Fallback to using index if input does not have a name
+        [component.name || componentIndex]: {
+          type: createGraphQlType({
+            isInput: false,
+            component,
+            sharedGraphQlTypes,
+          }) as GraphQLOutputType,
+        },
+      }),
+      {},
+    ),
+  });
 };
 
 export default createGraphQlOutputTypes;
