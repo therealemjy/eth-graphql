@@ -4,8 +4,8 @@
   "license": "MIT",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
-  "bin": "./dist/cli.js",
   "types": "./dist/index.d.ts",
+  "bin": "./dist/cli.js",
   "exports": {
     ".": {
       "require": "./dist/index.js",

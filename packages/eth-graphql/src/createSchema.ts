@@ -176,8 +176,11 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
             // Go through contract methods and build field types
             fields: contract.abi.reduce<ThunkObjMap<GraphQLFieldConfig<any, any, any>>>(
               (accContractFields, abiItem, abiItemIndex) => {
-                // Filter out non-function items
-                if (abiItem.type !== 'function') {
+                // Filter out items that aren't non-mutating functions
+                if (
+                  abiItem.type !== 'function' ||
+                  (abiItem.stateMutability !== 'view' && abiItem.stateMutability !== 'pure')
+                ) {
                   return accContractFields;
                 }
 
@@ -252,6 +255,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
           );
 
           // Ensure there's only one Contracts node
+          // TODO: find all contracts node and merge them together
           if (fieldNodes.length > 1) {
             // TODO: set human-friendlier error
             throw new Error('Only one "contracts" query is supported');

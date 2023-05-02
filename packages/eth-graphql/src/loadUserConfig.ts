@@ -20,7 +20,7 @@ const loadUserConfig = () => {
 
     return configFile.config.default as ContractConfig[];
   } catch (error) {
-    console.log('error', error);
+    console.error('error', error);
     // TODO: throw human-friendly error
     throw new Error(`${USER_CONFIG_FILE_NAME} config file not found`);
   }
