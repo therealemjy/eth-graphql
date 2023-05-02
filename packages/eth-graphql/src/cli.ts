@@ -18,12 +18,11 @@ BigInt.prototype.toJSON = function () {
 
 const PORT = 8008;
 const GRAPHIQL_ROUTE = '/eth-call-graphiql';
-
 const GRAPHIQL_URL = `http://localhost:${PORT}${GRAPHIQL_ROUTE}`;
 
 program
-  .option('--rpcProviderUrl', 'URL of the RPC provider to use with GraphiQL')
-  .action((_str, options) => {
+  .argument('<rpcProviderUrl>', 'URL of the RPC provider to use with GraphiQL')
+  .action(rpcProviderUrl => {
     // TODO: check user is running a recent enough version of Node, otherwise
     // the error "Unexpected identifier" will be returned when making any query
     // using the GraphiQL interface
@@ -32,7 +31,7 @@ program
     const contracts = loadUserConfig();
     const schema = createSchema({
       config: {
-        rpcProviderUrl: options.args[0],
+        rpcProviderUrl,
       },
       contracts,
     });
