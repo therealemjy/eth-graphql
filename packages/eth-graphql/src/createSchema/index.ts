@@ -11,15 +11,12 @@ import {
   ThunkObjMap,
 } from 'graphql';
 
-import { Config, ContractCall, ContractConfig } from '../types';
+import { Config, ContractCall, ContractConfig, SolidityValue } from '../types';
 import createGraphQlInputTypes from './createGraphQlInputTypes';
 import createGraphQlOutputTypes from './createGraphQlOutputTypes';
 import formatGraphQlArgs from './formatGraphQlArgs';
 import formatToFieldName from './formatToFieldName';
 import { SharedGraphQlTypes } from './types';
-
-type SoliditySingleReturnValue = string | number | bigint | object;
-type SolidityReturnValue = SoliditySingleReturnValue | Array<SoliditySingleReturnValue>;
 
 interface CreateSchemaInput {
   config: Config;
@@ -46,9 +43,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
               name: contract.name,
               // Go through contract methods and build field types
               fields: contract.abi.reduce<
-                ThunkObjMap<
-                  GraphQLFieldConfig<{ [key: string]: SolidityReturnValue }, unknown, unknown>
-                >
+                ThunkObjMap<GraphQLFieldConfig<{ [key: string]: SolidityValue }, unknown, unknown>>
               >((accContractFields, abiItem, abiItemIndex) => {
                 // Filter out items that aren't non-mutating functions
                 if (
@@ -67,7 +62,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                 const abiInputs = abiItem.inputs || [];
 
                 const contractField: GraphQLFieldConfig<
-                  { [key: string]: SolidityReturnValue },
+                  { [key: string]: SolidityValue },
                   unknown,
                   unknown
                 > = {
@@ -75,7 +70,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                     abiItem,
                     sharedGraphQlTypes,
                   }),
-                  resolve: (_obj: { [key: string]: SolidityReturnValue }) => {
+                  resolve: (_obj: { [key: string]: SolidityValue }) => {
                     const abiItemOutputs = abiItem.outputs || [];
                     const data = _obj[abiItemName];
 
@@ -87,7 +82,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                     // map them to an object, similarly to how they are mapped
                     // in the GraphQL schema
                     return abiItemOutputs.reduce<{
-                      [key: string]: SolidityReturnValue;
+                      [key: string]: SolidityValue;
                     }>(
                       (accFormattedData, outputComponent, outputComponentIndex) => ({
                         ...accFormattedData,
@@ -116,7 +111,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
               }, {}),
             }),
           ),
-          resolve: (_obj: { [key: string]: SolidityReturnValue }) => _obj[contract.name],
+          resolve: (_obj: { [key: string]: SolidityValue }) => _obj[contract.name],
         },
       }),
       {},
@@ -145,7 +140,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
           // Ensure there's only one Contracts node
           // TODO: find all contracts node and merge them together
           if (fieldNodes.length > 1) {
-            // TODO: set human-friendlier error
+            // TODO: set human-friendly error
             throw new Error('Only one "contracts" query is supported');
           }
 
@@ -224,14 +219,14 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
           );
 
           const ethCallProvider = new Provider(chainId, provider);
-          const multicallResults = await ethCallProvider.all<SolidityReturnValue>(
+          const multicallResults = await ethCallProvider.all<SolidityValue>(
             calls.map(({ call }) => call),
           );
 
           // Shape and return results
           return multicallResults.reduce<{
             [contractName: string]: {
-              [methodName: string]: SolidityReturnValue;
+              [methodName: string]: SolidityValue;
             };
           }>((accResults, result, index) => {
             const contractCall = calls[index];

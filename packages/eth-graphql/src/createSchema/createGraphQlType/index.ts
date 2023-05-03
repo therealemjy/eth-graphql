@@ -10,8 +10,8 @@ import {
   GraphQLString,
   ThunkObjMap,
 } from 'graphql';
+import { GraphQLBigInt } from 'graphql-scalars';
 
-import { BigIntScalar } from '../../scalars';
 import formatToFieldName from '../formatToFieldName';
 import { SharedGraphQlTypes } from '../types';
 import createGraphQlTypeName from './createGraphQlTypeName';
@@ -101,7 +101,7 @@ function createGraphQlType({
   } else if (componentType === 'bool') {
     graphQlType = GraphQLBoolean;
   } else {
-    graphQlType = BigIntScalar;
+    graphQlType = GraphQLBigInt;
   }
 
   // Detect if input is an array
