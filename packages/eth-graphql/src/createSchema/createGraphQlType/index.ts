@@ -14,7 +14,7 @@ import { GraphQLBigInt } from 'graphql-scalars';
 
 import formatToFieldName from '../formatToFieldName';
 import { SharedGraphQlTypes } from '../types';
-import createGraphQlTypeName from './createGraphQlTypeName';
+import formatToGraphQlTypeName from './formatToGraphQlTypeName';
 
 function getOrSetSharedGraphQlType({
   isInput,
@@ -25,7 +25,7 @@ function getOrSetSharedGraphQlType({
   component: JsonFragmentType;
   sharedGraphQlTypes: SharedGraphQlTypes;
 }) {
-  let sharedGraphQlTypeName = createGraphQlTypeName(component.internalType!);
+  let sharedGraphQlTypeName = formatToGraphQlTypeName(component.internalType!);
   // Add suffix if type is an input to prevent a potential duplicate with an
   // output
   if (isInput) {

@@ -44,21 +44,20 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
               // Go through contract methods and build field types
               fields: contract.abi.reduce<
                 ThunkObjMap<GraphQLFieldConfig<{ [key: string]: SolidityValue }, unknown, unknown>>
-              >((accContractFields, abiItem, abiItemIndex) => {
+              >((accContractFields, abiItem) => {
                 // Filter out items that aren't non-mutating functions
                 if (
                   abiItem.type !== 'function' ||
+                  !abiItem.name ||
                   (abiItem.stateMutability !== 'view' && abiItem.stateMutability !== 'pure')
                 ) {
                   return accContractFields;
                 }
 
-                // TODO: handle events
-
                 // TODO: handle function overloading
 
-                // Fallback to using index if method does not have a name
-                const abiItemName = formatToFieldName({ name: abiItem.name, index: abiItemIndex });
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                const abiItemName = abiItem.name!; // We've already asserted that the name property is truthy
                 const abiInputs = abiItem.inputs || [];
 
                 const contractField: GraphQLFieldConfig<
@@ -138,9 +137,8 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
           );
 
           // Ensure there's only one Contracts node
-          // TODO: find all contracts node and merge them together
           if (fieldNodes.length > 1) {
-            // TODO: set human-friendly error
+            // TODO: throw human-friendly error
             throw new Error('Only one "contracts" query is supported');
           }
 

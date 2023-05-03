@@ -9,13 +9,6 @@ import loadUserConfig from './loadUserConfig';
 
 const program = new Command();
 
-// Because JSON does not know how to handle BigInt values, we update the
-// prototype of BigInt so it returns a string when being parsed to JSON
-// @ts-ignore
-BigInt.prototype.toJSON = function () {
-  return this.toString();
-};
-
 const PORT = 8008;
 const GRAPHIQL_ROUTE = '/eth-call-graphiql';
 const GRAPHIQL_URL = `http://localhost:${PORT}${GRAPHIQL_ROUTE}`;
