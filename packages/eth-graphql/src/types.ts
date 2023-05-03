@@ -1,5 +1,5 @@
 import type { Call } from 'ethcall';
-import type { JsonFragment } from 'ethers';
+import type { Provider as EthersProvider, JsonFragment } from 'ethers';
 
 export interface ContractConfig {
   name: string;
@@ -10,7 +10,7 @@ export interface ContractConfig {
 }
 
 export interface Config {
-  rpcProviderUrl: string;
+  provider: EthersProvider;
 }
 
 export interface ContractCall {

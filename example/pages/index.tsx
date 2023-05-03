@@ -10,13 +10,6 @@ export async function getStaticProps() {
           PoolLens {
             getPoolDataFromVenusPool(
               poolRegistryAddress: "0x1aF50D1Ee859Bb972384F1f96F3cFCccfC5Ac210"
-              venusPool: {
-                name: ""
-                creator: ""
-                comptroller: ""
-                blockPosted: ""
-                timestampPosted: ""
-              }
             ) {
               name
             }

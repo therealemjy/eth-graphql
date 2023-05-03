@@ -1,5 +1,4 @@
 import type { Contract } from 'ethcall';
-import { JsonRpcProvider } from 'ethers';
 import {
   GraphQLFieldConfig,
   GraphQLInt,
@@ -39,8 +38,6 @@ interface FieldNameMapping {
 }
 
 const createSchema = ({ config, contracts }: CreateSchemaInput) => {
-  const provider = new JsonRpcProvider(config.rpcProviderUrl);
-
   const sharedGraphQlTypes: SharedGraphQlTypes = {
     inputs: {},
     outputs: {},
@@ -264,7 +261,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
             [],
           );
 
-          const ethCallProvider = new Provider(chainId, provider);
+          const ethCallProvider = new Provider(chainId, config.provider);
           const multicallResults = await ethCallProvider.all<SolidityValue>(
             calls.map(({ call }) => call),
           );

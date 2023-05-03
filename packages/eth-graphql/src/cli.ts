@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
+import { JsonRpcProvider } from 'ethers';
 import express from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import open from 'open';
@@ -21,10 +22,11 @@ program
     // using the GraphiQL interface
 
     // Build schema
+    const provider = new JsonRpcProvider(rpcProviderUrl);
     const contracts = loadUserConfig();
     const schema = createSchema({
       config: {
-        rpcProviderUrl,
+        provider,
       },
       contracts,
     });
