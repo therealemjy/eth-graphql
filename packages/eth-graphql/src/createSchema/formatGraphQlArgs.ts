@@ -11,6 +11,7 @@ const formatValueNode = (valueNode: ValueNode): SolidityValue => {
     );
   }
 
+  // Convert list to array
   if (valueNode.kind === Kind.LIST) {
     return valueNode.values.map(formatValueNode);
   }

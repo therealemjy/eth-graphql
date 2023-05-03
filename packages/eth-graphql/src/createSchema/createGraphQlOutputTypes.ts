@@ -8,7 +8,7 @@ import {
 } from 'graphql';
 
 import createGraphQlType from './createGraphQlType';
-import formatToFieldName from './formatToFieldName';
+import formatToEntityName from './formatToEntityName';
 import { SharedGraphQlTypes } from './types';
 
 const createGraphQlOutputTypes = ({
@@ -39,7 +39,7 @@ const createGraphQlOutputTypes = ({
         (accArgs, component, componentIndex) => ({
           ...accArgs,
           // Fallback to using index if input does not have a name
-          [formatToFieldName({ name: component.name, index: componentIndex })]: {
+          [formatToEntityName({ name: component.name, index: componentIndex, type: 'value' })]: {
             type: createGraphQlType({
               isInput: false,
               component,

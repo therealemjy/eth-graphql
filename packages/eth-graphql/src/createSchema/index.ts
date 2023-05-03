@@ -15,12 +15,27 @@ import { Config, ContractCall, ContractConfig, SolidityValue } from '../types';
 import createGraphQlInputTypes from './createGraphQlInputTypes';
 import createGraphQlOutputTypes from './createGraphQlOutputTypes';
 import formatGraphQlArgs from './formatGraphQlArgs';
+import formatToEntityName from './formatToEntityName';
 import formatToFieldName from './formatToFieldName';
 import { SharedGraphQlTypes } from './types';
+
+const ROOT_NODE_NAME = 'contracts';
 
 interface CreateSchemaInput {
   config: Config;
   contracts: ContractConfig[];
+}
+
+interface ContractMapping {
+  [contractName: string]: {
+    [chainId: number]: Contract;
+  };
+}
+
+interface FieldNameMapping {
+  [contractName: string]: {
+    [fieldName: string]: string;
+  };
 }
 
 const createSchema = ({ config, contracts }: CreateSchemaInput) => {
@@ -31,20 +46,37 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
     outputs: {},
   };
 
+  // Map contract names to contract instances
+  let contractMapping: ContractMapping;
+
+  // Map GraphQL fields to contract functions. Although most fields will be
+  // mapped to a function of the same name (for a given contract), overloaded
+  // functions are handled using multiple fields sharing the same name with an
+  // added suffix (see formatToFieldName function)
+  const fieldMapping: FieldNameMapping = {};
+
   const contractsType = new GraphQLObjectType({
-    name: 'contracts',
+    name: ROOT_NODE_NAME,
     // Go through contracts and build field types
-    fields: contracts.reduce(
-      (accContracts, contract) => ({
+    fields: contracts.reduce((accContracts, contract) => {
+      // Filter out ABI items that aren't non-mutating functions
+      const filteredContractAbiItems = contract.abi.filter(
+        abiItem =>
+          abiItem.type === 'function' &&
+          !!abiItem.name &&
+          (abiItem.stateMutability === 'view' || abiItem.stateMutability === 'pure'),
+      );
+
+      return {
         ...accContracts,
         [contract.name]: {
           type: new GraphQLNonNull(
             new GraphQLObjectType({
               name: contract.name,
               // Go through contract methods and build field types
-              fields: contract.abi.reduce<
+              fields: filteredContractAbiItems.reduce<
                 ThunkObjMap<GraphQLFieldConfig<{ [key: string]: SolidityValue }, unknown, unknown>>
-              >((accContractFields, abiItem) => {
+              >((accContractFields, abiItem, abiItemIndex) => {
                 // Filter out items that aren't non-mutating functions
                 if (
                   abiItem.type !== 'function' ||
@@ -85,9 +117,10 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                     }>(
                       (accFormattedData, outputComponent, outputComponentIndex) => ({
                         ...accFormattedData,
-                        [formatToFieldName({
+                        [formatToEntityName({
                           name: outputComponent.name,
                           index: outputComponentIndex,
+                          type: 'value',
                         })]: data[outputComponentIndex],
                       }),
                       {},
@@ -103,18 +136,31 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                   });
                 }
 
+                const contractFieldName = formatToFieldName({
+                  name: abiItemName,
+                  index: abiItemIndex,
+                  abi: filteredContractAbiItems,
+                });
+
+                // Initialize contract mapping if necessary
+                if (!fieldMapping[contract.name]) {
+                  fieldMapping[contract.name] = {};
+                }
+
+                // Add field to contract mapping
+                fieldMapping[contract.name][contractFieldName] = abiItemName;
+
                 return {
                   ...accContractFields,
-                  [abiItemName]: contractField,
+                  [contractFieldName]: contractField,
                 };
               }, {}),
             }),
           ),
           resolve: (_obj: { [key: string]: SolidityValue }) => _obj[contract.name],
         },
-      }),
-      {},
-    ),
+      };
+    }, {}),
   });
 
   const queryType = new GraphQLObjectType({
@@ -131,12 +177,12 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
           _context: unknown,
           info: GraphQLResolveInfo,
         ) => {
-          // Find Contracts node
+          // Find "contracts" node
           const fieldNodes = info.fieldNodes.filter(
             fieldNode => fieldNode.name.value === info.fieldName,
           );
 
-          // Ensure there's only one Contracts node
+          // Ensure there's only one "contracts" node
           if (fieldNodes.length > 1) {
             // TODO: throw human-friendly error
             throw new Error('Only one "contracts" query is supported');
@@ -149,31 +195,30 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
           // dynamically
           const { Provider, Contract } = await import('ethcall');
 
+          // Generate contract mapping if necessary. An instance of each
+          // contract is created for each chain supported and mapped to the
+          // corresponding chain id
+          if (!contractMapping) {
+            contractMapping = contracts.reduce<ContractMapping>(
+              (contractsAcc, { name, address, abi }) => ({
+                ...contractsAcc,
+                [name]: Object.keys(address).reduce<{
+                  [chainId: number]: Contract;
+                }>(
+                  (chainIdsAcc, chainId) => ({
+                    ...chainIdsAcc,
+                    [chainId]: new Contract(address[Number(chainId)], abi),
+                  }),
+                  {},
+                ),
+              }),
+              {},
+            );
+          }
+
           const fieldNode = fieldNodes[0];
 
-          // Generate contract mapping. An instance of each contract is created
-          // for each chain supported and mapped to the corresponding chain id
-          const contractMapping = contracts.reduce<{
-            [contractName: string]: {
-              [chainId: number]: Contract;
-            };
-          }>(
-            (contractsAcc, { name, address, abi }) => ({
-              ...contractsAcc,
-              [name]: Object.keys(address).reduce<{
-                [chainId: number]: Contract;
-              }>(
-                (chainIdsAcc, chainId) => ({
-                  ...chainIdsAcc,
-                  [chainId]: new Contract(address[Number(chainId)], abi),
-                }),
-                {},
-              ),
-            }),
-            {},
-          );
-
-          // Go through Contracts node to extract requests to make
+          // Go through "contracts" node to extract requests to make
           const calls = fieldNode.selectionSet!.selections.reduce<ContractCall[]>(
             (accCalls, contractSelection) => {
               // Ignore __typename and non-field selections
@@ -199,13 +244,16 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                   return accContractCalls;
                 }
 
-                // Extract arguments
+                // Find corresponding function name in mapping
+                const fnName = fieldMapping[contractName][callSelection.name.value];
+
+                // Format arguments
                 const contractCallArguments = formatGraphQlArgs(callSelection.arguments || []);
 
                 // Shape call
                 const contractCall: ContractCall = {
                   contractName: contractName,
-                  call: contract[callSelection.name.value](...contractCallArguments),
+                  call: contract[fnName](...contractCallArguments),
                 };
 
                 return [...accContractCalls, contractCall];

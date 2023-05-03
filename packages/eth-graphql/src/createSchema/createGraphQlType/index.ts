@@ -12,7 +12,7 @@ import {
 } from 'graphql';
 import { GraphQLBigInt } from 'graphql-scalars';
 
-import formatToFieldName from '../formatToFieldName';
+import formatToEntityName from '../formatToEntityName';
 import { SharedGraphQlTypes } from '../types';
 import formatToGraphQlTypeName from './formatToGraphQlTypeName';
 
@@ -42,7 +42,7 @@ function getOrSetSharedGraphQlType({
           fields: (component.components || []).reduce<ThunkObjMap<GraphQLInputFieldConfig>>(
             (accComponentGraphqlTypes, component, componentIndex) => ({
               ...accComponentGraphqlTypes,
-              [formatToFieldName({ name: component.name, index: componentIndex })]: {
+              [formatToEntityName({ name: component.name, index: componentIndex, type: 'arg' })]: {
                 type: createGraphQlType({
                   isInput,
                   component,
@@ -60,13 +60,14 @@ function getOrSetSharedGraphQlType({
           >(
             (accComponentGraphqlTypes, component, componentIndex) => ({
               ...accComponentGraphqlTypes,
-              [formatToFieldName({ name: component.name, index: componentIndex })]: {
-                type: createGraphQlType({
-                  isInput,
-                  component,
-                  sharedGraphQlTypes,
-                }) as GraphQLNonNull<GraphQLObjectType>,
-              },
+              [formatToEntityName({ name: component.name, index: componentIndex, type: 'value' })]:
+                {
+                  type: createGraphQlType({
+                    isInput,
+                    component,
+                    sharedGraphQlTypes,
+                  }) as GraphQLNonNull<GraphQLObjectType>,
+                },
             }),
             {},
           ),
