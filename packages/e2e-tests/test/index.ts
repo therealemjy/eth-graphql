@@ -1,110 +1,68 @@
-import { anyValue } from '@nomicfoundation/hardhat-chai-matchers/withArgs';
-import { loadFixture, time } from '@nomicfoundation/hardhat-network-helpers';
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
+import chai from 'chai';
+import chaiJestSnapshot from 'chai-jest-snapshot';
+import { createLink } from 'eth-graphql';
 import { ethers } from 'hardhat';
 
-describe('TestContract', function () {
-  // We define a fixture to reuse the same setup in every test.
-  // We use loadFixture to run this setup once, snapshot that state,
-  // and reset Hardhat Network to that snapshot in every test.
-  async function deployOneYearLockFixture() {
-    const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-    const ONE_GWEI = 1_000_000_000;
+import { MAINNET_CHAIN_ID } from '../constants';
 
-    const lockedAmount = ONE_GWEI;
-    const unlockTime = (await time.latest()) + ONE_YEAR_IN_SECS;
+chai.use(chaiJestSnapshot);
 
-    // Contracts are deployed using the first signer/account by default
-    const [owner, otherAccount] = await ethers.getSigners();
+before(function () {
+  chaiJestSnapshot.resetSnapshotRegistry();
+});
 
-    const Lock = await ethers.getContractFactory('TestContract');
-    const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+beforeEach(function () {
+  chaiJestSnapshot.configureUsingMochaContext(this);
+});
 
-    return { lock, unlockTime, lockedAmount, owner, otherAccount };
-  }
+// Create fixture for TestContract
+async function deployTestContractFixture() {
+  const TestContract = await ethers.getContractFactory('TestContract');
+  const testContract = await TestContract.deploy();
 
-  describe('Deployment', function () {
-    it('Should set the right unlockTime', async function () {
-      const { lock, unlockTime } = await loadFixture(deployOneYearLockFixture);
+  const testContractAddress = testContract.address;
+  console.log('testContractAddress', testContractAddress);
 
-      expect(await lock.unlockTime()).to.equal(unlockTime);
-    });
+  // TODO: Mock config to include deployed contracts address
 
-    it('Should set the right owner', async function () {
-      const { lock, owner } = await loadFixture(deployOneYearLockFixture);
-
-      expect(await lock.owner()).to.equal(owner.address);
-    });
-
-    it('Should receive and store the funds to lock', async function () {
-      const { lock, lockedAmount } = await loadFixture(deployOneYearLockFixture);
-
-      expect(await ethers.provider.getBalance(lock.address)).to.equal(lockedAmount);
-    });
-
-    it('Should fail if the unlockTime is not in the future', async function () {
-      // We don't use the fixture here because we want a different deployment
-      const latestTime = await time.latest();
-      const Lock = await ethers.getContractFactory('TestContract');
-      await expect(Lock.deploy(latestTime, { value: 1 })).to.be.revertedWith(
-        'Unlock time should be in the future',
-      );
-    });
+  const link = createLink({
+    // @ts-ignore
+    provider: ethers.provider,
   });
 
-  describe('Withdrawals', function () {
-    describe('Validations', function () {
-      it('Should revert with the right error if called too soon', async function () {
-        const { lock } = await loadFixture(deployOneYearLockFixture);
+  const client = new ApolloClient({
+    cache: new InMemoryCache(),
+    link,
+  });
 
-        await expect(lock.withdraw()).to.be.revertedWith("You can't withdraw yet");
-      });
+  return client;
+}
 
-      it('Should revert with the right error if called from another account', async function () {
-        const { lock, unlockTime, otherAccount } = await loadFixture(deployOneYearLockFixture);
+describe('end-to-end tests', function () {
+  it('should return the correct data', async function () {
+    const client = await loadFixture(deployTestContractFixture);
 
-        // We can increase the time in Hardhat Network
-        await time.increaseTo(unlockTime);
-
-        // We use lock.connect() to send a transaction from another account
-        await expect(lock.connect(otherAccount).withdraw()).to.be.revertedWith(
-          "You aren't the owner",
-        );
-      });
-
-      it("Shouldn't fail if the unlockTime has arrived and the owner calls it", async function () {
-        const { lock, unlockTime } = await loadFixture(deployOneYearLockFixture);
-
-        // Transactions are sent using the first signer by default
-        await time.increaseTo(unlockTime);
-
-        await expect(lock.withdraw()).not.to.be.reverted;
-      });
+    // Make GraphQL request
+    const { data } = await client.query({
+      query: gql`
+        query ($chainId: Int!) {
+          contracts(chainId: $chainId) {
+            TestContract {
+              getMovieTitle
+            }
+          }
+        }
+      `,
+      variables: {
+        chainId: MAINNET_CHAIN_ID,
+      },
     });
 
-    describe('Events', function () {
-      it('Should emit an event on withdrawals', async function () {
-        const { lock, unlockTime, lockedAmount } = await loadFixture(deployOneYearLockFixture);
+    console.log(data);
 
-        await time.increaseTo(unlockTime);
-
-        await expect(lock.withdraw()).to.emit(lock, 'Withdrawal').withArgs(lockedAmount, anyValue); // We accept any value as `when` arg
-      });
-    });
-
-    describe('Transfers', function () {
-      it('Should transfer the funds to the owner', async function () {
-        const { lock, unlockTime, lockedAmount, owner } = await loadFixture(
-          deployOneYearLockFixture,
-        );
-
-        await time.increaseTo(unlockTime);
-
-        await expect(lock.withdraw()).to.changeEtherBalances(
-          [owner, lock],
-          [lockedAmount, -lockedAmount],
-        );
-      });
-    });
+    expect(data).to.matchSnapshot();
   });
 });

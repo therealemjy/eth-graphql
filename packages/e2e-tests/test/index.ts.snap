@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`end-to-end tests should return the correct data 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "getMovieTitle": "Catch Me If You Can",
+    },
+    "__typename": "contracts",
+  },
+}
+`;

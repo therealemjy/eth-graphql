@@ -7,6 +7,7 @@
     "test:e2e": "dotenv hardhat test"
   },
   "devDependencies": {
+    "@apollo/client": "^3.7.12",
     "@ethersproject/abi": "^5.4.7",
     "@ethersproject/providers": "^5.4.7",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.0",
@@ -17,17 +18,19 @@
     "@typechain/ethers-v5": "^10.1.0",
     "@typechain/hardhat": "^6.1.2",
     "@types/chai": "^4.2.0",
+    "@types/chai-jest-snapshot": "^1.3.6",
     "@types/mocha": ">=9.1.0",
     "@types/node": ">=12.0.0",
     "chai": "^4.2.0",
+    "chai-jest-snapshot": "^2.0.0",
     "dotenv-cli": "latest",
     "ethers": "^5.4.7",
     "hardhat": "^2.14.0",
     "hardhat-gas-reporter": "^1.0.8",
     "prettier-config-custom": "*",
     "solidity-coverage": "^0.8.0",
-    "tsconfig": "*",
     "ts-node": ">=8.0.0",
+    "tsconfig": "*",
     "typechain": "^8.1.0",
     "typescript": ">=4.5.0"
   }
