@@ -4,7 +4,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "test": "turbo run test:e2e",
+    "test": "dotenv -- turbo run test:e2e",
     "lint": "turbo run lint",
     "tsc": "turbo run tsc",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md,json}\"",

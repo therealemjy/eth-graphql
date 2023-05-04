@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test:e2e": "hardhat test"
+    "test:e2e": "dotenv hardhat test"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.4.7",
@@ -20,6 +20,7 @@
     "@types/mocha": ">=9.1.0",
     "@types/node": ">=12.0.0",
     "chai": "^4.2.0",
+    "dotenv-cli": "latest",
     "ethers": "^5.4.7",
     "hardhat": "^2.14.0",
     "hardhat-gas-reporter": "^1.0.8",

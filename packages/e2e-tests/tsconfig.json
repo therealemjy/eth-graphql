@@ -1,11 +1,10 @@
 {
+  "extends": "tsconfig/library.json",
+  "include": ["."],
+  "exclude": ["artifacts", "cache", "typechain-types", "node_modules"],
   "compilerOptions": {
     "target": "es2020",
     "module": "commonjs",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true,
     "resolveJsonModule": true
   }
 }
