@@ -83,8 +83,6 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                   return accContractFields;
                 }
 
-                // TODO: handle function overloading
-
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 const abiItemName = abiItem.name!; // We've already asserted that the name property is truthy
                 const abiInputs = abiItem.inputs || [];

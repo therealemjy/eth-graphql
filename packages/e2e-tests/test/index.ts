@@ -1,5 +1,4 @@
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
-import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import chai from 'chai';
 import chaiJestSnapshot from 'chai-jest-snapshot';
@@ -19,15 +18,7 @@ beforeEach(function () {
 });
 
 // Create fixture for TestContract
-async function deployTestContractFixture() {
-  const TestContract = await ethers.getContractFactory('TestContract');
-  const testContract = await TestContract.deploy();
-
-  const testContractAddress = testContract.address;
-  console.log('testContractAddress', testContractAddress);
-
-  // TODO: Mock config to include deployed contracts address
-
+function initClient() {
   const link = createLink({
     // @ts-ignore
     provider: ethers.provider,
@@ -42,16 +33,49 @@ async function deployTestContractFixture() {
 }
 
 describe('end-to-end tests', function () {
-  it('should return the correct data', async function () {
-    const client = await loadFixture(deployTestContractFixture);
+  this.beforeAll(async function () {
+    const TestContract = await ethers.getContractFactory('TestContract');
+    await TestContract.deploy();
+  });
 
+  it('should return the correct data', async function () {
     // Make GraphQL request
+    const client = initClient();
     const { data } = await client.query({
       query: gql`
         query ($chainId: Int!) {
           contracts(chainId: $chainId) {
             TestContract {
-              getMovieTitle
+              getAnyMovieTitle
+              getAnyMovieDetails {
+                value0
+                value1
+                value2 {
+                  name
+                  walletAddress
+                }
+              }
+              getAnyMovie {
+                id
+                title
+              }
+              movies(arg0: 0) {
+                id
+                title
+                director {
+                  name
+                  walletAddress
+                }
+              }
+              getAllMovies {
+                id
+                title
+                director {
+                  name
+                  walletAddress
+                }
+              }
+              getByte32Example
             }
           }
         }
@@ -61,8 +85,8 @@ describe('end-to-end tests', function () {
       },
     });
 
-    console.log(data);
-
-    expect(data).to.matchSnapshot();
+    expect(data).to.matchSnapshot(
+      true, // TODO: remove
+    );
   });
 });

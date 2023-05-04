@@ -7,28 +7,24 @@ export async function getStaticProps() {
     query: gql`
       query GetPools {
         contracts(chainId: 97) {
-          PoolLens {
-            getPoolDataFromVenusPool(
-              poolRegistryAddress: "0x1aF50D1Ee859Bb972384F1f96F3cFCccfC5Ac210"
-            ) {
-              name
-            }
+          XVS {
+            balanceOf(_owner: "0x11cbEA7E8FfF39942075128ee7de77C06822f4de")
           }
         }
       }
     `,
   });
 
-  console.log(data);
-
   return {
     props: {
-      xvsBalance: '',
+      data,
     },
   };
 }
 
-export default function Web() {
+export default function Web({ data }: { data: unknown }) {
+  console.log(data);
+
   return (
     <div>
       <h1>Web 1</h1>

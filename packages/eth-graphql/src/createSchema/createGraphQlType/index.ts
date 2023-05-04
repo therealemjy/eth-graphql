@@ -88,21 +88,21 @@ function createGraphQlType({
 }) {
   let graphQlType;
 
-  const componentType = component.type?.replace('[]', '');
+  const componentBaseType = component.type?.replace('[]', '').replace(/[0-9]/g, '');
 
   // Handle tuples
-  if (componentType === 'tuple' && component.internalType) {
+  if (componentBaseType === 'tuple' && component.internalType) {
     graphQlType = getOrSetSharedGraphQlType({
       isInput,
       component,
       sharedGraphQlTypes,
     });
-  } else if (componentType === 'string' || componentType === 'address') {
-    graphQlType = GraphQLString;
-  } else if (componentType === 'bool') {
+  } else if (componentBaseType === 'uint' || componentBaseType === 'int') {
+    graphQlType = GraphQLBigInt;
+  } else if (componentBaseType === 'bool') {
     graphQlType = GraphQLBoolean;
   } else {
-    graphQlType = GraphQLBigInt;
+    graphQlType = GraphQLString;
   }
 
   // Detect if input is an array

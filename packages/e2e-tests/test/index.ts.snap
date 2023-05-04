@@ -5,7 +5,55 @@ Object {
   "contracts": Object {
     "TestContract": Object {
       "__typename": "TestContract",
-      "getMovieTitle": "Catch Me If You Can",
+      "getAllMovies": Array [
+        Object {
+          "__typename": "TestContract_Movie",
+          "director": Object {
+            "__typename": "TestContract_Director",
+            "name": "Steven Spielberg",
+            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+          },
+          "id": 0,
+          "title": "Catch Me If You Can",
+        },
+        Object {
+          "__typename": "TestContract_Movie",
+          "director": Object {
+            "__typename": "TestContract_Director",
+            "name": "Robert Zemeckis",
+            "walletAddress": "0x86f11f319E53481493Ea50d97eAc684c5Ca8403D",
+          },
+          "id": 1,
+          "title": "Forrest Gump",
+        },
+      ],
+      "getAnyMovie": Object {
+        "__typename": "TestContract_Movie",
+        "id": 0,
+        "title": "Catch Me If You Can",
+      },
+      "getAnyMovieDetails": Object {
+        "__typename": "getAnyMovieDetailsOutput",
+        "value0": "Catch Me If You Can",
+        "value1": 0,
+        "value2": Object {
+          "__typename": "TestContract_Director",
+          "name": "Steven Spielberg",
+          "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+        },
+      },
+      "getAnyMovieTitle": "Catch Me If You Can",
+      "getByte32Example": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+      "movies": Object {
+        "__typename": "moviesOutput",
+        "director": Object {
+          "__typename": "TestContract_Director",
+          "name": "Steven Spielberg",
+          "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+        },
+        "id": 0,
+        "title": "Catch Me If You Can",
+      },
     },
     "__typename": "contracts",
   },
