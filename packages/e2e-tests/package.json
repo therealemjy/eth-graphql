@@ -24,7 +24,9 @@
     "ethers": "^5.4.7",
     "hardhat": "^2.14.0",
     "hardhat-gas-reporter": "^1.0.8",
+    "prettier-config-custom": "*",
     "solidity-coverage": "^0.8.0",
+    "tsconfig": "*",
     "ts-node": ">=8.0.0",
     "typechain": "^8.1.0",
     "typescript": ">=4.5.0"
