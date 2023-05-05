@@ -197,8 +197,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
 
           // Ensure there's only one "contracts" node
           if (fieldNodes.length > 1) {
-            // TODO: throw human-friendly error
-            throw new Error('Only one "contracts" query is supported');
+            throw new Error('Only one "contracts" query field is supported');
           }
 
           const fieldNode = fieldNodes[0];
@@ -278,9 +277,6 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
   });
 
   const schema = new GraphQLSchema({ query: queryType });
-
-  console.log(printSchema(schema));
-
   return schema;
 };
 

@@ -17,10 +17,6 @@ const GRAPHIQL_URL = `http://localhost:${PORT}${GRAPHIQL_ROUTE}`;
 program
   .argument('<rpcProviderUrl>', 'URL of the RPC provider to use with GraphiQL')
   .action(rpcProviderUrl => {
-    // TODO: check user is running a recent enough version of Node, otherwise
-    // the error "Unexpected identifier" will be returned when making any query
-    // using the GraphiQL interface
-
     // Build schema
     const provider = new providers.JsonRpcProvider(rpcProviderUrl);
     const contracts = loadUserConfig();

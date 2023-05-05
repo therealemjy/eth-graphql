@@ -91,8 +91,6 @@ describe('end-to-end tests', function () {
       },
     });
 
-    expect(data).to.matchSnapshot(
-      true, // TODO: remove
-    );
+    expect(data).to.matchSnapshot();
   });
 });

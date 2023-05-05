@@ -88,11 +88,18 @@ function createGraphQlType({
 }) {
   let graphQlType;
 
-  const componentBaseType = component.type?.replace('[]', '').replace(/[0-9]/g, '');
+  // Use string as the fallback type. In this context, the type property should
+  // always be defined but we use this logic as a safeguard
+  if (!component.type) {
+    return GraphQLString;
+  }
 
-  // TODO: handle fixed size arrays that don't use the type "tuple" (e.g.: string[3])
+  const firstBracketIndex = component.type.indexOf('[');
+  const componentBaseType = (
+    firstBracketIndex > 0 ? component.type.substring(0, firstBracketIndex) : component.type
+  ).replace(/[0-9]/g, '');
 
-  // Handle tuples
+  // Handle structs
   if (componentBaseType === 'tuple' && component.internalType) {
     graphQlType = getOrSetSharedGraphQlType({
       isInput,
@@ -107,12 +114,18 @@ function createGraphQlType({
     graphQlType = GraphQLString;
   }
 
-  // Detect if input is an array
-  if (component.type?.slice(-2) === '[]') {
-    graphQlType = new GraphQLList(graphQlType);
+  graphQlType = new GraphQLNonNull(graphQlType);
+
+  // Return list if type is an array. Note that since GraphQL does not support
+  // tuples, values typed as a fixed size array (e.g.: string[3]) will be
+  // translated to an array without a fixed size. This is a compromise and a
+  // choice taken in this library
+  const isArray = firstBracketIndex > 0;
+  if (isArray) {
+    return new GraphQLList(graphQlType);
   }
 
-  return new GraphQLNonNull(graphQlType);
+  return graphQlType;
 }
 
 export default createGraphQlType;

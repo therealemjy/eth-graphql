@@ -1,9 +1,7 @@
 import { BigNumber } from 'ethers';
 import { GraphQLScalarType, Kind } from 'graphql';
 
-// TODO: check GraphQLBigInt from graphql-scalars to improve
 const GraphQLBigInt = new GraphQLScalarType({
-  // TODO: update meta data
   name: 'BigInt',
   description: 'The `BigInt` scalar type represents non-fractional signed whole numeric values.',
 

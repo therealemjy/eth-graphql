@@ -32,8 +32,11 @@ Object {
         "id": "0",
         "title": "Catch Me If You Can",
       },
-      "getAnyMovieDetails": Object {
-        "__typename": "getAnyMovieDetailsOutput",
+      "getBooleanExample": true,
+      "getByteExample": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+      "getIntExample": "125637412567341",
+      "getMultipleValuesExample": Object {
+        "__typename": "getMultipleValuesExampleOutput",
         "value0": "Catch Me If You Can",
         "value1": "0",
         "value2": Object {
@@ -42,8 +45,13 @@ Object {
           "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
         },
       },
-      "getAnyMovieTitle": "Catch Me If You Can",
-      "getByte32Example": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+      "getStringExample": "string example",
+      "getTupleExample": Array [
+        "0",
+        "1",
+        "2",
+      ],
+      "getUintExample": "1256374125673412563451263546712536712536712573612",
       "movies": Object {
         "__typename": "moviesOutput",
         "director": Object {
@@ -54,8 +62,9 @@ Object {
         "id": "0",
         "title": "Catch Me If You Can",
       },
-      "overloadedFn0": "overloaded result 0",
-      "overloadedFn1": "overloaded result 1",
+      "overloadedFn0": "overloaded result 1",
+      "overloadedFn1": "overloaded result 0",
+      "overloadedFn2": "overloaded result 2",
     },
     "__typename": "contracts",
   },
