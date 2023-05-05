@@ -15,8 +15,8 @@ contract TestContract {
   struct Movie {
     uint256 id;
     string title;
-    Director director;
     Status status;
+    Director director;
   }
 
   Movie[] public movies;
@@ -26,22 +26,22 @@ contract TestContract {
       Movie({
         id: 0,
         title: 'Catch Me If You Can',
+        status: Status.Released,
         director: Director({
           name: 'Steven Spielberg',
           walletAddress: 0xA5ae0b2386De51Aba852551A1EE828BfD598E111
-        }),
-        status: Status.Released
+        })
       })
     );
     movies.push(
       Movie({
         id: 1,
         title: 'Forrest Gump',
+        status: Status.Archived,
         director: Director({
           name: 'Robert Zemeckis',
           walletAddress: 0x86f11f319E53481493Ea50d97eAc684c5Ca8403D
-        }),
-        status: Status.Archived
+        })
       })
     );
   }
@@ -58,16 +58,24 @@ contract TestContract {
     return (movies[0].title, movies[0].id, movies[0].director);
   }
 
-  function getByte() public pure returns (bytes32) {
-    return keccak256(abi.encodePacked('Hello world'));
+  function getString() public pure returns (string memory) {
+    return 'string example';
+  }
+
+  function getNamedString() public view returns (string memory movieTitle) {
+    return movies[0].title;
   }
 
   function getBoolean() public pure returns (bool) {
     return true;
   }
 
-  function getString() public pure returns (string memory) {
-    return 'string example';
+  function getAddress() public pure returns (address) {
+    return 0xA5ae0b2386De51Aba852551A1EE828BfD598E111;
+  }
+
+  function getBytes() public pure returns (bytes32) {
+    return keccak256(abi.encodePacked('Hello world'));
   }
 
   function getUint() public pure returns (uint256) {
@@ -82,10 +90,6 @@ contract TestContract {
     return ['0', '1', '2'];
   }
 
-  function getAddress() public pure returns (address) {
-    return 0xA5ae0b2386De51Aba852551A1EE828BfD598E111;
-  }
-
   function overloadedFn() public pure returns (string memory) {
     return 'overloaded result 0';
   }
@@ -96,5 +100,41 @@ contract TestContract {
 
   function overloadedFn(string memory, uint, string memory) public pure returns (string memory) {
     return 'overloaded result 2';
+  }
+
+  function passUnnamedString(string memory) public pure returns (string memory) {
+    return 'passUnnamedString result';
+  }
+
+  function passString(string memory someString) public pure returns (string memory) {
+    return someString;
+  }
+
+  function passBoolean(bool someBoolean) public pure returns (bool) {
+    return someBoolean;
+  }
+
+  function passAddress(address someAddress) public pure returns (address) {
+    return someAddress;
+  }
+
+  function passBytes(bytes32 someBytes) public pure returns (bytes32) {
+    return someBytes;
+  }
+
+  function passUint(uint256 someUint) public pure returns (uint256) {
+    return someUint;
+  }
+
+  function passInt(int256 someInt) public pure returns (int256) {
+    return someInt;
+  }
+
+  function passTuple(string[3] memory someTuple) public pure returns (string[3] memory) {
+    return someTuple;
+  }
+
+  function passMovie(Movie memory someMovie) public pure returns (Movie memory) {
+    return someMovie;
   }
 }

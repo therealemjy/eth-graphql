@@ -9,7 +9,6 @@ import {
   GraphQLSchema,
   Kind,
   ThunkObjMap,
-  printSchema,
 } from 'graphql';
 
 import { Config, ContractCall, ContractConfig, SolidityValue } from '../types';

@@ -17,7 +17,7 @@ const formatValueNode = (valueNode: ValueNode): SolidityValue => {
 
   // Convert object to tuple
   if (valueNode.kind === Kind.OBJECT) {
-    return valueNode.fields.map(field => field.value);
+    return valueNode.fields.map(field => formatValueNode(field.value));
   }
 
   return valueNode.value;

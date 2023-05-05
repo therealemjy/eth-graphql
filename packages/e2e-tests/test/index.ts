@@ -76,16 +76,46 @@ describe('end-to-end tests', function () {
                   walletAddress
                 }
               }
-              getByte
-              getBoolean
               getString
+              getNamedString
+              getBoolean
+              getAddress
+              getBytes
               getUint
               getInt
               getTuple
-              getAddress
               overloadedFn0(arg0: 10)
               overloadedFn1
               overloadedFn2(arg0: "some-string", arg1: "10000000000000000000", arg2: "")
+              passUnnamedString(arg0: "some-string")
+              passString(someString: "some-string")
+              passBoolean(someBoolean: true)
+              passAddress(someAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111")
+              passBytes(
+                someBytes: "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd"
+              )
+              passUint(someUint: "128738121231267831231323")
+              passInt(someInt: 1265341)
+              passTuple(someTuple: ["0", "1", "2"])
+              passMovie(
+                someMovie: {
+                  id: "0"
+                  title: "some movie"
+                  status: "1"
+                  director: {
+                    name: "some director"
+                    walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+                  }
+                }
+              ) {
+                id
+                title
+                status
+                director {
+                  name
+                  walletAddress
+                }
+              }
             }
           }
         }
@@ -95,6 +125,6 @@ describe('end-to-end tests', function () {
       },
     });
 
-    expect(data).to.matchSnapshot();
+    expect(data).to.matchSnapshot(true);
   });
 });
