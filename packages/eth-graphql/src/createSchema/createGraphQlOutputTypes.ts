@@ -1,4 +1,4 @@
-import { JsonFragment } from 'ethers';
+import { JsonFragment } from '@ethersproject/abi';
 import {
   GraphQLFieldConfig,
   GraphQLNonNull,

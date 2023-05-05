@@ -1,4 +1,5 @@
-import type { Contract } from 'ethcall';
+import { providers } from '@0xsequence/multicall';
+import { Contract } from 'ethers';
 import {
   GraphQLFieldConfig,
   GraphQLInt,
@@ -16,6 +17,7 @@ import createGraphQlOutputTypes from './createGraphQlOutputTypes';
 import formatGraphQlArgs from './formatGraphQlArgs';
 import formatToEntityName from './formatToEntityName';
 import formatToFieldName from './formatToFieldName';
+import formatToSignature from './formatToSignature';
 import { SharedGraphQlTypes } from './types';
 
 const ROOT_NODE_NAME = 'contracts';
@@ -43,13 +45,26 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
     outputs: {},
   };
 
-  // Map contract names to contract instances
-  let contractMapping: ContractMapping;
+  const provider = new providers.MulticallProvider(config.provider);
 
-  // Map GraphQL fields to contract functions. Although most fields will be
-  // mapped to a function of the same name (for a given contract), overloaded
-  // functions are handled using multiple fields sharing the same name with an
-  // added suffix (see formatToFieldName function)
+  // Map contract names to contract instances
+  const contractMapping = contracts.reduce<ContractMapping>(
+    (contractsAcc, { name, address, abi }) => ({
+      ...contractsAcc,
+      [name]: Object.keys(address).reduce<{
+        [chainId: number]: Contract;
+      }>(
+        (chainIdsAcc, chainId) => ({
+          ...chainIdsAcc,
+          [chainId]: new Contract(address[Number(chainId)], abi, provider),
+        }),
+        {},
+      ),
+    }),
+    {},
+  );
+
+  // Mapping of GraphQL fields to contract functions
   const fieldMapping: FieldNameMapping = {};
 
   const contractsType = new GraphQLObjectType({
@@ -87,6 +102,12 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                 const abiItemName = abiItem.name!; // We've already asserted that the name property is truthy
                 const abiInputs = abiItem.inputs || [];
 
+                const contractFieldName = formatToFieldName({
+                  name: abiItemName,
+                  index: abiItemIndex,
+                  abi: filteredContractAbiItems,
+                });
+
                 const contractField: GraphQLFieldConfig<
                   { [key: string]: SolidityValue },
                   unknown,
@@ -98,7 +119,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                   }),
                   resolve: (_obj: { [key: string]: SolidityValue }) => {
                     const abiItemOutputs = abiItem.outputs || [];
-                    const data = _obj[abiItemName];
+                    const data = _obj[contractFieldName];
 
                     if (abiItemOutputs.length === 1 || !Array.isArray(data)) {
                       return data;
@@ -131,11 +152,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                   });
                 }
 
-                const contractFieldName = formatToFieldName({
-                  name: abiItemName,
-                  index: abiItemIndex,
-                  abi: filteredContractAbiItems,
-                });
+                const contractFunctionSignature = formatToSignature(abiItem);
 
                 // Initialize contract mapping if necessary
                 if (!fieldMapping[contract.name]) {
@@ -143,7 +160,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                 }
 
                 // Add field to contract mapping
-                fieldMapping[contract.name][contractFieldName] = abiItemName;
+                fieldMapping[contract.name][contractFieldName] = contractFunctionSignature;
 
                 return {
                   ...accContractFields,
@@ -183,34 +200,6 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
             throw new Error('Only one "contracts" query is supported');
           }
 
-          // Because the library ethcall is a pure ESM module, it cannot be
-          // imported regularly in this library since it would require it to be
-          // an ESM module as well; limiting its compatibility with other
-          // projects that wish to use it. For that reason, we need to import it
-          // dynamically
-          const { Provider, Contract } = await import('ethcall');
-
-          // Generate contract mapping if necessary. An instance of each
-          // contract is created for each chain supported and mapped to the
-          // corresponding chain id
-          if (!contractMapping) {
-            contractMapping = contracts.reduce<ContractMapping>(
-              (contractsAcc, { name, address, abi }) => ({
-                ...contractsAcc,
-                [name]: Object.keys(address).reduce<{
-                  [chainId: number]: Contract;
-                }>(
-                  (chainIdsAcc, chainId) => ({
-                    ...chainIdsAcc,
-                    [chainId]: new Contract(address[Number(chainId)], abi),
-                  }),
-                  {},
-                ),
-              }),
-              {},
-            );
-          }
-
           const fieldNode = fieldNodes[0];
 
           // Go through "contracts" node to extract requests to make
@@ -248,6 +237,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                 // Shape call
                 const contractCall: ContractCall = {
                   contractName: contractName,
+                  fieldName: callSelection.name.value,
                   call: contract[fnName](...contractCallArguments),
                 };
 
@@ -259,13 +249,11 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
             [],
           );
 
-          const ethCallProvider = new Provider(chainId, config.provider);
-          const multicallResults = await ethCallProvider.all<SolidityValue>(
-            calls.map(({ call }) => call),
-          );
+          // Merge all calls into one using multicall contract
+          const multicallResults = await Promise.all(calls.map(({ call }) => call));
 
-          // Shape and return results
-          return multicallResults.reduce<{
+          // Format and return results
+          const formattedResults = multicallResults.reduce<{
             [contractName: string]: {
               [methodName: string]: SolidityValue;
             };
@@ -277,10 +265,12 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
               ...accResults,
               [contractName]: {
                 ...(accResults[contractName] || {}),
-                [contractCall.call.name]: result,
+                [contractCall.fieldName]: result,
               },
             };
           }, {});
+
+          return formattedResults;
         },
       },
     },

@@ -57,4 +57,12 @@ contract TestContract {
   function getByte32Example() public pure returns (bytes32) {
     return keccak256(abi.encodePacked('Hello world'));
   }
+
+  function overloadedFn() public pure returns (string memory) {
+    return 'overloaded result 0';
+  }
+
+  function overloadedFn(string memory, uint, string memory) public pure returns (string memory) {
+    return 'overloaded result 1';
+  }
 }

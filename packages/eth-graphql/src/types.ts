@@ -1,5 +1,5 @@
-import type { Call } from 'ethcall';
-import type { Provider as EthersProvider, JsonFragment } from 'ethers';
+import { JsonFragment } from '@ethersproject/abi';
+import type { ContractFunction, providers } from 'ethers';
 
 export interface ContractConfig {
   name: string;
@@ -10,11 +10,12 @@ export interface ContractConfig {
 }
 
 export interface Config {
-  provider: EthersProvider;
+  provider: providers.Provider;
 }
 
 export interface ContractCall {
-  call: Call;
+  call: ContractFunction;
+  fieldName: string;
   contractName: string;
 }
 

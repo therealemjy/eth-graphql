@@ -1,4 +1,4 @@
-import { JsonFragmentType } from 'ethers';
+import { JsonFragmentType } from '@ethersproject/abi';
 import {
   GraphQLBoolean,
   GraphQLFieldConfig,
@@ -10,8 +10,8 @@ import {
   GraphQLString,
   ThunkObjMap,
 } from 'graphql';
-import { GraphQLBigInt } from 'graphql-scalars';
 
+import GraphQLBigInt from '../../GraphQLBigInt';
 import formatToEntityName from '../formatToEntityName';
 import { SharedGraphQlTypes } from '../types';
 import formatToGraphQlTypeName from './formatToGraphQlTypeName';

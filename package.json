@@ -4,7 +4,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "test": "dotenv -- turbo run test:e2e",
+    "test": "turbo run test:e2e",
     "lint": "turbo run lint",
     "tsc": "turbo run tsc",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md,json,sol}\"",
@@ -18,7 +18,6 @@
     "prettier-plugin-solidity": "^1.1.3",
     "turbo": "latest"
   },
-  "packageManager": "yarn@1.22.19",
   "workspaces": [
     "example",
     "packages/*"

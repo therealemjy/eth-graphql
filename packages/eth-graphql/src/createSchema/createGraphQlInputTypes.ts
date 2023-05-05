@@ -1,4 +1,4 @@
-import { JsonFragmentType } from 'ethers';
+import { JsonFragmentType } from '@ethersproject/abi';
 import { GraphQLFieldConfig, GraphQLInputObjectType, GraphQLNonNull } from 'graphql';
 
 import createGraphQlType from './createGraphQlType';

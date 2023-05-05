@@ -12,7 +12,7 @@
   "dependencies": {
     "@apollo/client": "^3.7.12",
     "eth-graphql": "*",
-    "ethers": "^6.3.0",
+    "ethers": "^5.7.2",
     "next": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

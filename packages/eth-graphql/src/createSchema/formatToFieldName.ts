@@ -1,4 +1,4 @@
-import type { JsonFragment } from 'ethers';
+import { JsonFragment } from '@ethersproject/abi';
 
 const formatToFieldName = ({
   name,

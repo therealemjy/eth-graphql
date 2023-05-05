@@ -20,7 +20,6 @@ beforeEach(function () {
 // Create fixture for TestContract
 function initClient() {
   const link = createLink({
-    // @ts-ignore
     provider: ethers.provider,
   });
 
@@ -76,6 +75,8 @@ describe('end-to-end tests', function () {
                 }
               }
               getByte32Example
+              overloadedFn0
+              overloadedFn1(arg0: "some-string", arg1: 123, arg2: "")
             }
           }
         }
