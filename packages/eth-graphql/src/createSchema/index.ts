@@ -9,6 +9,7 @@ import {
   GraphQLSchema,
   Kind,
   ThunkObjMap,
+  printSchema,
 } from 'graphql';
 
 import { Config, ContractCall, ContractConfig, SolidityValue } from '../types';
@@ -276,7 +277,11 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
     },
   });
 
-  return new GraphQLSchema({ query: queryType });
+  const schema = new GraphQLSchema({ query: queryType });
+
+  console.log(printSchema(schema));
+
+  return schema;
 };
 
 export default createSchema;

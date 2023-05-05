@@ -45,15 +45,6 @@ describe('end-to-end tests', function () {
         query ($chainId: Int!) {
           contracts(chainId: $chainId) {
             TestContract {
-              getAnyMovieTitle
-              getAnyMovieDetails {
-                value0
-                value1
-                value2 {
-                  name
-                  walletAddress
-                }
-              }
               getAnyMovie {
                 id
                 title
@@ -74,9 +65,23 @@ describe('end-to-end tests', function () {
                   walletAddress
                 }
               }
-              getByte32Example
-              overloadedFn0
-              overloadedFn1(arg0: "some-string", arg1: 123, arg2: "")
+              getMultipleValuesExample {
+                value0
+                value1
+                value2 {
+                  name
+                  walletAddress
+                }
+              }
+              getByteExample
+              getBooleanExample
+              getStringExample
+              getUintExample
+              getIntExample
+              getTupleExample
+              overloadedFn0(arg0: 10)
+              overloadedFn1
+              overloadedFn2(arg0: "some-string", arg1: "10000000000000000000", arg2: "")
             }
           }
         }

@@ -38,14 +38,6 @@ contract TestContract {
     );
   }
 
-  function getAnyMovieTitle() public view returns (string memory) {
-    return movies[0].title;
-  }
-
-  function getAnyMovieDetails() public view returns (string memory, uint256, Director memory) {
-    return (movies[0].title, movies[0].id, movies[0].director);
-  }
-
   function getAnyMovie() public view returns (Movie memory) {
     return movies[0];
   }
@@ -54,15 +46,47 @@ contract TestContract {
     return movies;
   }
 
-  function getByte32Example() public pure returns (bytes32) {
+  function getMultipleValuesExample()
+    public
+    view
+    returns (string memory, uint256, Director memory)
+  {
+    return (movies[0].title, movies[0].id, movies[0].director);
+  }
+
+  function getByteExample() public pure returns (bytes32) {
     return keccak256(abi.encodePacked('Hello world'));
+  }
+
+  function getBooleanExample() public pure returns (bool) {
+    return true;
+  }
+
+  function getStringExample() public pure returns (string memory) {
+    return 'string example';
+  }
+
+  function getUintExample() public pure returns (uint256) {
+    return 1256374125673412563451263546712536712536712573612;
+  }
+
+  function getIntExample() public pure returns (int168) {
+    return 125637412567341;
+  }
+
+  function getTupleExample() public pure returns (string[3] memory) {
+    return ['0', '1', '2'];
   }
 
   function overloadedFn() public pure returns (string memory) {
     return 'overloaded result 0';
   }
 
-  function overloadedFn(string memory, uint, string memory) public pure returns (string memory) {
+  function overloadedFn(uint16) public pure returns (string memory) {
     return 'overloaded result 1';
+  }
+
+  function overloadedFn(string memory, uint, string memory) public pure returns (string memory) {
+    return 'overloaded result 2';
   }
 }

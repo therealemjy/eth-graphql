@@ -90,6 +90,8 @@ function createGraphQlType({
 
   const componentBaseType = component.type?.replace('[]', '').replace(/[0-9]/g, '');
 
+  // TODO: handle fixed size arrays that don't use the type "tuple" (e.g.: string[3])
+
   // Handle tuples
   if (componentBaseType === 'tuple' && component.internalType) {
     graphQlType = getOrSetSharedGraphQlType({
