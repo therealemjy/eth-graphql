@@ -48,10 +48,12 @@ describe('end-to-end tests', function () {
               getAnyMovie {
                 id
                 title
+                status
               }
               movies(arg0: 0) {
                 id
                 title
+                status
                 director {
                   name
                   walletAddress
@@ -60,12 +62,13 @@ describe('end-to-end tests', function () {
               getAllMovies {
                 id
                 title
+                status
                 director {
                   name
                   walletAddress
                 }
               }
-              getMultipleValuesExample {
+              getMultipleValues {
                 value0
                 value1
                 value2 {
@@ -73,12 +76,13 @@ describe('end-to-end tests', function () {
                   walletAddress
                 }
               }
-              getByteExample
-              getBooleanExample
-              getStringExample
-              getUintExample
-              getIntExample
-              getTupleExample
+              getByte
+              getBoolean
+              getString
+              getUint
+              getInt
+              getTuple
+              getAddress
               overloadedFn0(arg0: 10)
               overloadedFn1
               overloadedFn2(arg0: "some-string", arg1: "10000000000000000000", arg2: "")

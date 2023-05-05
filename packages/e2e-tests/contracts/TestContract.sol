@@ -7,10 +7,16 @@ contract TestContract {
     address walletAddress;
   }
 
+  enum Status {
+    Released,
+    Archived
+  }
+
   struct Movie {
     uint256 id;
     string title;
     Director director;
+    Status status;
   }
 
   Movie[] public movies;
@@ -23,7 +29,8 @@ contract TestContract {
         director: Director({
           name: 'Steven Spielberg',
           walletAddress: 0xA5ae0b2386De51Aba852551A1EE828BfD598E111
-        })
+        }),
+        status: Status.Released
       })
     );
     movies.push(
@@ -33,7 +40,8 @@ contract TestContract {
         director: Director({
           name: 'Robert Zemeckis',
           walletAddress: 0x86f11f319E53481493Ea50d97eAc684c5Ca8403D
-        })
+        }),
+        status: Status.Archived
       })
     );
   }
@@ -46,36 +54,36 @@ contract TestContract {
     return movies;
   }
 
-  function getMultipleValuesExample()
-    public
-    view
-    returns (string memory, uint256, Director memory)
-  {
+  function getMultipleValues() public view returns (string memory, uint256, Director memory) {
     return (movies[0].title, movies[0].id, movies[0].director);
   }
 
-  function getByteExample() public pure returns (bytes32) {
+  function getByte() public pure returns (bytes32) {
     return keccak256(abi.encodePacked('Hello world'));
   }
 
-  function getBooleanExample() public pure returns (bool) {
+  function getBoolean() public pure returns (bool) {
     return true;
   }
 
-  function getStringExample() public pure returns (string memory) {
+  function getString() public pure returns (string memory) {
     return 'string example';
   }
 
-  function getUintExample() public pure returns (uint256) {
+  function getUint() public pure returns (uint256) {
     return 1256374125673412563451263546712536712536712573612;
   }
 
-  function getIntExample() public pure returns (int168) {
+  function getInt() public pure returns (int168) {
     return 125637412567341;
   }
 
-  function getTupleExample() public pure returns (string[3] memory) {
+  function getTuple() public pure returns (string[3] memory) {
     return ['0', '1', '2'];
+  }
+
+  function getAddress() public pure returns (address) {
+    return 0xA5ae0b2386De51Aba852551A1EE828BfD598E111;
   }
 
   function overloadedFn() public pure returns (string memory) {

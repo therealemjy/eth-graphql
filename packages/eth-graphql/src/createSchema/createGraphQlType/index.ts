@@ -27,7 +27,7 @@ function getOrSetSharedGraphQlType({
 }) {
   let sharedGraphQlTypeName = formatToGraphQlTypeName(component.internalType!);
   // Add suffix if type is an input to prevent a potential duplicate with an
-  // output
+  // output type
   if (isInput) {
     sharedGraphQlTypeName += 'Input';
   }
@@ -117,7 +117,7 @@ function createGraphQlType({
   graphQlType = new GraphQLNonNull(graphQlType);
 
   // Return list if type is an array. Note that since GraphQL does not support
-  // tuples, values typed as a fixed size array (e.g.: string[3]) will be
+  // tuples, values typed as a fixed-size array (e.g.: string[3]) will be
   // translated to an array without a fixed size. This is a compromise and a
   // choice taken in this library
   const isArray = firstBracketIndex > 0;

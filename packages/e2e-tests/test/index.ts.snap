@@ -5,6 +5,7 @@ Object {
   "contracts": Object {
     "TestContract": Object {
       "__typename": "TestContract",
+      "getAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
       "getAllMovies": Array [
         Object {
           "__typename": "TestContract_Movie",
@@ -14,6 +15,7 @@ Object {
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
           "id": "0",
+          "status": "0",
           "title": "Catch Me If You Can",
         },
         Object {
@@ -24,19 +26,21 @@ Object {
             "walletAddress": "0x86f11f319E53481493Ea50d97eAc684c5Ca8403D",
           },
           "id": "1",
+          "status": "1",
           "title": "Forrest Gump",
         },
       ],
       "getAnyMovie": Object {
         "__typename": "TestContract_Movie",
         "id": "0",
+        "status": "0",
         "title": "Catch Me If You Can",
       },
-      "getBooleanExample": true,
-      "getByteExample": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
-      "getIntExample": "125637412567341",
-      "getMultipleValuesExample": Object {
-        "__typename": "getMultipleValuesExampleOutput",
+      "getBoolean": true,
+      "getByte": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+      "getInt": "125637412567341",
+      "getMultipleValues": Object {
+        "__typename": "getMultipleValuesOutput",
         "value0": "Catch Me If You Can",
         "value1": "0",
         "value2": Object {
@@ -45,13 +49,13 @@ Object {
           "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
         },
       },
-      "getStringExample": "string example",
-      "getTupleExample": Array [
+      "getString": "string example",
+      "getTuple": Array [
         "0",
         "1",
         "2",
       ],
-      "getUintExample": "1256374125673412563451263546712536712536712573612",
+      "getUint": "1256374125673412563451263546712536712536712573612",
       "movies": Object {
         "__typename": "moviesOutput",
         "director": Object {
@@ -60,6 +64,7 @@ Object {
           "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
         },
         "id": "0",
+        "status": "0",
         "title": "Catch Me If You Can",
       },
       "overloadedFn0": "overloaded result 1",
