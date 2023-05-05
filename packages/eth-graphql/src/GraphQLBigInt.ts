@@ -5,7 +5,7 @@ import { GraphQLScalarType, Kind } from 'graphql';
 const GraphQLBigInt = new GraphQLScalarType({
   // TODO: update meta data
   name: 'BigInt',
-  description: 'Custom scalar for BigInt values',
+  description: 'The `BigInt` scalar type represents non-fractional signed whole numeric values.',
 
   serialize(value) {
     if (
