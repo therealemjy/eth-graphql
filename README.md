@@ -1,3 +1,21 @@
+# Gotchas
+
+- GraphQL does not accept unnamed inputs and values, for that reason every
+  unnamed function argument and returned value in Solidity are assigned a name
+  based on their type and index (e.g.: the second argument of a function would
+  be named arg1 if it is unnamed in the contract, while the first value returned
+  by a function would be named value0 if it is unnamed in the contract)
+- structs (expressed as tuples in Solidty) are converted to object types
+- non-struct tuples (e.g.: string[3]) are converted to arrays without a set size
+  because GraphQL doesn't support tuples. This can make writing queries tedious
+  as the GraphQL schema (and so GraphiQL) will not show that a certain argument
+  requires a specific array size to be passed, rather it will just show that an
+  array needs to be passed. The transaction will then revert with an error that
+  isn't really helpful ("missing argument: coder array someStatuses"). Two
+  possible solutions: either detect this error was returned by the contract and
+  print a friendly error instead, or transform these tuples to object types
+  (although this option makes using the schema less intuitive in my opinion)
+
 # Turborepo starter
 
 This is an official starter Turborepo.

@@ -57,6 +57,45 @@ Object {
         "2",
       ],
       "getUint": "1256374125673412563451263546712536712536712573612",
+      "mayhem": Object {
+        "__typename": "mayhemOutput",
+        "director": Object {
+          "__typename": "TestContract_Director",
+          "name": "some director",
+          "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+        },
+        "passedMovies": Array [
+          Object {
+            "__typename": "TestContract_Movie",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "some director",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            },
+            "id": "0",
+            "status": "1",
+            "title": "some movie",
+          },
+          Object {
+            "__typename": "TestContract_Movie",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "some director",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            },
+            "id": "0",
+            "status": "1",
+            "title": "some movie",
+          },
+        ],
+        "statuses": Array [
+          "0",
+          "1",
+          "1",
+          "1",
+        ],
+        "value1": "671432189",
+      },
       "movies": Object {
         "__typename": "moviesOutput",
         "director": Object {

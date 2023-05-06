@@ -137,4 +137,24 @@ contract TestContract {
   function passMovie(Movie memory someMovie) public pure returns (Movie memory) {
     return someMovie;
   }
+
+  function mayhem(
+    string memory,
+    uint256 someUint,
+    int256[2] memory,
+    Movie[] memory someMovies,
+    Director[2] memory someDirectors,
+    Status[4] memory someStatuses
+  )
+    public
+    pure
+    returns (
+      Movie[] memory passedMovies,
+      uint256,
+      Status[4] memory statuses,
+      Director memory director
+    )
+  {
+    return (someMovies, someUint, someStatuses, someDirectors[0]);
+  }
 }

@@ -116,6 +116,58 @@ describe('end-to-end tests', function () {
                   walletAddress
                 }
               }
+              mayhem(
+                arg0: "some string"
+                someUint: 671432189
+                arg2: ["1000000000000000000", "200000000000000000"]
+                someMovies: [
+                  {
+                    id: "0"
+                    title: "some movie"
+                    status: "1"
+                    director: {
+                      name: "some director"
+                      walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+                    }
+                  }
+                  {
+                    id: "0"
+                    title: "some movie"
+                    status: "1"
+                    director: {
+                      name: "some director"
+                      walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+                    }
+                  }
+                ]
+                someDirectors: [
+                  {
+                    name: "some director"
+                    walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+                  }
+                  {
+                    name: "some director"
+                    walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+                  }
+                ]
+                someStatuses: [0, 1, 1, 1]
+              ) {
+                passedMovies {
+                  id
+                  title
+                  status
+                  director {
+                    name
+                    walletAddress
+                  }
+                }
+                value1
+                statuses
+                director {
+                  name
+                  walletAddress
+                }
+              }
             }
           }
         }
@@ -125,6 +177,6 @@ describe('end-to-end tests', function () {
       },
     });
 
-    expect(data).to.matchSnapshot(true);
+    expect(data).to.matchSnapshot();
   });
 });

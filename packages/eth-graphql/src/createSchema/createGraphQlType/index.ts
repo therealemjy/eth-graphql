@@ -122,7 +122,7 @@ function createGraphQlType({
   // choice taken in this library
   const isArray = firstBracketIndex > 0;
   if (isArray) {
-    return new GraphQLList(graphQlType);
+    return new GraphQLNonNull(new GraphQLList(graphQlType));
   }
 
   return graphQlType;

@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "build": "hardhat compile",
     "test:e2e": "dotenv hardhat test"
   },
   "devDependencies": {
