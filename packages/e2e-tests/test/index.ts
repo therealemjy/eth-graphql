@@ -76,6 +76,7 @@ describe('end-to-end tests', function () {
                   walletAddress
                 }
               }
+              getNothing
               getString
               getNamedString
               getBoolean
@@ -186,6 +187,6 @@ describe('end-to-end tests', function () {
       },
     });
 
-    expect(data).to.matchSnapshot(true);
+    expect(data).to.matchSnapshot();
   });
 });

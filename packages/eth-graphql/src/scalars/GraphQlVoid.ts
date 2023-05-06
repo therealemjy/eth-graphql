@@ -2,11 +2,10 @@ import { GraphQLScalarType } from 'graphql';
 
 const GraphQLBigInt = new GraphQLScalarType({
   name: 'Void',
-  description:
-    'The `Void` scalar type represents undefined values. Because GraphQL does not allow returning an undefined value for a field, Void is serialized to null.',
+  description: 'The `Void` scalar type represents undefined values.',
 
-  serialize() {
-    return null;
+  serialize(value) {
+    return value;
   },
 
   parseValue() {

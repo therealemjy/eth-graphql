@@ -25,7 +25,7 @@ function getOrSetSharedGraphQlType({
   component: JsonFragmentType;
   sharedGraphQlTypes: SharedGraphQlTypes;
 }) {
-  let sharedGraphQlTypeName = formatToGraphQlTypeName(component.internalType!);
+  let sharedGraphQlTypeName = formatToGraphQlTypeName(component.internalType);
   // Add suffix if type is an input to prevent a potential duplicate with an
   // output type
   if (isInput) {

@@ -16,6 +16,8 @@ const createGraphQlOutputTypes = ({
 
   // Map no output to void
   if (abiItemOutputs.length === 0) {
+    // Ideally we'd return an undefined or null type, but GraphQL does not
+    // permit that so instead we return a nullable string
     return GraphQlVoid;
   }
 

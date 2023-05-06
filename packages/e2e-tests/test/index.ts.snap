@@ -50,6 +50,7 @@ Object {
         },
       },
       "getNamedString": "Catch Me If You Can",
+      "getNothing": null,
       "getString": "string example",
       "getTuple": Array [
         "0",

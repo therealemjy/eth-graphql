@@ -9,7 +9,6 @@ import {
   GraphQLSchema,
   Kind,
   ThunkObjMap,
-  printSchema,
 } from 'graphql';
 
 import { Config, ContractCall, ContractConfig, SolidityValue } from '../types';
@@ -99,8 +98,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                   return accContractFields;
                 }
 
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                const abiItemName = abiItem.name!; // We've already asserted that the name property is truthy
+                const abiItemName = abiItem.name;
                 const abiInputs = abiItem.inputs || [];
 
                 const contractFieldName = formatToFieldName({
@@ -122,6 +120,12 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
                     const abiItemOutputs = abiItem.outputs || [];
                     const data = _obj[contractFieldName];
 
+                    // Handle functions that return void
+                    if (abiItemOutputs.length === 0) {
+                      return undefined;
+                    }
+
+                    // Handle functions that return only one value
                     if (abiItemOutputs.length === 1 || !Array.isArray(data)) {
                       return data;
                     }
@@ -203,7 +207,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
           const fieldNode = fieldNodes[0];
 
           // Go through "contracts" node to extract requests to make
-          const calls = fieldNode.selectionSet!.selections.reduce<ContractCall[]>(
+          const calls = (fieldNode.selectionSet?.selections || []).reduce<ContractCall[]>(
             (accCalls, contractSelection) => {
               // Ignore __typename and non-field selections
               if (
@@ -217,7 +221,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
               const contract = contractMapping[contractName][chainId];
 
               // Go through call nodes
-              const contractCalls = contractSelection.selectionSet!.selections.reduce<
+              const contractCalls = (contractSelection.selectionSet?.selections || []).reduce<
                 ContractCall[]
               >((accContractCalls, callSelection) => {
                 // Ignore __typename and non-field selections
@@ -277,9 +281,6 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
   });
 
   const schema = new GraphQLSchema({ query: queryType });
-
-  console.log(printSchema(schema));
-
   return schema;
 };
 
