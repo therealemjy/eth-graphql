@@ -1,14 +1,8 @@
 import { JsonFragment } from '@ethersproject/abi';
-import {
-  GraphQLFieldConfig,
-  GraphQLNonNull,
-  GraphQLObjectType,
-  GraphQLOutputType,
-  ThunkObjMap,
-} from 'graphql';
+import { GraphQLOutputType } from 'graphql';
 
+import { GraphQlVoid } from '../scalars';
 import createGraphQlType from './createGraphQlType';
-import formatToEntityName from './formatToEntityName';
 import { SharedGraphQlTypes } from './types';
 
 const createGraphQlOutputTypes = ({
@@ -20,37 +14,26 @@ const createGraphQlOutputTypes = ({
 }) => {
   const abiItemOutputs = abiItem.outputs || [];
 
-  // Map single output to a single type
-  if (abiItemOutputs.length === 1) {
-    return createGraphQlType({
-      isInput: false,
-      component: abiItemOutputs[0],
-      sharedGraphQlTypes,
-    }) as GraphQLOutputType;
+  // Map no output to void
+  if (abiItemOutputs.length === 0) {
+    return GraphQlVoid;
   }
 
-  // Map array output to an object
-  return new GraphQLNonNull(
-    new GraphQLObjectType({
-      name: `${abiItem.name!}Output`,
-      fields: abiItemOutputs.reduce<
-        ThunkObjMap<GraphQLFieldConfig<{ [key: string]: unknown }, unknown, unknown>>
-      >(
-        (accArgs, component, componentIndex) => ({
-          ...accArgs,
-          // Fallback to using index if input does not have a name
-          [formatToEntityName({ name: component.name, index: componentIndex, type: 'value' })]: {
-            type: createGraphQlType({
-              isInput: false,
-              component,
-              sharedGraphQlTypes,
-            }) as GraphQLNonNull<GraphQLOutputType>,
+  return createGraphQlType({
+    isInput: false,
+    component:
+      abiItemOutputs.length === 1
+        ? // Map single output to a single type
+          abiItemOutputs[0]
+        : // Map array output to an object
+          {
+            ...abiItem,
+            components: abiItemOutputs,
+            type: 'tuple',
+            internalType: `${abiItem.name}Output`,
           },
-        }),
-        {},
-      ),
-    }),
-  );
+    sharedGraphQlTypes,
+  }) as GraphQLOutputType;
 };
 
 export default createGraphQlOutputTypes;

@@ -46,6 +46,8 @@ contract TestContract {
     );
   }
 
+  function getNothing() public pure {}
+
   function getAnyMovie() public view returns (Movie memory) {
     return movies[0];
   }
@@ -90,16 +92,20 @@ contract TestContract {
     return ['0', '1', '2'];
   }
 
-  function overloadedFn() public pure returns (string memory) {
-    return 'overloaded result 0';
+  function overloadedFn() public pure returns (string memory, uint256) {
+    return ('overloaded result 0', 0);
   }
 
-  function overloadedFn(uint16) public pure returns (string memory) {
-    return 'overloaded result 1';
+  function overloadedFn(uint16) public pure returns (string memory, uint256) {
+    return ('overloaded result 1', 1);
   }
 
-  function overloadedFn(string memory, uint, string memory) public pure returns (string memory) {
-    return 'overloaded result 2';
+  function overloadedFn(
+    string memory,
+    uint,
+    string memory
+  ) public pure returns (string memory, uint256) {
+    return ('overloaded result 2', 2);
   }
 
   function passUnnamedString(string memory) public pure returns (string memory) {

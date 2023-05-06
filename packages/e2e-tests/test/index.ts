@@ -84,9 +84,18 @@ describe('end-to-end tests', function () {
               getUint
               getInt
               getTuple
-              overloadedFn0(arg0: 10)
-              overloadedFn1
-              overloadedFn2(arg0: "some-string", arg1: "10000000000000000000", arg2: "")
+              overloadedFn0(arg0: 10) {
+                value0
+                value1
+              }
+              overloadedFn1 {
+                value0
+                value1
+              }
+              overloadedFn2(arg0: "some-string", arg1: "10000000000000000000", arg2: "") {
+                value0
+                value1
+              }
               passUnnamedString(arg0: "some-string")
               passString(someString: "some-string")
               passBoolean(someBoolean: true)
@@ -177,6 +186,6 @@ describe('end-to-end tests', function () {
       },
     });
 
-    expect(data).to.matchSnapshot();
+    expect(data).to.matchSnapshot(true);
   });
 });

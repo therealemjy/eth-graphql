@@ -32,7 +32,7 @@ const GraphQLBigInt = new GraphQLScalarType({
 
   parseLiteral(ast) {
     if (ast.kind !== Kind.STRING && ast.kind !== Kind.INT) {
-      throw new Error('BigInt value needs to tbe a string or an integer');
+      throw new Error('BigInt value needs to be a string or an integer');
     }
 
     return ast.value.toString();

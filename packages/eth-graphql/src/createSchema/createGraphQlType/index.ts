@@ -11,7 +11,7 @@ import {
   ThunkObjMap,
 } from 'graphql';
 
-import GraphQLBigInt from '../../GraphQLBigInt';
+import { GraphQLBigInt } from '../../scalars';
 import formatToEntityName from '../formatToEntityName';
 import { SharedGraphQlTypes } from '../types';
 import formatToGraphQlTypeName from './formatToGraphQlTypeName';
