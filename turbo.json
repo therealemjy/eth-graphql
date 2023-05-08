@@ -12,6 +12,9 @@
       "cache": false,
       "persistent": true
     },
+    "test:units": {
+      "cache": false
+    },
     "test:e2e": {
       "cache": false,
       "dependsOn": ["^build"]

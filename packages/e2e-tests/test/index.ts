@@ -34,7 +34,9 @@ function initClient() {
 describe('end-to-end tests', function () {
   this.beforeAll(async function () {
     const TestContract = await ethers.getContractFactory('TestContract');
-    await TestContract.deploy();
+    const contract = await TestContract.deploy();
+
+    console.log('here', contract.address);
   });
 
   it('should return the correct data', async function () {

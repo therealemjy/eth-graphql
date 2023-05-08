@@ -4,7 +4,9 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "test": "turbo run test:e2e",
+    "test:e2e": "turbo run test:e2e",
+    "test:units": "turbo run test:units",
+    "test": "npm run test:units && npm run test:e2e",
     "lint": "turbo run lint",
     "tsc": "turbo run tsc",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md,json,sol}\"",
