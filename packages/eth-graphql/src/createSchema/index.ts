@@ -103,7 +103,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
 
                 const contractFieldName = formatToFieldName({
                   name: abiItemName,
-                  index: abiItemIndex,
+                  indexInAbi: abiItemIndex,
                   abi: filteredContractAbiItems,
                 });
 

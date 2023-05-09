@@ -3,11 +3,11 @@ import { JsonFragment } from '@ethersproject/abi';
 const formatToFieldName = ({
   name,
   abi,
-  index,
+  indexInAbi,
 }: {
   name: string;
   abi: JsonFragment[];
-  index: number;
+  indexInAbi: number;
 }) => {
   // Support function overloading by adding each function
   // signature to the schema, appending their name with their
@@ -30,7 +30,7 @@ const formatToFieldName = ({
   const isOverloadedFn = overloadedFnIndexes.length > 1;
 
   if (isOverloadedFn) {
-    const relativeIndex = index - overloadedFnIndexes[0];
+    const relativeIndex = indexInAbi - overloadedFnIndexes[0];
     fieldName += relativeIndex;
   }
 
