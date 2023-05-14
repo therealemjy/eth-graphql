@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createSchema/formatGraphQlArgs converts argument nodes to valid arguments 1`] = `
+[
+  [
+    [
+      "fake string 0",
+    ],
+  ],
+  [
+    [
+      "fake string 1",
+    ],
+  ],
+  "fake string 2",
+  true,
+  "100",
+  "0.1",
+  "0",
+]
+`;

@@ -112,10 +112,10 @@ describe('end-to-end tests', function () {
               passMovie(
                 someMovie: {
                   id: "0"
-                  title: "some movie"
+                  title: "fake movie"
                   status: "1"
                   director: {
-                    name: "some director"
+                    name: "fake director"
                     walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
                   }
                 }
@@ -129,36 +129,36 @@ describe('end-to-end tests', function () {
                 }
               }
               mayhem(
-                arg0: "some string"
+                arg0: "fake string"
                 someUint: 671432189
                 arg2: ["1000000000000000000", "200000000000000000"]
                 someMovies: [
                   {
                     id: "0"
-                    title: "some movie"
+                    title: "fake movie"
                     status: "1"
                     director: {
-                      name: "some director"
+                      name: "fake director"
                       walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
                     }
                   }
                   {
                     id: "0"
-                    title: "some movie"
+                    title: "fake movie"
                     status: "1"
                     director: {
-                      name: "some director"
+                      name: "fake director"
                       walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
                     }
                   }
                 ]
                 someDirectors: [
                   {
-                    name: "some director"
+                    name: "fake director"
                     walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
                   }
                   {
-                    name: "some director"
+                    name: "fake director"
                     walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
                   }
                 ]
