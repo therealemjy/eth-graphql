@@ -6,8 +6,12 @@ const contracts = [
     name: 'TestContract',
     address: {
       // TODO: find way to pass address of contract deployed during tests
-      1: '0x1c39BA375faB6a9f6E0c01B9F49d488e101C2011',
+      1: '0x5E5713a0d915701F464DEbb66015adD62B2e6AE9',
     },
+    abi: testContractInfo.abi,
+  },
+  {
+    name: 'TestContract2',
     abi: testContractInfo.abi,
   },
 ];

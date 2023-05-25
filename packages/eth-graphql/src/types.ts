@@ -3,10 +3,10 @@ import type { ContractFunction, providers } from 'ethers';
 
 export interface ContractConfig {
   name: string;
-  address: {
+  abi: JsonFragment[];
+  address?: {
     [chainId: number]: string;
   };
-  abi: JsonFragment[];
 }
 
 export interface Config {

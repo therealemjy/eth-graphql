@@ -34,12 +34,10 @@ function initClient() {
 describe('end-to-end tests', function () {
   this.beforeAll(async function () {
     const TestContract = await ethers.getContractFactory('TestContract');
-    const contract = await TestContract.deploy();
-
-    console.log('here', contract.address);
+    await TestContract.deploy();
   });
 
-  it('should return the correct data', async function () {
+  it('returns the correct data when calling a contract with a defined address', async function () {
     // Make GraphQL request
     const client = initClient();
     const { data } = await client.query({
@@ -186,6 +184,33 @@ describe('end-to-end tests', function () {
       `,
       variables: {
         chainId: MAINNET_CHAIN_ID,
+      },
+    });
+
+    expect(data).to.matchSnapshot();
+  });
+
+  it.only('returns the correct data when calling a contract with dynamic addresses', async function () {
+    // Make GraphQL request
+    const client = initClient();
+    const { data } = await client.query({
+      query: gql`
+        query ($chainId: Int!, $addresses: [String!]!) {
+          contracts(chainId: $chainId) {
+            TestContract2(addresses: $addresses) {
+              getAnyMovie {
+                id
+                title
+                status
+              }
+              # TODO: add other fields
+            }
+          }
+        }
+      `,
+      variables: {
+        chainId: MAINNET_CHAIN_ID,
+        addresses: ['1', '2', '3'],
       },
     });
 
