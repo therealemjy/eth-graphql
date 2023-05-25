@@ -17,7 +17,6 @@ beforeEach(function () {
   chaiJestSnapshot.configureUsingMochaContext(this);
 });
 
-// Create fixture for TestContract
 function initClient() {
   const link = createLink({
     provider: ethers.provider,
@@ -33,6 +32,8 @@ function initClient() {
 
 describe('end-to-end tests', function () {
   this.beforeAll(async function () {
+    // TODO: deploy multicall contract so tests can be run fully locally
+
     const TestContract = await ethers.getContractFactory('TestContract');
     await TestContract.deploy();
   });
