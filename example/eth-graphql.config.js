@@ -19,6 +19,10 @@ const contracts = [
     abi: erc20Abi,
   },
   {
+    name: 'ERC20',
+    abi: erc20Abi,
+  },
+  {
     name: 'PoolLens',
     address: {
       97: '0x7d6A1a595dCa742B4FF4Fb8684e3F018C3c0bEC0',

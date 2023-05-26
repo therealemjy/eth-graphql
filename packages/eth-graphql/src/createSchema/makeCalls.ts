@@ -22,6 +22,7 @@ export interface MakeCallsInput {
   contractMapping: ContractMapping;
   fieldMapping: FieldNameMapping;
   multicallProvider: providers.MulticallProvider;
+  chainId: number;
 }
 
 const makeCalls = async ({
@@ -29,6 +30,7 @@ const makeCalls = async ({
   contractMapping,
   fieldMapping,
   multicallProvider,
+  chainId,
 }: MakeCallsInput) => {
   // Find "contracts" node
   const fieldNodes = graphqlResolveInfo.fieldNodes.filter(
@@ -68,11 +70,20 @@ const makeCalls = async ({
         // Format arguments
         const contractCallArguments = formatGraphQlArgs(callSelection.arguments || []);
 
-        // Get contract address(es). If contract was defined in config without an address, then it means we're calling it
-        const chainId = graphqlResolveInfo.variableValues.chainId as number;
-        const contractAddresses = contractConfig.address
-          ? [contractConfig.address[chainId]]
-          : (graphqlResolveInfo.variableValues.addresses as string[]) || [];
+        // Get contract address(es). If contract was defined in config without
+        // an address, then it means an array of addresses to call was passed as
+        // the first argument of the contract field
+        let contractAddresses = contractConfig.address && [contractConfig.address[chainId]];
+
+        // Get contract addresses from variables' values or directly from the
+        // selection if they were hard-coded in the query
+        if (!contractAddresses) {
+          contractAddresses =
+            (graphqlResolveInfo.variableValues.addresses as string[]) ||
+            (formatGraphQlArgs(contractSelection.arguments || [])[0] as string[]);
+        }
+
+        const hasDefinedAddress = !!contractConfig.address;
 
         // Shape a contract call for each contract address to call
         const newContractCalls: ContractCall[] = contractAddresses.map(
@@ -83,7 +94,10 @@ const makeCalls = async ({
               contractName: contractName,
               fieldName: callSelection.name.value,
               call: contract[fnName](...contractCallArguments),
-              indexInResultArray: !contractConfig.address ? contractAddressIndex : undefined,
+              // We use the indexInResultArray property as an indicator for
+              // which result this call data needs to be inserted in if it is
+              // part of a contract call using dynamic addresses
+              indexInResultArray: hasDefinedAddress ? undefined : contractAddressIndex,
             };
           },
         );

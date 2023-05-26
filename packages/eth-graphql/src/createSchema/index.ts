@@ -195,7 +195,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
         },
         resolve: async (
           _obj: unknown,
-          _variables: unknown,
+          { chainId }: { chainId: number },
           _context: unknown,
           graphqlResolveInfo: GraphQLResolveInfo,
         ) =>
@@ -204,6 +204,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
             contractMapping,
             fieldMapping,
             multicallProvider,
+            chainId,
           }),
       },
     },
