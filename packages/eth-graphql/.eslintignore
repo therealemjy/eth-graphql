@@ -1,0 +1,4 @@
+coverage
+.turbo
+dist
+node_modules

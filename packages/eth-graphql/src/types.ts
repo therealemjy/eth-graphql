@@ -1,5 +1,5 @@
 import { JsonFragment } from '@ethersproject/abi';
-import type { ContractFunction, providers } from 'ethers';
+import type { providers } from 'ethers';
 
 export interface ContractConfig {
   name: string;

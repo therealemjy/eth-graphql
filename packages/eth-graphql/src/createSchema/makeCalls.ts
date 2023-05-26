@@ -2,7 +2,7 @@ import { providers } from '@0xsequence/multicall';
 import { Contract, ContractFunction } from 'ethers';
 import { GraphQLResolveInfo, Kind } from 'graphql';
 
-import { SoliditySingleValue, SolidityValue } from '../types';
+import { SolidityValue } from '../types';
 import formatGraphQlArgs from './formatGraphQlArgs';
 import { ContractMapping, FieldNameMapping } from './types';
 
@@ -116,6 +116,7 @@ const makeCalls = async ({
       };
     }
 
+    // Handle multiple results merged into an array
     const contractData = (accResults[contractCall.contractName] as ContractData[]) || [];
 
     if (!contractData[contractCall.indexInResultArray]) {
@@ -127,7 +128,6 @@ const makeCalls = async ({
       [contractCall.fieldName]: result,
     };
 
-    // Handle multiple results merged into an array (
     return {
       ...accResults,
       [contractCall.contractName]: contractData,
