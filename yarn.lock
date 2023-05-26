@@ -123,6 +123,15 @@
   dependencies:
     js-base64 "^3.7.2"
 
+"@0xsequence/wallet-contracts@^1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@0xsequence/wallet-contracts/-/wallet-contracts-1.10.0.tgz#89212f1b029ef64954f2f8ffbf0ad61af2c7280a"
+  integrity sha512-NfPBJkp6/ApjVuTqQMgJvpN5lWyNc9bHm9ZITEi3X3nREf5126RLEXCyThChapkmcglHnQn+ndA8j6bfcpFEAg==
+  optionalDependencies:
+    "@ethersproject/abi" "^5.7.0"
+    "@ethersproject/providers" "^5.7.2"
+    ethers "^5.7.2"
+
 "@0xsequence/wallet@^0.43.27":
   version "0.43.27"
   resolved "https://registry.yarnpkg.com/@0xsequence/wallet/-/wallet-0.43.27.tgz#7b15932faa4e9fcacc9f8030b1f339e6089e8f91"

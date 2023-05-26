@@ -10,9 +10,6 @@ const config: HardhatUserConfig = {
       accounts: {
         mnemonic: DEPLOYER_ACCOUNT_MNEMONIC,
       },
-      forking: {
-        url: process.env['MAINNET_FORKING_RPC_URL'] || '',
-      },
     },
   },
 };

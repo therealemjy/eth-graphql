@@ -1,3 +1,4 @@
+import multiCallUtilsContractInfo from '@0xsequence/wallet-contracts/artifacts/contracts/modules/utils/MultiCallUtils.sol/MultiCallUtils.json';
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import { expect } from 'chai';
 import chai from 'chai';
@@ -5,7 +6,7 @@ import chaiJestSnapshot from 'chai-jest-snapshot';
 import { createLink } from 'eth-graphql';
 import { ethers } from 'hardhat';
 
-import { MAINNET_CHAIN_ID } from '../constants';
+import { MAINNET_CHAIN_ID, MULTICALL_CONTRACT_ADDRESS } from '../constants';
 
 chai.use(chaiJestSnapshot);
 
@@ -17,9 +18,10 @@ beforeEach(function () {
   chaiJestSnapshot.configureUsingMochaContext(this);
 });
 
-function initClient() {
+const initClient = () => {
   const link = createLink({
     provider: ethers.provider,
+    multicallAddress: MULTICALL_CONTRACT_ADDRESS,
   });
 
   const client = new ApolloClient({
@@ -28,12 +30,20 @@ function initClient() {
   });
 
   return client;
-}
+};
 
 describe('end-to-end tests', function () {
   this.beforeAll(async function () {
+    // Deploy test contract
     const TestContract = await ethers.getContractFactory('TestContract');
     await TestContract.deploy();
+
+    // Deploy multicall contract
+    const MulticallContract = await ethers.getContractFactory(
+      multiCallUtilsContractInfo.abi,
+      multiCallUtilsContractInfo.bytecode,
+    );
+    await MulticallContract.deploy();
   });
 
   it('returns the correct data when calling a contract with a defined address', async function () {

@@ -47,7 +47,12 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
     outputs: {},
   };
 
-  const provider = new providers.MulticallProvider(config.provider);
+  const multicallOptions = {
+    batchSize: Infinity, // Do not limit the amount of concurrent requests per batch
+    contract: config.multicallAddress,
+  };
+
+  const provider = new providers.MulticallProvider(config.provider, multicallOptions);
 
   // Map contract names to their config
   const contractMapping = contracts.reduce<ContractMapping>(

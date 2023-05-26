@@ -11,7 +11,7 @@ export interface ContractConfig {
 
 export interface Config {
   provider: providers.Provider;
-  // TODO: add multicallAddress parameter
+  multicallAddress?: string;
 }
 
 export interface ContractCall {

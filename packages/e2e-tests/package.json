@@ -8,6 +8,7 @@
     "test:e2e": "dotenv hardhat test"
   },
   "devDependencies": {
+    "@0xsequence/wallet-contracts": "^1.10.0",
     "@apollo/client": "^3.7.12",
     "@ethersproject/abi": "^5.4.7",
     "@ethersproject/providers": "^5.4.7",
