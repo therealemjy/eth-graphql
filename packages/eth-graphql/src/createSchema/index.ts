@@ -1,5 +1,4 @@
 import { providers } from '@0xsequence/multicall';
-import { Contract } from 'ethers';
 import {
   GraphQLFieldConfig,
   GraphQLInt,
@@ -9,37 +8,25 @@ import {
   GraphQLResolveInfo,
   GraphQLSchema,
   GraphQLString,
-  Kind,
   ThunkObjMap,
 } from 'graphql';
 
-import { Config, ContractCall, ContractConfig, SolidityValue } from '../types';
+import { Config, ContractConfig, SolidityValue } from '../types';
 import createGraphQlInputTypes from './createGraphQlInputTypes';
 import createGraphQlOutputTypes from './createGraphQlOutputTypes';
-import formatGraphQlArgs from './formatGraphQlArgs';
 import formatToEntityName from './formatToEntityName';
 import formatToFieldName from './formatToFieldName';
 import formatToSignature from './formatToSignature';
-import { SharedGraphQlTypes } from './types';
+import makeCalls from './makeCalls';
+import { ContractMapping, FieldNameMapping, SharedGraphQlTypes } from './types';
 
 const ROOT_NODE_NAME = 'contracts';
+const addressesGraphQlInputType = new GraphQLNonNull(new GraphQLList(GraphQLString));
 
 interface CreateSchemaInput {
   config: Config;
   contracts: ContractConfig[];
 }
-
-interface ContractMapping {
-  [contractName: string]: Omit<ContractConfig, 'name'>;
-}
-
-interface FieldNameMapping {
-  [contractName: string]: {
-    [fieldName: string]: string;
-  };
-}
-
-const addressesGraphQlInputType = new GraphQLNonNull(new GraphQLList(GraphQLString));
 
 const createSchema = ({ config, contracts }: CreateSchemaInput) => {
   const sharedGraphQlTypes: SharedGraphQlTypes = {
@@ -52,7 +39,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
     contract: config.multicallAddress,
   };
 
-  const provider = new providers.MulticallProvider(config.provider, multicallOptions);
+  const multicallProvider = new providers.MulticallProvider(config.provider, multicallOptions);
 
   // Map contract names to their config
   const contractMapping = contracts.reduce<ContractMapping>(
@@ -208,105 +195,16 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
         },
         resolve: async (
           _obj: unknown,
-          { chainId }: { chainId: number },
+          _variables: unknown,
           _context: unknown,
-          info: GraphQLResolveInfo,
-        ) => {
-          // Find "contracts" node
-          const fieldNodes = info.fieldNodes.filter(
-            fieldNode => fieldNode.name.value === info.fieldName,
-          );
-
-          // Ensure there's only one "contracts" node
-          if (fieldNodes.length > 1) {
-            throw new Error('Only one "contracts" query field is supported');
-          }
-
-          const fieldNode = fieldNodes[0];
-
-          // Go through "contracts" node to extract requests to make
-          const calls = (fieldNode.selectionSet?.selections || []).reduce<ContractCall[]>(
-            (accCalls, contractSelection) => {
-              // Ignore __typename and non-field selections
-              if (
-                contractSelection.kind !== Kind.FIELD ||
-                contractSelection.name.value === '__typename'
-              ) {
-                return accCalls;
-              }
-
-              const contractName = contractSelection.name.value;
-              const contractConfig = contractMapping[contractName];
-
-              if (!contractConfig.address) {
-                // TODO: handle calling contract at multiple addresses
-                const contractAddressesArg = (info.variableValues.addresses as string[]) || [];
-                throw new Error(
-                  `TODO: handle calling contract at multiple addresses ${contractAddressesArg}`,
-                );
-              }
-
-              const contract = new Contract(
-                contractConfig.address[chainId],
-                contractConfig.abi,
-                provider,
-              );
-
-              // Go through call nodes
-              const contractCalls = (contractSelection.selectionSet?.selections || []).reduce<
-                ContractCall[]
-              >((accContractCalls, callSelection) => {
-                // Ignore __typename and non-field selections
-                if (
-                  callSelection.kind !== Kind.FIELD ||
-                  callSelection.name.value === '__typename'
-                ) {
-                  return accContractCalls;
-                }
-
-                // Find corresponding function name in mapping
-                const fnName = fieldMapping[contractName][callSelection.name.value];
-
-                // Format arguments
-                const contractCallArguments = formatGraphQlArgs(callSelection.arguments || []);
-
-                // Shape call
-                const contractCall: ContractCall = {
-                  contractName: contractName,
-                  fieldName: callSelection.name.value,
-                  call: contract[fnName](...contractCallArguments),
-                };
-
-                return [...accContractCalls, contractCall];
-              }, []);
-
-              return accCalls.concat(contractCalls);
-            },
-            [],
-          );
-
-          // Merge all calls into one using multicall contract
-          const multicallResults = await Promise.all(calls.map(({ call }) => call));
-
-          // Format and return results
-          const formattedResults = multicallResults.reduce<{
-            [contractName: string]: {
-              [methodName: string]: SolidityValue;
-            };
-          }>((accResults, result, index) => {
-            const contractCall = calls[index];
-
-            return {
-              ...accResults,
-              [contractCall.contractName]: {
-                ...(accResults[contractCall.contractName] || {}),
-                [contractCall.fieldName]: result,
-              },
-            };
-          }, {});
-
-          return formattedResults;
-        },
+          graphqlResolveInfo: GraphQLResolveInfo,
+        ) =>
+          makeCalls({
+            graphqlResolveInfo,
+            contractMapping,
+            fieldMapping,
+            multicallProvider,
+          }),
       },
     },
   });
