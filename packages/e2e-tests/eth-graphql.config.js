@@ -1,12 +1,12 @@
 // TODO: find way to improve that (and accept modules?)
 const testContractInfo = require('./artifacts/contracts/TestContract.sol/TestContract.json');
+const { TEST_CONTRACT_ADDRESS } = require('./constants');
 
 const contracts = [
   {
     name: 'TestContract',
     address: {
-      // TODO: find way to pass address of contract deployed during tests
-      1: '0x5E5713a0d915701F464DEbb66015adD62B2e6AE9',
+      1: TEST_CONTRACT_ADDRESS,
     },
     abi: testContractInfo.abi,
   },

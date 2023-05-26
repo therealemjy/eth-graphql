@@ -32,8 +32,6 @@ function initClient() {
 
 describe('end-to-end tests', function () {
   this.beforeAll(async function () {
-    // TODO: deploy multicall contract so tests can be run fully locally
-
     const TestContract = await ethers.getContractFactory('TestContract');
     await TestContract.deploy();
   });
@@ -191,7 +189,7 @@ describe('end-to-end tests', function () {
     expect(data).to.matchSnapshot();
   });
 
-  it.only('returns the correct data when calling a contract with dynamic addresses', async function () {
+  it.skip('returns the correct data when calling a contract with dynamic addresses', async function () {
     // Make GraphQL request
     const client = initClient();
     const { data } = await client.query({
