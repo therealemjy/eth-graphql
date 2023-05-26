@@ -6,7 +6,12 @@ import chaiJestSnapshot from 'chai-jest-snapshot';
 import { createLink } from 'eth-graphql';
 import { ethers } from 'hardhat';
 
-import { MAINNET_CHAIN_ID, MULTICALL_CONTRACT_ADDRESS } from '../constants';
+import {
+  MAINNET_CHAIN_ID,
+  MULTICALL_CONTRACT_ADDRESS,
+  TEST_CONTRACT_2_ADDRESS,
+  TEST_CONTRACT_ADDRESS,
+} from '../constants';
 
 chai.use(chaiJestSnapshot);
 
@@ -34,16 +39,22 @@ const initClient = () => {
 
 describe('end-to-end tests', function () {
   this.beforeAll(async function () {
-    // Deploy test contract
+    // Deploy test contracts
     const TestContract = await ethers.getContractFactory('TestContract');
-    await TestContract.deploy();
+    const deployedTestContract = await TestContract.deploy();
+    console.log(`TestContract deployed at: ${deployedTestContract.address}`);
+
+    const TestContract2 = await ethers.getContractFactory('TestContract');
+    const deployedTestContract2 = await TestContract2.deploy();
+    console.log(`TestContract2 deployed at: ${deployedTestContract2.address}`);
 
     // Deploy multicall contract
     const MulticallContract = await ethers.getContractFactory(
       multiCallUtilsContractInfo.abi,
       multiCallUtilsContractInfo.bytecode,
     );
-    await MulticallContract.deploy();
+    const deployedMulticallContract = await MulticallContract.deploy();
+    console.log(`Multicall deployed at: ${deployedMulticallContract.address}`);
   });
 
   it('returns the correct data when calling a contract with a defined address', async function () {
@@ -199,7 +210,7 @@ describe('end-to-end tests', function () {
     expect(data).to.matchSnapshot();
   });
 
-  it.skip('returns the correct data when calling a contract with dynamic addresses', async function () {
+  it('returns the correct data when calling a contract with dynamic addresses', async function () {
     // Make GraphQL request
     const client = initClient();
     const { data } = await client.query({
@@ -212,6 +223,8 @@ describe('end-to-end tests', function () {
                 title
                 status
               }
+              getString
+              getNamedString
               # TODO: add other fields
             }
           }
@@ -219,7 +232,7 @@ describe('end-to-end tests', function () {
       `,
       variables: {
         chainId: MAINNET_CHAIN_ID,
-        addresses: ['1', '2', '3'],
+        addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
       },
     });
 

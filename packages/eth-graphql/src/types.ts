@@ -14,11 +14,5 @@ export interface Config {
   multicallAddress?: string;
 }
 
-export interface ContractCall {
-  call: ContractFunction;
-  fieldName: string;
-  contractName: string;
-}
-
-type SoliditySingleValue = string | number | bigint | boolean | object;
-export type SolidityValue = SoliditySingleValue | Array<SoliditySingleValue>;
+export type SoliditySingleValue = string | number | bigint | boolean | object;
+export type SolidityValue = SoliditySingleValue | SoliditySingleValue[];
