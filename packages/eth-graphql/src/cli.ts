@@ -15,9 +15,10 @@ const GRAPHIQL_ROUTE = '/eth-call-graphiql';
 const GRAPHIQL_URL = `http://localhost:${PORT}${GRAPHIQL_ROUTE}`;
 
 program
-  .argument('<rpcProviderUrl>', 'URL of the RPC provider to use with GraphiQL')
-  .action(rpcProviderUrl => {
+  .requiredOption('-r, --rpc <rpcProviderUrl>', 'URL of the RPC provider to use with GraphiQL')
+  .action(() => {
     // Build schema
+    const rpcProviderUrl = program.opts().rpc;
     const provider = new providers.JsonRpcProvider(rpcProviderUrl);
     const contracts = loadUserConfig();
     const schema = createSchema({
