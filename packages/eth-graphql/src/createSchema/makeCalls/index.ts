@@ -34,11 +34,13 @@ const makeCalls = async ({
   chainId,
 }: MakeCallsInput) => {
   // Find "contracts" node
-  const fieldNodes = graphqlResolveInfo.fieldNodes.filter(
+  const fieldNode = graphqlResolveInfo.fieldNodes.find(
     fieldNode => fieldNode.name.value === graphqlResolveInfo.fieldName,
   );
 
-  const fieldNode = fieldNodes[0];
+  if (!fieldNode) {
+    return {};
+  }
 
   // Go through "contracts" node to extract requests to make
   const calls = (fieldNode.selectionSet?.selections || []).reduce<ContractCall[]>(

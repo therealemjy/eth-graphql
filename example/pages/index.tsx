@@ -31,12 +31,22 @@ export async function getStaticProps() {
   };
 }
 
-export default function Web({ data }: { data: unknown }) {
+export default function Web({ data }: { data: any }) {
   console.log(data);
 
   return (
     <div>
-      <h1>Web 1</h1>
+      <h2>Whale SHIB balance:</h2>
+      <p>{data.contracts.SHIB.balanceOf}</p>
+
+      <h2>Token supplies:</h2>
+      {data.contracts.ERC20.map((token: any) => (
+        <div key={`token-${token.name}`}>
+          <p>
+            {token.name}: {token.totalSupply}
+          </p>
+        </div>
+      ))}
     </div>
   );
 }
