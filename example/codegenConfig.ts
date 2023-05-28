@@ -2,7 +2,7 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 import { createSchema } from 'eth-graphql';
 import { printSchema } from 'graphql';
 
-import ethGraphQlConfig from './ethGraphQlConfig';
+import ethGraphQlConfig from './src/ethGraphQlConfig';
 
 const config: CodegenConfig = {
   overwrite: true,

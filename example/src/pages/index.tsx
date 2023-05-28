@@ -1,5 +1,5 @@
-import { graphql } from '../.gql';
-import { GetTokensQuery } from '../.gql/graphql';
+import { graphql } from '../../.gql';
+import { GetTokensQuery } from '../../.gql/graphql';
 import client from '../client';
 
 export async function getStaticProps() {
