@@ -1,5 +1,6 @@
-const { providers } = require('ethers');
-const erc20Abi = require('./abis/erc20.json');
+import { providers } from 'ethers';
+
+import erc20Abi from './abis/erc20.json';
 
 const RPC_PROVIDER_URL = 'https://ethereum.publicnode.com';
 const provider = new providers.JsonRpcProvider(RPC_PROVIDER_URL);
@@ -25,6 +26,4 @@ const config = {
   ],
 };
 
-module.exports = {
-  default: config,
-};
+export default config;

@@ -6,7 +6,7 @@ import ethGraphQlConfig from './src/ethGraphQlConfig';
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: printSchema(createSchema(ethGraphQlConfig.default)),
+  schema: printSchema(createSchema(ethGraphQlConfig)),
   documents: '**/*.tsx',
   generates: {
     '.gql/': {

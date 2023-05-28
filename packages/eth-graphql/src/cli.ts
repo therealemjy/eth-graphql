@@ -3,9 +3,9 @@ import { Command } from 'commander';
 import express from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import open from 'open';
-import path from 'path';
 
 import createSchema from './createSchema';
+import loadFile from './loadFile';
 
 const program = new Command();
 
@@ -18,10 +18,8 @@ program.requiredOption('-c, --config <configFilePath>', 'Path to the config file
   const options = program.opts();
   const { config: configFilePath } = options;
 
-  // Load contracts' config
-  const absoluteConfigFilePath = path.resolve(configFilePath);
-  const { default: config } = require(absoluteConfigFilePath);
-
+  // Load config and create schema
+  const config = loadFile(configFilePath);
   const schema = createSchema(config);
 
   // Create express server and open GraphiQL route

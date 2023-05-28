@@ -3,7 +3,7 @@ import { createLink } from 'eth-graphql';
 
 import config from './ethGraphQlConfig';
 
-const link = createLink(config.default);
+const link = createLink(config);
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
