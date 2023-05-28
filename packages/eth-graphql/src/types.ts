@@ -9,10 +9,16 @@ export interface ContractConfig {
   };
 }
 
-export interface Config {
+export interface ChainConfig {
   provider: providers.Provider;
-  contracts: ContractConfig[];
   multicallAddress?: string;
+}
+
+export interface Config {
+  chains: {
+    [chainId: number]: ChainConfig;
+  };
+  contracts: ContractConfig[];
 }
 
 export type SoliditySingleValue = string | number | bigint | boolean | object;

@@ -6,17 +6,18 @@ export async function getStaticProps() {
   const { data } = await client.query({
     query: gql`
       query GetPools {
-        contracts(chainId: 97) {
-          XVS {
-            balanceOf(_owner: "0x11cbEA7E8FfF39942075128ee7de77C06822f4de")
+        contracts(chainId: 1) {
+          SHIB {
+            balanceOf(_owner: "0x5a52e96bacdabb82fd05763e25335261b270efcb")
           }
           ERC20(
             addresses: [
-              "0xA808e341e8e723DC6BA0Bb5204Bafc2330d7B8e4"
-              "0xe8bd7cCC165FAEb9b81569B05424771B9A20cbEF"
+              "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+              "0xdAC17F958D2ee523a2206206994597C13D831ec7"
             ]
           ) {
             name
+            totalSupply
           }
         }
       }

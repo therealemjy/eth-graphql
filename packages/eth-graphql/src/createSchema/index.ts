@@ -11,6 +11,7 @@ import {
   ThunkObjMap,
 } from 'graphql';
 
+import EthGraphQlError from '../EthGraphQlError';
 import { Config, SolidityValue } from '../types';
 import createGraphQlInputTypes from './createGraphQlInputTypes';
 import createGraphQlOutputTypes from './createGraphQlOutputTypes';
@@ -19,22 +20,23 @@ import formatToFieldName from './formatToFieldName';
 import formatToSignature from './formatToSignature';
 import makeCalls from './makeCalls';
 import { ContractMapping, FieldNameMapping, SharedGraphQlTypes } from './types';
+import validateConfig from './validateConfig';
 
 const ROOT_NODE_NAME = 'contracts';
 const addressesGraphQlInputType = new GraphQLNonNull(new GraphQLList(GraphQLString));
 
 const createSchema = (config: Config) => {
+  // Validate user config
+  const configValidation = validateConfig(config);
+
+  if (!configValidation.isValid) {
+    throw new EthGraphQlError(configValidation.error);
+  }
+
   const sharedGraphQlTypes: SharedGraphQlTypes = {
     inputs: {},
     outputs: {},
   };
-
-  const multicallOptions = {
-    batchSize: Infinity, // Do not limit the amount of concurrent requests per batch
-    contract: config.multicallAddress,
-  };
-
-  const multicallProvider = new providers.MulticallProvider(config.provider, multicallOptions);
 
   // Map contract names to their config
   const contractMapping: ContractMapping = {};
@@ -190,14 +192,32 @@ const createSchema = (config: Config) => {
           { chainId }: { chainId: number },
           _context: unknown,
           graphqlResolveInfo: GraphQLResolveInfo,
-        ) =>
-          makeCalls({
+        ) => {
+          const chainConfig = config.chains[chainId];
+
+          // Throw an error if no config has been provided for the requested chain ID
+          if (!chainConfig) {
+            throw new EthGraphQlError(`Missing config for chain ID ${chainId}`);
+          }
+
+          const multicallOptions = {
+            batchSize: Infinity, // Do not limit the amount of concurrent requests per batch
+            contract: chainConfig.multicallAddress,
+          };
+
+          const multicallProvider = new providers.MulticallProvider(
+            chainConfig.provider,
+            multicallOptions,
+          );
+
+          return makeCalls({
             graphqlResolveInfo,
             contractMapping,
             fieldMapping,
             multicallProvider,
             chainId,
-          }),
+          });
+        },
       },
     },
   });

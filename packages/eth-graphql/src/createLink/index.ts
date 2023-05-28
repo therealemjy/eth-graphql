@@ -2,20 +2,11 @@ import { ApolloLink, Observable } from '@apollo/client/core';
 import { graphql } from 'graphql';
 import { print } from 'graphql/language/printer';
 
-import EthGraphQlError from '../EthGraphQlError';
 import createSchema from '../createSchema';
 import { Config } from '../types';
-import validateConfig from './validateConfig';
 
-const createLink = (config: Config) => {
-  // Validate user config
-  const configValidation = validateConfig(config);
-
-  if (!configValidation.isValid) {
-    throw new EthGraphQlError(configValidation.error);
-  }
-
-  return new ApolloLink(
+const createLink = (config: Config) =>
+  new ApolloLink(
     operation =>
       new Observable(observer => {
         graphql({
@@ -28,6 +19,5 @@ const createLink = (config: Config) => {
         });
       }),
   );
-};
 
 export default createLink;

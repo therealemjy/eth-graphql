@@ -4,11 +4,15 @@ import { providers } from 'ethers';
 
 import contracts from './contracts';
 
-const RPC_PROVIDER_URL = 'https://bsc-testnet.nodereal.io/v1/f9777f42cc9243f0a766937df1c6a5f3';
-const provider = new providers.JsonRpcProvider(RPC_PROVIDER_URL);
+const RPC_PROVIDER_URL = 'https://ethereum.publicnode.com';
+const ethereumMainnetProvider = new providers.JsonRpcProvider(RPC_PROVIDER_URL);
 
 const link = createLink({
-  provider,
+  chains: {
+    1: {
+      provider: ethereumMainnetProvider,
+    },
+  },
   contracts: contracts.default,
 });
 

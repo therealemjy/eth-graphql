@@ -4,13 +4,24 @@ import type { providers } from 'ethers';
 import { Config } from '../../types';
 import validateConfig from '../validateConfig';
 
+const defaultFakeConfig: Config = {
+  chains: {
+    1: {
+      provider: {} as providers.Provider,
+    },
+  },
+  contracts: [],
+};
+
 describe('createLink/validateConfig', () => {
+  // TODO: add test to validate chains
+
   it('returns error related to duplicated contract names correctly', () => {
     const duplicatedContractName0 = 'duplicatedContractName0';
     const duplicatedContractName1 = 'duplicatedContractName1';
 
     const fakeConfig: Config = {
-      provider: {} as providers.Provider,
+      ...defaultFakeConfig,
       contracts: [
         {
           abi: [],
@@ -54,7 +65,7 @@ describe('createLink/validateConfig', () => {
     const invalidContractName = 'invalid contract-name';
 
     const fakeConfig: Config = {
-      provider: {} as providers.Provider,
+      ...defaultFakeConfig,
       contracts: [
         {
           abi: [],
@@ -83,7 +94,7 @@ describe('createLink/validateConfig', () => {
     const duplicatedContractName = 'duplicatedContractName0';
 
     const fakeConfig: Config = {
-      provider: {} as providers.Provider,
+      ...defaultFakeConfig,
       contracts: [
         {
           abi: [],
@@ -114,7 +125,7 @@ describe('createLink/validateConfig', () => {
 
   it('returns valid output when provided config is valid', () => {
     const fakeConfig: Config = {
-      provider: {} as providers.Provider,
+      ...defaultFakeConfig,
       contracts: [
         {
           abi: [],

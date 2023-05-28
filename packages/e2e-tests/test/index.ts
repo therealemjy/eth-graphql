@@ -26,9 +26,13 @@ beforeEach(function () {
 
 const initClient = () => {
   const link = createLink({
-    provider: ethers.provider,
+    chains: {
+      1: {
+        provider: ethers.provider,
+        multicallAddress: MULTICALL_CONTRACT_ADDRESS,
+      },
+    },
     contracts,
-    multicallAddress: MULTICALL_CONTRACT_ADDRESS,
   });
 
   const client = new ApolloClient({
