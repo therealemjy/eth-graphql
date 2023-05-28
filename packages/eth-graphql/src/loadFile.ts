@@ -1,5 +1,5 @@
-import jiti from 'jiti';
 import path from 'path';
+import jiti from 'jiti';
 
 import EthGraphQlError from './EthGraphQlError';
 

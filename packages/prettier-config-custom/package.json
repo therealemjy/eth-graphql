@@ -13,6 +13,6 @@
     "access": "public"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^4.1.1"
+    "@ianvs/prettier-plugin-sort-imports": "^4.0.0"
   }
 }
