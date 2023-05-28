@@ -1,20 +1,9 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { createLink } from 'eth-graphql';
-import { providers } from 'ethers';
 
-import contracts from './contracts';
+import config from './ethGraphQlConfig';
 
-const RPC_PROVIDER_URL = 'https://ethereum.publicnode.com';
-const provider = new providers.JsonRpcProvider(RPC_PROVIDER_URL);
-
-const link = createLink({
-  chains: {
-    1: {
-      provider,
-    },
-  },
-  contracts: contracts.default,
-});
+const link = createLink(config.default);
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),

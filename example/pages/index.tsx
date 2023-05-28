@@ -1,11 +1,11 @@
-import { gql } from '@apollo/client/core';
-
+import { graphql } from '../.gql';
+import { GetTokensQuery } from '../.gql/graphql';
 import client from '../client';
 
 export async function getStaticProps() {
   const { data } = await client.query({
-    query: gql`
-      query GetPools {
+    query: graphql(/* GraphQL */ `
+      query GetTokens {
         contracts(chainId: 1) {
           SHIB {
             balanceOf(_owner: "0x5a52e96bacdabb82fd05763e25335261b270efcb")
@@ -21,7 +21,7 @@ export async function getStaticProps() {
           }
         }
       }
-    `,
+    `),
   });
 
   return {
@@ -31,7 +31,7 @@ export async function getStaticProps() {
   };
 }
 
-export default function Web({ data }: { data: any }) {
+export default function Web({ data }: { data: GetTokensQuery }) {
   console.log(data);
 
   return (
@@ -40,7 +40,7 @@ export default function Web({ data }: { data: any }) {
       <p>{data.contracts.SHIB.balanceOf}</p>
 
       <h2>Token supplies:</h2>
-      {data.contracts.ERC20.map((token: any) => (
+      {data.contracts.ERC20.map(token => (
         <div key={`token-${token.name}`}>
           <p>
             {token.name}: {token.totalSupply}

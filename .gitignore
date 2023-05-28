@@ -25,7 +25,7 @@ yarn-error.log*
 # local env files
 .env
 .env.local
-.env.development.local
+.env.development.locals
 .env.test.local
 .env.production.local
 
@@ -35,6 +35,9 @@ dist
 
 # vercel
 .vercel
+
+# codegen
+example/.gql
 
 # typescript
 tsconfig.tsbuildinfo
