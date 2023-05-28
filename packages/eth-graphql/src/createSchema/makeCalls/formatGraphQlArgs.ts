@@ -7,7 +7,7 @@ import { SolidityValue } from '../../types';
 const formatValueNode = (valueNode: ValueNode): SolidityValue => {
   if (valueNode.kind === Kind.NULL || valueNode.kind === Kind.VARIABLE) {
     throw new EthGraphQlError(
-      `Incorrect valueNode kind detected: ${valueNode.kind}. There is likely an issue with one of the ABIs inside your eth-graphql config file.`,
+      `Incorrect valueNode kind detected: ${valueNode.kind}. There is likely an issue with an ABI inside your eth-graphql config file`,
     );
   }
 

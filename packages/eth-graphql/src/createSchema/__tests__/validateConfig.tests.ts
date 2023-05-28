@@ -14,8 +14,6 @@ const defaultFakeConfig: Config = {
 };
 
 describe('createLink/validateConfig', () => {
-  // TODO: add test to validate chains
-
   it('returns error related to duplicated contract names correctly', () => {
     const duplicatedContractName0 = 'duplicatedContractName0';
     const duplicatedContractName1 = 'duplicatedContractName1';
