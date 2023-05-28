@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`createSchema/formatGraphQlArgs converts argument nodes to valid arguments 1`] = `
+exports[`createSchema/makeCalls/formatGraphQlArgs converts argument nodes to valid arguments 1`] = `
 [
   [
     [

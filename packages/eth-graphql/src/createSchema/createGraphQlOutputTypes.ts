@@ -1,8 +1,8 @@
 import { JsonFragment } from '@ethersproject/abi';
 import { GraphQLOutputType } from 'graphql';
 
-import { GraphQlVoid } from '../scalars';
 import createGraphQlType from './createGraphQlType';
+import { GraphQlVoid } from './scalars';
 import { SharedGraphQlTypes } from './types';
 
 const createGraphQlOutputTypes = ({

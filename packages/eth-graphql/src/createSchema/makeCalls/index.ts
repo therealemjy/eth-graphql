@@ -2,9 +2,10 @@ import { providers } from '@0xsequence/multicall';
 import { Contract, ContractFunction } from 'ethers';
 import { GraphQLResolveInfo, Kind } from 'graphql';
 
-import { SolidityValue } from '../types';
+import EthGraphQlError from '../../EthGraphQlError';
+import { SolidityValue } from '../../types';
+import { ContractMapping, FieldNameMapping } from '../types';
 import formatGraphQlArgs from './formatGraphQlArgs';
-import { ContractMapping, FieldNameMapping } from './types';
 
 interface ContractCall {
   call: ContractFunction;
@@ -39,7 +40,7 @@ const makeCalls = async ({
 
   // Ensure there's only one "contracts" node
   if (fieldNodes.length > 1) {
-    throw new Error('Only one "contracts" query field is supported');
+    throw new EthGraphQlError('Only one "contracts" query field is supported');
   }
 
   const fieldNode = fieldNodes[0];
@@ -70,13 +71,20 @@ const makeCalls = async ({
         // Format arguments
         const contractCallArguments = formatGraphQlArgs(callSelection.arguments || []);
 
-        // Get contract address(es). If contract was defined in config without
-        // an address, then it means an array of addresses to call was passed as
-        // the first argument of the contract field
+        // Throw an error if an address property was defined for the contract
+        // but no address was added for the queried chain ID
+        if (contractConfig.address && !contractConfig.address[chainId]) {
+          throw new EthGraphQlError(
+            `Missing address for ${contractName} contract for chain ID ${chainId}`,
+          );
+        }
+
+        // Get contract address from config if it exists
         let contractAddresses = contractConfig.address && [contractConfig.address[chainId]];
 
-        // Get contract addresses from variables' values or directly from the
-        // selection if they were hard-coded in the query
+        // If contract was defined in config without an address property, then
+        // it means an array of addresses to call was passed as the first
+        // argument of the contract field
         if (!contractAddresses) {
           contractAddresses =
             (graphqlResolveInfo.variableValues.addresses as string[]) ||

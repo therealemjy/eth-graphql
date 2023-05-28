@@ -1,11 +1,12 @@
 import { ArgumentNode, Kind, ValueNode } from 'graphql';
 
-import { SolidityValue } from '../types';
+import EthGraphQlError from '../../EthGraphQlError';
+import { SolidityValue } from '../../types';
 
 // Format each type of value node to an argument consumable by the contract
 const formatValueNode = (valueNode: ValueNode): SolidityValue => {
   if (valueNode.kind === Kind.NULL || valueNode.kind === Kind.VARIABLE) {
-    throw new Error(
+    throw new EthGraphQlError(
       `Incorrect valueNode kind detected: ${valueNode.kind}. There is likely an issue with one of the ABIs inside your eth-graphql config file.`,
     );
   }

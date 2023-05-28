@@ -1,5 +1,5 @@
 import createLink from './createLink';
 
-export * from './types';
+export type { ContractConfig, Config } from './types';
 
 export { createLink };

@@ -2,7 +2,7 @@ import { ArgumentNode, Kind } from 'graphql';
 
 import formatGraphQlArgs from '../formatGraphQlArgs';
 
-describe('createSchema/formatGraphQlArgs', () => {
+describe('createSchema/makeCalls/formatGraphQlArgs', () => {
   it.each([Kind.NULL, Kind.VARIABLE])(
     'throws an error if one of the argument values is of the kind NULL',
     () => {
@@ -26,7 +26,7 @@ describe('createSchema/formatGraphQlArgs', () => {
         throw new Error('formatGraphQlArgs should have thrown an error but did not');
       } catch (error) {
         expect(error).toMatchInlineSnapshot(
-          `[Error: Incorrect valueNode kind detected: NullValue. There is likely an issue with one of the ABIs inside your eth-graphql config file.]`,
+          `[Error: [eth-graphql] Incorrect valueNode kind detected: NullValue. There is likely an issue with one of the ABIs inside your eth-graphql config file.]`,
         );
       }
     },
