@@ -38,11 +38,6 @@ const makeCalls = async ({
     fieldNode => fieldNode.name.value === graphqlResolveInfo.fieldName,
   );
 
-  // Ensure there's only one "contracts" node
-  if (fieldNodes.length > 1) {
-    throw new EthGraphQlError('Only one "contracts" query field is supported');
-  }
-
   const fieldNode = fieldNodes[0];
 
   // Go through "contracts" node to extract requests to make

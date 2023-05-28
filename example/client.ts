@@ -5,12 +5,12 @@ import { providers } from 'ethers';
 import contracts from './contracts';
 
 const RPC_PROVIDER_URL = 'https://ethereum.publicnode.com';
-const ethereumMainnetProvider = new providers.JsonRpcProvider(RPC_PROVIDER_URL);
+const provider = new providers.JsonRpcProvider(RPC_PROVIDER_URL);
 
 const link = createLink({
   chains: {
     1: {
-      provider: ethereumMainnetProvider,
+      provider,
     },
   },
   contracts: contracts.default,
