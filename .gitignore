@@ -33,9 +33,6 @@ yarn-error.log*
 .turbo
 dist
 
-# vercel
-.vercel
-
 # codegen
 example/.gql
 
@@ -46,3 +43,6 @@ tsconfig.tsbuildinfo
 cache
 artifacts
 typechain-types
+
+# eslint
+.eslintcache

@@ -16,7 +16,7 @@
   "scripts": {
     "build": "tsup ./src/index.ts ./src/cli.ts --format esm,cjs --dts --clean",
     "dev": "npm run build -- --watch",
-    "lint": "eslint \"**/*.ts*\"",
+    "lint": "eslint --cache \"**/*.ts*\"",
     "tsc": "tsc",
     "test:units": "jest"
   },
