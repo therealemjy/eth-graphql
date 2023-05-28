@@ -1,4 +1,3 @@
-// TODO: find way to improve that (and accept modules?)
 const erc20Abi = require('./abis/erc20.json');
 const poolLensAbi = require('./abis/poolLens.json');
 const comptrollerAbi = require('./abis/comptroller.json');

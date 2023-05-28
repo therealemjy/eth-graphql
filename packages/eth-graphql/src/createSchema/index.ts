@@ -11,7 +11,7 @@ import {
   ThunkObjMap,
 } from 'graphql';
 
-import { Config, ContractConfig, SolidityValue } from '../types';
+import { Config, SolidityValue } from '../types';
 import createGraphQlInputTypes from './createGraphQlInputTypes';
 import createGraphQlOutputTypes from './createGraphQlOutputTypes';
 import formatToEntityName from './formatToEntityName';
@@ -23,12 +23,7 @@ import { ContractMapping, FieldNameMapping, SharedGraphQlTypes } from './types';
 const ROOT_NODE_NAME = 'contracts';
 const addressesGraphQlInputType = new GraphQLNonNull(new GraphQLList(GraphQLString));
 
-interface CreateSchemaInput {
-  config: Config;
-  contracts: ContractConfig[];
-}
-
-const createSchema = ({ config, contracts }: CreateSchemaInput) => {
+const createSchema = (config: Config) => {
   const sharedGraphQlTypes: SharedGraphQlTypes = {
     inputs: {},
     outputs: {},
@@ -42,16 +37,7 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
   const multicallProvider = new providers.MulticallProvider(config.provider, multicallOptions);
 
   // Map contract names to their config
-  const contractMapping = contracts.reduce<ContractMapping>(
-    (contractsAcc, { name, address, abi }) => ({
-      ...contractsAcc,
-      [name]: {
-        abi,
-        address,
-      },
-    }),
-    {},
-  );
+  const contractMapping: ContractMapping = {};
 
   // Mapping of GraphQL fields to contract functions
   const fieldMapping: FieldNameMapping = {};
@@ -59,7 +45,13 @@ const createSchema = ({ config, contracts }: CreateSchemaInput) => {
   const contractsType = new GraphQLObjectType({
     name: ROOT_NODE_NAME,
     // Go through contracts and build field types
-    fields: contracts.reduce((accContracts, contract) => {
+    fields: config.contracts.reduce((accContracts, contract) => {
+      // Add contract to mapping
+      contractMapping[contract.name] = {
+        abi: contract.abi,
+        address: contract.address,
+      };
+
       // Filter out ABI items that aren't non-mutating named functions
       const filteredContractAbiItems = contract.abi.filter(
         abiItem =>

@@ -12,6 +12,7 @@ import {
   TEST_CONTRACT_2_ADDRESS,
   TEST_CONTRACT_ADDRESS,
 } from '../constants';
+import contracts from './contracts';
 
 chai.use(chaiJestSnapshot);
 
@@ -26,6 +27,7 @@ beforeEach(function () {
 const initClient = () => {
   const link = createLink({
     provider: ethers.provider,
+    contracts,
     multicallAddress: MULTICALL_CONTRACT_ADDRESS,
   });
 

@@ -3,21 +3,14 @@ import { graphql } from 'graphql';
 import { print } from 'graphql/language/printer';
 
 import createSchema from './createSchema';
-import loadUserConfig from './loadUserConfig';
 import { Config } from './types';
 
-const createLink = (config: Config) => {
-  // Load user config
-  const contracts = loadUserConfig();
-
-  return new ApolloLink(
+const createLink = (config: Config) =>
+  new ApolloLink(
     operation =>
       new Observable(observer => {
         graphql({
-          schema: createSchema({
-            config,
-            contracts,
-          }),
+          schema: createSchema(config),
           source: print(operation.query),
           variableValues: operation.variables,
         }).then(result => {
@@ -26,6 +19,5 @@ const createLink = (config: Config) => {
         });
       }),
   );
-};
 
 export default createLink;
