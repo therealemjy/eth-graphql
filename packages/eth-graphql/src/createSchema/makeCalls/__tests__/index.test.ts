@@ -122,6 +122,7 @@ describe('createSchema/makeCalls', () => {
       throw new Error('makeCalls should have thrown an error but did not');
     } catch (error) {
       expect(error).toBeInstanceOf(EthGraphQlError);
+      expect(EthGraphQlError).toHaveBeenCalledTimes(1);
       expect(EthGraphQlError).toHaveBeenCalledWith(
         `Missing address for ${mockedContractName} contract for chain ID ${mockedChainId}`,
       );

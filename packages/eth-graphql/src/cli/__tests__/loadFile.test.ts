@@ -1,12 +1,12 @@
 import path from 'path';
 import jiti from 'jiti';
 
-import EthGraphQlError from '../EthGraphQlError';
+import EthGraphQlError from '../../EthGraphQlError';
 import loadFile from '../loadFile';
 
-jest.mock('../EthGraphQlError');
 jest.mock('jiti');
 jest.mock('path');
+jest.mock('../../EthGraphQlError');
 
 describe('loadFile', () => {
   test('should throw EthGraphQlError when given an invalid file extension', async () => {
@@ -19,6 +19,7 @@ describe('loadFile', () => {
       throw new Error('loadFile should have thrown an error but did not');
     } catch (error) {
       expect(error).toBeInstanceOf(EthGraphQlError);
+      expect(EthGraphQlError).toHaveBeenCalledTimes(1);
       expect(EthGraphQlError).toHaveBeenCalledWith(
         `Incorrect file extension for config: ${invalidFileExtension}. Convert your config file to a .js or .ts file`,
       );
@@ -40,7 +41,9 @@ describe('loadFile', () => {
     const config = loadFile(fakeFilePath);
 
     expect(mockedJiti).toHaveBeenCalledTimes(1);
+    expect(mockedPathResolve).toHaveBeenCalledTimes(1);
     expect(mockedPathResolve).toHaveBeenCalledWith(fakeFilePath);
+    expect(mockedLoader).toHaveBeenCalledTimes(1);
     expect(mockedLoader).toHaveBeenCalledWith(fakeAbsoluteFilePath);
     expect(config).toEqual(fakeFileContent);
   });

@@ -1,7 +1,7 @@
 import path from 'path';
 import jiti from 'jiti';
 
-import EthGraphQlError from './EthGraphQlError';
+import EthGraphQlError from '../EthGraphQlError';
 
 const loadFile = (filePath: string) => {
   const configFilePathComponents = filePath.split('.');
