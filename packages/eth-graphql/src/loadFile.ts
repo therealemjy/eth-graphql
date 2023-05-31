@@ -15,9 +15,6 @@ const loadFile = (filePath: string) => {
 
   const loader = jiti('', { interopDefault: true });
 
-  // @ts-ignore
-  console.log(loader.getMockImplementation());
-
   const absoluteFilePath = path.resolve(filePath);
   const config = loader(absoluteFilePath);
 
