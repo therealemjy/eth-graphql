@@ -91,7 +91,7 @@ const mockedDefaultArgs: MakeCallsInput = {
   chainId: 1,
 };
 
-describe('makeCalls', () => {
+describe('createSchema/makeCalls', () => {
   it('should return an empty object when "contracts" fieldNode is not found', async () => {
     const result = await makeCalls({
       ...mockedDefaultArgs,

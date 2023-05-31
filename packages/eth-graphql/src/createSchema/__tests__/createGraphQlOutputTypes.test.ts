@@ -7,7 +7,7 @@ import { SharedGraphQlTypes } from '../types';
 
 jest.mock('../createGraphQlType');
 
-describe('createGraphQlOutputTypes', () => {
+describe('createSchema/createGraphQlOutputTypes', () => {
   const mockAbiItem: JsonFragment = {
     name: 'mockName',
     type: 'mockType',

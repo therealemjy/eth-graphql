@@ -9,7 +9,7 @@ import { SharedGraphQlTypes } from '../types';
 jest.mock('../createGraphQlType');
 jest.mock('../formatToEntityName');
 
-describe('createGraphQlInputTypes', () => {
+describe('createSchema/createGraphQlInputTypes', () => {
   const mockComponents: ReadonlyArray<JsonFragmentType> = [
     { name: 'mockName1', type: 'string' },
     { name: 'mockName2', type: 'number' },

@@ -12,7 +12,7 @@ const defaultFakeConfig: Config = {
   contracts: [],
 };
 
-describe('validateConfig', () => {
+describe('createSchema/validateConfig', () => {
   it('validates correctly when contract names only contain letters, numbers, and underscores', () => {
     const mockConfig: Config = {
       ...defaultFakeConfig,
