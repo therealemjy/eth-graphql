@@ -7,7 +7,7 @@ import { Config } from '../../types';
 jest.mock('../../createSchema');
 
 describe('createLink', () => {
-  it('should create a valid link configuration', () => {
+  it('should create a valid ApolloLink instance', () => {
     const config: Config = {
       chains: {
         1: {
