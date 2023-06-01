@@ -16,15 +16,17 @@ import { GraphQLBigInt } from '../scalars';
 import { SharedGraphQlTypes } from '../types';
 import formatToGraphQlTypeName from './formatToGraphQlTypeName';
 
+export interface GetOrSetSharedGraphQlType {
+  isInput: boolean;
+  component: JsonFragmentType;
+  sharedGraphQlTypes: SharedGraphQlTypes;
+}
+
 function getOrSetSharedGraphQlType({
   isInput,
   component,
   sharedGraphQlTypes,
-}: {
-  isInput: boolean;
-  component: JsonFragmentType;
-  sharedGraphQlTypes: SharedGraphQlTypes;
-}) {
+}: GetOrSetSharedGraphQlType) {
   let sharedGraphQlTypeName = formatToGraphQlTypeName(component.internalType);
   // Add suffix if type is an input to prevent a potential duplicate with an
   // output type
@@ -77,15 +79,13 @@ function getOrSetSharedGraphQlType({
   return sharedGraphQlTypes[keyType][sharedGraphQlTypeName];
 }
 
-function createGraphQlType({
-  isInput,
-  component,
-  sharedGraphQlTypes,
-}: {
+export interface CreateGraphQlTypeInput {
   isInput: boolean;
   component: JsonFragmentType;
   sharedGraphQlTypes: SharedGraphQlTypes;
-}) {
+}
+
+function createGraphQlType({ isInput, component, sharedGraphQlTypes }: CreateGraphQlTypeInput) {
   let graphQlType;
 
   // Use string as the fallback type. In this context, the type property should
