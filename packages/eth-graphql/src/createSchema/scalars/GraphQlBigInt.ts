@@ -25,7 +25,7 @@ const GraphQLBigInt = new GraphQLScalarType({
   parseValue(value) {
     if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'bigint') {
       throw new EthGraphQlError(
-        'GraphQL BigInt Scalar serializer expected a string, number or BigInt object',
+        'GraphQL BigInt Scalar parser expected a string, number or BigInt object',
       );
     }
 
