@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "yarn codegen && next dev",
+    "build": "yarn codegen && next build",
     "start": "next start",
     "lint": "next lint",
     "tsc": "tsc",
-    "graphiql": "eth-graphql --config ./src/ethGraphQlConfig.ts",
+    "graphiql": "yarn eth-graphql --config ./src/ethGraphQlConfig.ts",
     "codegen": "graphql-codegen --config ./codegenConfig.ts"
   },
   "dependencies": {

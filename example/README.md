@@ -6,12 +6,6 @@ Install dependencies:
 yarn
 ```
 
-Generate types for GraphQL queries:
-
-```bash
-yarn codegen
-```
-
 Run the development server:
 
 ```bash
