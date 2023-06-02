@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "tsc": "tsc",
-    "graphiql": "yarn eth-graphql --config ./src/ethGraphQlConfig.ts",
+    "graphiql": "eth-graphql --config ./src/ethGraphQlConfig.ts",
     "codegen": "graphql-codegen --config ./codegenConfig.ts"
   },
   "dependencies": {
