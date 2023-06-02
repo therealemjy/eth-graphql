@@ -26,12 +26,14 @@ const openGraphiQlRoute = ({ route, port, config }: openGraphiQlRouteInput) => {
     }),
   );
 
+  const url = `http://localhost:${port}${route}`;
+
   app.listen(port, () => {
-    console.log(`GraphiQL is running at: ${route}`);
+    console.log(`GraphiQL is running at: ${url}`);
   });
 
   // Open page in browser
-  open(route).catch(console.error);
+  open(url).catch(console.error);
 };
 
 export default openGraphiQlRoute;

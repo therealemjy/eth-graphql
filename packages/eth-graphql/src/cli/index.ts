@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 
-import { GRAPHIQL_URL, PORT } from '../constants';
+import { GRAPHIQL_ROUTE, PORT } from '../constants';
 import loadFile from './loadFile';
 import openGraphiQlRoute from './openGraphiQlRoute';
 
@@ -15,7 +15,7 @@ program.requiredOption('-c, --config <configFilePath>', 'Path to the config file
 
   openGraphiQlRoute({
     port: PORT,
-    route: GRAPHIQL_URL,
+    route: GRAPHIQL_ROUTE,
     config,
   });
 });
