@@ -5,13 +5,8 @@ import chaiJestSnapshot from 'chai-jest-snapshot';
 import { createLink } from 'eth-graphql';
 import { ethers } from 'hardhat';
 
-import {
-  MAINNET_CHAIN_ID,
-  MULTICALL_CONTRACT_ADDRESS,
-  TEST_CONTRACT_2_ADDRESS,
-  TEST_CONTRACT_ADDRESS,
-} from '../constants';
-import contracts from './contracts';
+import { MAINNET_CHAIN_ID, TEST_CONTRACT_2_ADDRESS, TEST_CONTRACT_ADDRESS } from '../constants';
+import config from '../ethGraphQlConfig';
 
 chai.use(chaiJestSnapshot);
 
@@ -24,15 +19,7 @@ beforeEach(function () {
 });
 
 const initClient = () => {
-  const link = createLink({
-    chains: {
-      1: {
-        provider: ethers.provider,
-        multicallAddress: MULTICALL_CONTRACT_ADDRESS,
-      },
-    },
-    contracts,
-  });
+  const link = createLink(config);
 
   const client = new ApolloClient({
     cache: new InMemoryCache(),

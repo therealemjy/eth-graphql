@@ -1,3 +1,4 @@
+import { Config } from 'eth-graphql';
 import { providers } from 'ethers';
 
 import erc20Abi from './abis/erc20.json';
@@ -5,7 +6,7 @@ import erc20Abi from './abis/erc20.json';
 const RPC_PROVIDER_URL = 'https://ethereum.publicnode.com';
 const provider = new providers.JsonRpcProvider(RPC_PROVIDER_URL);
 
-const config = {
+const config: Config = {
   chains: {
     1: {
       provider,
