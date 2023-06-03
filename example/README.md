@@ -22,7 +22,7 @@ Run the GraphiQL server:
 yarn graphiql
 ```
 
-Open [http://localhost:8008/eth-call-graphiql](http://localhost:8008/eth-call-graphiql) with your
-browser to see the result.
+The command will automatically open
+[http://localhost:8008/eth-call-graphiql](http://localhost:8008/eth-call-graphiql) in your browser.
 
 <p align="center"><img src="../doc-assets/screenshot-graphiql.png" width="100%"/></p>

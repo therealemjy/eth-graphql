@@ -24,12 +24,12 @@
     "@0xsequence/multicall": "^0.43.27",
     "@graphql-tools/schema": "^9.0.19",
     "commander": "^10.0.1",
-    "ethers": "^5.7.2",
     "graphql": "^16.6.0",
     "jiti": "^1.18.2"
   },
   "peerDependencies": {
-    "@apollo/client": "^3.x"
+    "@apollo/client": "^3.x",
+    "ethers": "^5.x"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.7.0",
