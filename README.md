@@ -5,7 +5,7 @@
 <p align="center">eth-graphql is a client-side GraphQL solution to fetch data from contracts
 deployed on evm-compatible blockchains</p>
 
-<p align="center"><img src="./doc-assets/screenshot-graphiql.png" width="100%"/></p>
+<p align="center"><img src="./doc-assets/screenshot-graphiql-header.png" width="100%"/></p>
 
 ## Killer features
 
@@ -24,6 +24,7 @@ cache normalization etc.)
 ### Install eth-graphql and its peer dependencies
 
 Using yarn:
+
 ```bash
 yarn add eth-graphql @apollo/client@^3.x ethers@^5.x
 ```
@@ -134,7 +135,7 @@ The command will automatically open
 [http://localhost:8008/eth-call-graphiql](http://localhost:8008/eth-call-graphiql)
 in your browser.
 
-// TODO: insert image of GraphiQL interface
+<p align="center"><img src="./doc-assets/screenshot-graphiql-example.png" width="100%"/></p>
 
 ## Multi-chain support
 
@@ -371,8 +372,7 @@ will however trigger an error of the type "TODO: INSERT ERROR EXAMPLE HERE".
 
 ### Unnamed input arguments
 
-All input arguments of a field need to have a name in GraphQL. For that reason,
-unnamed input arguments are given a generated name within the GraphQL schema
+Unnamed input arguments are given a generated name within the GraphQL schema
 which follows this template: `argX`, where `X` represents the index of the input
 in the function.
 
@@ -380,8 +380,7 @@ in the function.
 
 ### Unnamed output properties
 
-All output properties of a field need to have a name in GraphQL. For that
-reason, unnamed output properties are given a generated name within the GraphQL
+Unnamed output properties are given a generated name within the GraphQL
 schema which follows this template: `valueX`, where `X` represents the index of
 the properties in the function output.
 
