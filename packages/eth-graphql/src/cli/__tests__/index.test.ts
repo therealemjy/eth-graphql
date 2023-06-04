@@ -1,9 +1,8 @@
-import commander from 'commander';
-
-import { GRAPHIQL_URL, PORT } from '../../constants';
+import { GRAPHIQL_ROUTE, PORT } from '../../constants';
 import { Config } from '../../types';
 import loadFile from '../loadFile';
 import openGraphiQlRoute from '../openGraphiQlRoute';
+import commander from 'commander';
 
 jest.mock('commander');
 jest.mock('../loadFile');
@@ -46,7 +45,7 @@ describe('cli', () => {
     expect(openGraphiQlRoute).toHaveBeenCalledTimes(1);
     expect(openGraphiQlRoute).toHaveBeenCalledWith({
       port: PORT,
-      route: GRAPHIQL_URL,
+      route: GRAPHIQL_ROUTE,
       config: fakeConfig,
     });
   });
