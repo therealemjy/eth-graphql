@@ -41,12 +41,11 @@ Anywhere in your project, create a .js or .ts file (e.g.: ethGraphQlConfig.ts)
 that exports a `config` object as default:
 
 ```typescript
-import { Config } from 'eth-graphql';
-import { providers } from 'ethers';
+import erc20Abi from "./abis/erc20.json";
+import { Config } from "eth-graphql";
+import { providers } from "ethers";
 
-import erc20Abi from './abis/erc20.json';
-
-const RPC_PROVIDER_URL = 'https://ethereum.publicnode.com';
+const RPC_PROVIDER_URL = "https://ethereum.publicnode.com";
 const provider = new providers.JsonRpcProvider(RPC_PROVIDER_URL);
 
 const config: Config = {
@@ -57,9 +56,9 @@ const config: Config = {
   },
   contracts: [
     {
-      name: 'SHIB',
+      name: "SHIB",
       address: {
-        1: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE',
+        1: "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
       },
       abi: erc20Abi,
     },
@@ -75,10 +74,9 @@ contract [here](example/src/abis/erc20.json).
 ### Create link and attach it to Apollo client
 
 ```typescript
-import { ApolloClient, InMemoryCache } from '@apollo/client';
-import { createLink } from 'eth-graphql';
-
-import config from './ethGraphQlConfig';
+import config from "./ethGraphQlConfig";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { createLink } from "eth-graphql";
 
 const link = createLink(config);
 
@@ -96,7 +94,7 @@ You can now write your first GraphQL query to fetch data from contracts on the
 blockchain!
 
 ```typescript
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 const { data } = await client.query({
   query: gql`
@@ -110,7 +108,7 @@ const { data } = await client.query({
   `,
 });
 
-console.log(data.contracts.SHIB.decimals) // 18
+console.log(data.contracts.SHIB.decimals); // 18
 ```
 
 ### GraphiQL interface
@@ -143,15 +141,14 @@ In the previous example, we've configured only one chain. The config can however
 be updated to support calling contracts on multiple chains:
 
 ```typescript
-import { Config } from 'eth-graphql';
-import { providers } from 'ethers';
+import erc20Abi from "./abis/erc20.json";
+import { Config } from "eth-graphql";
+import { providers } from "ethers";
 
-import erc20Abi from './abis/erc20.json';
-
-const MAINNET_RPC_PROVIDER_URL = 'https://ethereum.publicnode.com';
+const MAINNET_RPC_PROVIDER_URL = "https://ethereum.publicnode.com";
 const mainnetProvider = new providers.JsonRpcProvider(MAINNET_RPC_PROVIDER_URL);
 
-const TESTNET_RPC_PROVIDER_URL = 'https://ethereum.publicnode.com'; // TODO: add correct provider URL
+const TESTNET_RPC_PROVIDER_URL = "https://ethereum.publicnode.com"; // TODO: add correct provider URL
 const testnetProvider = new providers.JsonRpcProvider(TESTNET_RPC_PROVIDER_URL);
 
 const config: Config = {
@@ -159,17 +156,18 @@ const config: Config = {
     1: {
       provider: mainnetProvider,
     },
-    2: { // TODO: add correct chain ID
+    2: {
+      // TODO: add correct chain ID
       provider: testnetProvider,
-    }
+    },
   },
   contracts: [
     {
-      name: 'SHIB',
+      name: "SHIB",
       address: {
-        1: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE',
+        1: "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
         // TODO: add correct chain ID and contract address
-        2: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE',
+        2: "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
       },
       abi: erc20Abi,
     },
@@ -182,7 +180,7 @@ export default config;
 You can then choose which chain to fetch data from when making your query:
 
 ```typescript
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 const { data: mainnetData } = await client.query({
   query: gql`
@@ -240,13 +238,18 @@ when making your query. Results will be returned as an array of outputs, sorted
 in the same order as the input addresses:
 
 ```typescript
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 const { data } = await client.query({
   query: gql`
     query GetTokens {
       contracts(chainId: 1) {
-        ERC20(addresses: ["0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"]) {
+        ERC20(
+          addresses: [
+            "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+            "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"
+          ]
+        ) {
           name
         }
       }
@@ -254,7 +257,7 @@ const { data } = await client.query({
   `,
 });
 
-console.log(data.contracts.ERC20)
+console.log(data.contracts.ERC20);
 /* 
 [{
   name: 'USD Coin'
@@ -306,23 +309,22 @@ method from eth-graphql:
 
 ```typescript
 // codegenConfig.ts
-import type { CodegenConfig } from '@graphql-codegen/cli';
-import { createSchema } from 'eth-graphql';
-import { printSchema } from 'graphql';
-
-import ethGraphQlConfig from './ethGraphQlConfig';
+import ethGraphQlConfig from "./ethGraphQlConfig";
+import type { CodegenConfig } from "@graphql-codegen/cli";
+import { createSchema } from "eth-graphql";
+import { printSchema } from "graphql";
 
 const config: CodegenConfig = {
   overwrite: true,
   schema: printSchema(createSchema(ethGraphQlConfig)),
-  documents: '**/*.tsx',
+  documents: "**/*.tsx",
   generates: {
-    '.gql/': {
-      preset: 'client',
+    ".gql/": {
+      preset: "client",
       plugins: [],
       config: {
         scalars: {
-          BigInt: 'string',
+          BigInt: "string",
         },
       },
     },
