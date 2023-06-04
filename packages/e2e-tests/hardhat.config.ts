@@ -1,5 +1,4 @@
 import '@nomicfoundation/hardhat-toolbox';
-
 import { HardhatUserConfig } from 'hardhat/config';
 
 import { DEPLOYER_ACCOUNT_MNEMONIC } from './constants';

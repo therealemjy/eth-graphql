@@ -1,10 +1,7 @@
-// @ts-check
-
-/** @type {import("@ianvs/prettier-plugin-sort-imports").PrettierConfig} */
-
 module.exports = {
   $schema: "http://json.schemastore.org/prettierrc",
   arrowParens: "avoid",
+  bracketSpacing: false,
   jsxBracketSameLine: false,
   jsxSingleQuote: false,
   printWidth: 100,
@@ -16,7 +13,7 @@ module.exports = {
   trailingComma: "all",
   useTabs: false,
   bracketSpacing: true,
-  importOrder: ["<BUILTIN_MODULES>", "<THIRD_PARTY_MODULES>", "", "^[.]"],
-  importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],
-  importOrderTypeScriptVersion: "5.0.0",
+  importOrderSeparation: true,
+  importOrderSortSpecifiers: true,
+  importOrder: ["<THIRD_PARTY_MODULES>", "^@src/(.*)$", "^@bin/(.*)$", "^[./]"],
 };

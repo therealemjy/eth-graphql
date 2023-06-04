@@ -1,6 +1,7 @@
 import multiCallUtilsContractInfo from '@0xsequence/wallet-contracts/artifacts/contracts/modules/utils/MultiCallUtils.sol/MultiCallUtils.json';
-import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
-import chai, { expect } from 'chai';
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import { expect } from 'chai';
+import chai from 'chai';
 import chaiJestSnapshot from 'chai-jest-snapshot';
 import { createLink } from 'eth-graphql';
 import { ethers } from 'hardhat';
