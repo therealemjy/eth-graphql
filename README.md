@@ -267,15 +267,17 @@ console.log(data.contracts.ERC20);
 
 ## Using custom multicall addresses
 
-eth-graphql uses the multicall contract from [0xsequence](TODO: add link to
-0xsequence multicall contract repo) to batch all the calls from a single query
-into one. You can find the list of supported chains [here](TODO: add link to
-0xsequence repo).
+eth-graphql uses the multicall contract from
+[0xsequence](https://github.com/0xsequence/sequence.js/tree/master/packages/multicall)
+to batch all the calls of a query into one. You can find the list of supported
+networks
+[here](https://github.com/0xsequence/sequence.js/tree/master/packages/multicall#supported-networks).
 
-If you wish to call contracts on a chain that is not supported
-or if you simply want to use your own multicall contract, you can deploy
-0xsequence multicall's contract ([code here](TODO: add link to contract)) and
-pass the address of the deployed contract into your config:
+If you wish to call contracts on a network that is not supported or if you
+simply want to use your own multicall contract, you can deploy 0xsequence's
+multicall contract ([code
+here](https://github.com/0xsequence/wallet-contracts/blob/master/src/contracts/modules/utils/MultiCallUtils.sol))
+and pass the address of the deployed contract into your config:
 
 ```typescript
 import { Config } from 'eth-graphql';
@@ -301,8 +303,7 @@ export default config;
 
 ## Automatically generating types for queries with graphql-codegen
 
-You can automatically generate TypeScript types for your queries using [Graphql
-Codegen](TODO: add link to Codegen's documentation) and the `createSchema`
+You can automatically generate TypeScript types for your queries using [graphql-codegen](https://the-guild.dev/graphql/codegen) and the `createSchema`
 method from eth-graphql:
 
 ```typescript
@@ -332,9 +333,10 @@ const config: CodegenConfig = {
 export default config;
 ```
 
-Visit [Graphql Codegen's documentation](TODO: add link to Codegen's
-documentation "Get started" section) to see how to install it on your project
-and automatically generate TypeScript types for all your queries.
+Visit graphql-codegen's
+[documentation](https://the-guild.dev/graphql/codegen/docs/getting-started/installation)
+to see how to install it on your project and automatically generate TypeScript
+types for all your queries.
 
 ## Choices taken
 
