@@ -91,21 +91,21 @@ const makeCalls = async ({
         const hasDefinedAddress = !!contractConfig.address;
 
         // Shape a contract call for each contract address to call
-        const newContractCalls: ContractCall[] = contractAddresses.map(
-          (contractAddress, contractAddressIndex) => {
-            const contract = new Contract(contractAddress, contractConfig.abi, multicallProvider);
+        const newContractCalls = contractAddresses.map((contractAddress, contractAddressIndex) => {
+          const contract = new Contract(contractAddress, contractConfig.abi, multicallProvider);
 
-            return {
-              contractName: contractName,
-              fieldName: callSelection.name.value,
-              call: contract[fnName](...contractCallArguments),
-              // We use the indexInResultArray property as an indicator for
-              // which result this call data needs to be inserted in if it is
-              // part of a contract call using dynamic addresses
-              indexInResultArray: hasDefinedAddress ? undefined : contractAddressIndex,
-            };
-          },
-        );
+          const contractCall: ContractCall = {
+            contractName: contractName,
+            fieldName: callSelection.name.value,
+            call: contract[fnName](...contractCallArguments),
+            // We use the indexInResultArray property as an indicator for
+            // which result this call data needs to be inserted in if it is
+            // part of a contract call using dynamic addresses
+            indexInResultArray: hasDefinedAddress ? undefined : contractAddressIndex,
+          };
+
+          return contractCall;
+        });
 
         return accContractCalls.concat(newContractCalls);
       }, []);
