@@ -161,7 +161,7 @@ const config: Config = {
       name: "SHIB",
       address: {
         1: "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
-        2: "0x058d6Fb2828608C0422BB6C89F77CCaA9ea7A9b4",
+        5: "0x058d6Fb2828608C0422BB6C89F77CCaA9ea7A9b4",
       },
       abi: erc20Abi,
     },
