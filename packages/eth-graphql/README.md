@@ -1,10 +1,10 @@
-<p align="center"><img src="./doc-assets/banner.jpg" width="100%" /></p>
+<p align="center"><img src="https://github.com/therealemjy/eth-graphql/assets/44675210/778851a7-6383-4002-ab26-2c997c73436f" width="100%" /></p>
 
 <h2 align="center">Query any blockchain data using GraphQL</h2>
 
 <p align="center">eth-graphql is an Apollo link for retrieving contract data from EVM-compatible blockchains using GraphQL</p>
 
-<p align="center"><img src="./doc-assets/screenshot-graphiql-header.png" width="100%"/></p>
+<p align="center"><img src="https://github.com/therealemjy/eth-graphql/assets/44675210/59087e7b-bae6-49e9-963a-c06892088c6a" width="100%"/></p>
 
 ## Killer features
 
@@ -12,7 +12,8 @@
 
 ⚡️ Groups requests into one using multicall for optimal efficiency
 
-🛠 Leverage all the features of GraphQL and Apollo Client tools, such as optimistic updates and cache normalization
+🛠 Leverage all the features of GraphQL and Apollo Client tools, such as optimistic updates and cache
+normalization
 
 🔬 Comprehensive TypeScript support via GraphQL Codegen
 
@@ -34,15 +35,15 @@ npm install eth-graphql @apollo/client@^3.x ethers@^5.x
 
 ### Setting up configuration File
 
-Create a .js or .ts file (e.g.: ethGraphQlConfig.ts) which exports a `config`
-object as default:
+Create a .js or .ts file (e.g.: ethGraphQlConfig.ts) which exports a `config` object as default:
 
 ```typescript
-import erc20Abi from "./abis/erc20.json";
-import { Config } from "eth-graphql";
-import { providers } from "ethers";
+import { Config } from 'eth-graphql';
+import { providers } from 'ethers';
 
-const RPC_PROVIDER_URL = "https://ethereum.publicnode.com";
+import erc20Abi from './abis/erc20.json';
+
+const RPC_PROVIDER_URL = 'https://ethereum.publicnode.com';
 const provider = new providers.JsonRpcProvider(RPC_PROVIDER_URL);
 
 const config: Config = {
@@ -53,9 +54,9 @@ const config: Config = {
   },
   contracts: [
     {
-      name: "SHIB",
+      name: 'SHIB',
       address: {
-        1: "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
+        1: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE',
       },
       abi: erc20Abi,
     },
@@ -65,15 +66,16 @@ const config: Config = {
 export default config;
 ```
 
-_Note that if you want to use the example above, the ABI of the ERC20
-contract can be found [here](example/src/abis/erc20.json)._
+_Note that if you want to use the example above, the ABI of the ERC20 contract can be found
+[here](example/src/abis/erc20.json)._
 
 ### Link creation and connection to Apollo Client
 
 ```typescript
-import config from "./ethGraphQlConfig";
-import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { createLink } from "eth-graphql";
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { createLink } from 'eth-graphql';
+
+import config from './ethGraphQlConfig';
 
 const link = createLink(config);
 
@@ -87,11 +89,10 @@ export default client;
 
 ### Crafting your first query
 
-You're now ready to write your first GraphQL query to fetch data from contracts
-on the blockchain!
+You're now ready to write your first GraphQL query to fetch data from contracts on the blockchain!
 
 ```typescript
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 const { data } = await client.query({
   query: gql`
@@ -110,8 +111,8 @@ console.log(data.contracts.SHIB.decimals); // 18
 
 ### GraphiQL interface
 
-To explore the generated client-side schema and experiment with your queries,
-you can start a GraphiQL server using the following command:
+To explore the generated client-side schema and experiment with your queries, you can start a
+GraphiQL server using the following command:
 
 ```bash
 yarn eth-graphql --config ./ethGraphQlConfig.ts
@@ -123,28 +124,29 @@ or with npm:
 npm run eth-graphql --config ./ethGraphQlConfig.ts
 ```
 
-_Note that the config option signifies the location of your config file, relative to the directory from which you're executing the command_
+_Note that the config option signifies the location of your config file, relative to the directory
+from which you're executing the command_
 
 The command will automatically open
-[http://localhost:8008/eth-call-graphiql](http://localhost:8008/eth-call-graphiql)
-in your browser.
+[http://localhost:8008/eth-call-graphiql](http://localhost:8008/eth-call-graphiql) in your browser.
 
 <p align="center"><img src="./doc-assets/screenshot-graphiql-example.png" width="100%"/></p>
 
 ## Multi-chain support
 
-In the previous example, we've configured only one chain. However, the
-configuration can be adapted to support contract calls on multiple chains:
+In the previous example, we've configured only one chain. However, the configuration can be adapted
+to support contract calls on multiple chains:
 
 ```typescript
-import erc20Abi from "./abis/erc20.json";
-import { Config } from "eth-graphql";
-import { providers } from "ethers";
+import { Config } from 'eth-graphql';
+import { providers } from 'ethers';
 
-const MAINNET_RPC_PROVIDER_URL = "https://ethereum.publicnode.com";
+import erc20Abi from './abis/erc20.json';
+
+const MAINNET_RPC_PROVIDER_URL = 'https://ethereum.publicnode.com';
 const mainnetProvider = new providers.JsonRpcProvider(MAINNET_RPC_PROVIDER_URL);
 
-const TESTNET_RPC_PROVIDER_URL = "https://ethereum-goerli.publicnode.com";
+const TESTNET_RPC_PROVIDER_URL = 'https://ethereum-goerli.publicnode.com';
 const testnetProvider = new providers.JsonRpcProvider(TESTNET_RPC_PROVIDER_URL);
 
 const config: Config = {
@@ -158,10 +160,10 @@ const config: Config = {
   },
   contracts: [
     {
-      name: "SHIB",
+      name: 'SHIB',
       address: {
-        1: "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
-        5: "0x058d6Fb2828608C0422BB6C89F77CCaA9ea7A9b4",
+        1: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE',
+        5: '0x058d6Fb2828608C0422BB6C89F77CCaA9ea7A9b4',
       },
       abi: erc20Abi,
     },
@@ -174,7 +176,7 @@ export default config;
 You can then select which chain to fetch data from when making your query:
 
 ```typescript
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 const { data: mainnetData } = await client.query({
   query: gql`
@@ -227,12 +229,12 @@ const config: Config = {
 export default config;
 ```
 
-In which case you will be able to pass an array of contract addresses to fetch
-when making your query. Results will be returned as an array of outputs, sorted
-in the same order as the input addresses:
+In which case you will be able to pass an array of contract addresses to fetch when making your
+query. Results will be returned as an array of outputs, sorted in the same order as the input
+addresses:
 
 ```typescript
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 const { data } = await client.query({
   query: gql`
@@ -264,14 +266,12 @@ console.log(data.contracts.ERC20);
 ## Using custom multicall addresses
 
 eth-graphql uses the multicall contract from
-[0xsequence](https://github.com/0xsequence/sequence.js/tree/master/packages/multicall)
-to batch all the calls of a query into one. You can find the list of supported
-networks
+[0xsequence](https://github.com/0xsequence/sequence.js/tree/master/packages/multicall) to batch all
+the calls of a query into one. You can find the list of supported networks
 [here](https://github.com/0xsequence/sequence.js/tree/master/packages/multicall#supported-networks).
 
-In case you want to interact with contracts on an unsupported network, or prefer
-to use your own multicall contract, you can deploy 0xsequence's multicall
-contract. The code can be found
+In case you want to interact with contracts on an unsupported network, or prefer to use your own
+multicall contract, you can deploy 0xsequence's multicall contract. The code can be found
 [here](https://github.com/0xsequence/wallet-contracts/blob/master/src/contracts/modules/utils/MultiCallUtils.sol).
 Once deployed, include the contract's address in your configuration as follows:
 
@@ -299,27 +299,29 @@ export default config;
 
 ## Automatically generating types for queries with graphql-codegen
 
-You can automatically generate TypeScript types for your queries using [graphql-codegen](https://the-guild.dev/graphql/codegen) and the `createSchema`
-method from eth-graphql:
+You can automatically generate TypeScript types for your queries using
+[graphql-codegen](https://the-guild.dev/graphql/codegen) and the `createSchema` method from
+eth-graphql:
 
 ```typescript
 // codegenConfig.ts
-import ethGraphQlConfig from "./ethGraphQlConfig";
-import type { CodegenConfig } from "@graphql-codegen/cli";
-import { createSchema } from "eth-graphql";
-import { printSchema } from "graphql";
+import type { CodegenConfig } from '@graphql-codegen/cli';
+import { createSchema } from 'eth-graphql';
+import { printSchema } from 'graphql';
+
+import ethGraphQlConfig from './ethGraphQlConfig';
 
 const config: CodegenConfig = {
   overwrite: true,
   schema: printSchema(createSchema(ethGraphQlConfig)),
-  documents: "**/*.tsx",
+  documents: '**/*.tsx',
   generates: {
-    ".gql/": {
-      preset: "client",
+    '.gql/': {
+      preset: 'client',
       plugins: [],
       config: {
         scalars: {
-          BigInt: "string",
+          BigInt: 'string',
         },
       },
     },
@@ -330,19 +332,18 @@ export default config;
 ```
 
 Visit graphql-codegen's
-[documentation](https://the-guild.dev/graphql/codegen/docs/getting-started/installation)
-to see how to install it on your project and automatically generate TypeScript
-types for all your queries.
+[documentation](https://the-guild.dev/graphql/codegen/docs/getting-started/installation) to see how
+to install it on your project and automatically generate TypeScript types for all your queries.
 
 ## Choices taken
 
-This library is opinionated and choices were taken in order to make the GraphQL
-query language work with any contract ABI.
+This library is opinionated and choices were taken in order to make the GraphQL query language work
+with any contract ABI.
 
 ### Uint and Int
 
-Mapped to the custom scalar `BigInt`. It accepts an integer or a string as input
-and always returns a string in the GraphQL schema.
+Mapped to the custom scalar `BigInt`. It accepts an integer or a string as input and always returns
+a string in the GraphQL schema.
 
 e.g. ABI:
 
@@ -481,8 +482,8 @@ type ContractName_Movie {
 
 ### Void output
 
-Non-mutating functions that return nothing will return the custom scalar `Void`,
-which returns `null` in the GraphQL schema.
+Non-mutating functions that return nothing will return the custom scalar `Void`, which returns
+`null` in the GraphQL schema.
 
 e.g. ABI:
 
@@ -508,11 +509,10 @@ type ContractName {
 
 ### Tuples (input and output)
 
-GraphQL lacks the capability to assign a fixed length to arrays, whether they're
-used as input or output. Hence, tuples are represented as arrays with
-unspecified length in the GraphQL schema. However, supplying an array with an
-incorrect length, as defined by the respective contract ABI, will trigger an
-error.
+GraphQL lacks the capability to assign a fixed length to arrays, whether they're used as input or
+output. Hence, tuples are represented as arrays with unspecified length in the GraphQL schema.
+However, supplying an array with an incorrect length, as defined by the respective contract ABI,
+will trigger an error.
 
 e.g. ABI:
 
@@ -550,9 +550,8 @@ type ContractName {
 
 ### Unnamed input arguments
 
-In the GraphQL schema, unnamed input arguments are assigned a generated name
-following the pattern: `argX`, where `X` represents the argument's position
-within the function arguments.
+In the GraphQL schema, unnamed input arguments are assigned a generated name following the pattern:
+`argX`, where `X` represents the argument's position within the function arguments.
 
 e.g. ABI:
 
@@ -583,7 +582,6 @@ e.g. ABI:
     "type": "function"
   }
 ]
-
 ```
 
 Generated GraphQL:
@@ -596,9 +594,8 @@ type ContractName {
 
 ### Unnamed output properties
 
-In the GraphQL schema, unnamed output properties are assigned a generated name
-following the the pattern: `valueX`, where `X` represents the property's
-position within the function output.
+In the GraphQL schema, unnamed output properties are assigned a generated name following the the
+pattern: `valueX`, where `X` represents the property's position within the function output.
 
 e.g. ABI:
 
@@ -640,8 +637,8 @@ type getUnnamedValuesOutput {
 
 ### Overloaded functions
 
-Overloaded functions are treated as separate functions, differentiated by their
-names suffixed with their respective index within the ABI.
+Overloaded functions are treated as separate functions, differentiated by their names suffixed with
+their respective index within the ABI.
 
 e.g. ABI:
 
