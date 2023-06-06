@@ -1,6 +1,6 @@
 <p align="center"><img src="https://github.com/therealemjy/eth-graphql/assets/44675210/778851a7-6383-4002-ab26-2c997c73436f" width="100%" /></p>
 
-<h2 align="center">Query any blockchain data using GraphQL</h2>
+<h2 align="center">Query blockchain data using GraphQL</h2>
 
 <p align="center">eth-graphql is an Apollo link for retrieving contract data from EVM-compatible blockchains using GraphQL</p>
 
