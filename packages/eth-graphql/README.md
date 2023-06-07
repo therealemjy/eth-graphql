@@ -375,7 +375,7 @@ type ContractName {
 }
 ```
 
-### Bytes, string, address
+### Bytes, string, address, enums
 
 Mapped to a string.
 
