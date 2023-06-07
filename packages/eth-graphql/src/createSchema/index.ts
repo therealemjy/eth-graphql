@@ -1,4 +1,4 @@
-import { providers } from '@0xsequence/multicall';
+import { Multicall, providers } from '@0xsequence/multicall';
 import {
   GraphQLFieldConfig,
   GraphQLInt,
@@ -200,10 +200,13 @@ const createSchema = (config: Config) => {
             throw new EthGraphQlError(`Missing config for chain ID ${chainId}`);
           }
 
-          const multicallOptions = {
+          const multicallOptions: Partial<Multicall['options']> = {
             batchSize: Infinity, // Do not limit the amount of concurrent requests per batch
-            contract: chainConfig.multicallAddress,
           };
+
+          if (chainConfig.multicallAddress) {
+            multicallOptions.contract = chainConfig.multicallAddress;
+          }
 
           const multicallProvider = new providers.MulticallProvider(
             chainConfig.provider,
