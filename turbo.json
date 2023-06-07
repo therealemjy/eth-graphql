@@ -7,13 +7,16 @@
       "dependsOn": ["^build"]
     },
     "lint": {},
-    "tsc": {},
+    "tsc": {
+      "dependsOn": ["^build"]
+    },
     "dev": {
       "cache": false,
       "persistent": true
     },
     "test:units": {
-      "cache": false
+      "cache": false,
+      "dependsOn": ["^build"]
     },
     "test:e2e": {
       "cache": false,

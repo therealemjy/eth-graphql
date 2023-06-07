@@ -7,7 +7,7 @@
     "build": "yarn codegen && next build",
     "start": "next start",
     "lint": "next lint",
-    "tsc": "tsc",
+    "tsc": "yarn codegen && tsc",
     "graphiql": "yarn eth-graphql --config ./src/ethGraphQlConfig.ts",
     "codegen": "graphql-codegen --config ./codegenConfig.ts"
   },

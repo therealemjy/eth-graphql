@@ -29,6 +29,7 @@
     "chai-jest-snapshot": "^2.0.0",
     "dotenv-cli": "latest",
     "ethers": "^5.4.7",
+    "eth-graphql": "*",
     "hardhat": "^2.14.0",
     "hardhat-gas-reporter": "^1.0.8",
     "prettier-config-custom": "*",
