@@ -8,9 +8,10 @@
 
 ## Killer features
 
-🔄 Automatically generate GraphQL schema for invoking any blockchain contract
+🔄 Use an automatically generated GraphQL schema to fetch data from any EVM-compatible blockchain
+contract
 
-⚡️ Groups requests into one using multicall for optimal efficiency
+⚡️ Requests are batched using multicall for optimal efficiency
 
 🛠 Leverage all the features of GraphQL and Apollo Client tools, such as optimistic updates and cache
 normalization
