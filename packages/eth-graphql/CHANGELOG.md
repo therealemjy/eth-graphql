@@ -1,5 +1,11 @@
 # eth-graphql
 
+## 0.3.2
+
+### Patch Changes
+
+- Remove unnecessary package
+
 ## 0.3.1
 
 ### Patch Changes
