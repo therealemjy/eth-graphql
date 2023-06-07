@@ -1,5 +1,11 @@
 # eth-graphql
 
+## 0.3.4
+
+### Patch Changes
+
+- Update documentation to add enums
+
 ## 0.3.3
 
 ### Patch Changes
