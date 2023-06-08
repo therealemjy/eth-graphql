@@ -1,10 +1,11 @@
-import createSchema from '../../createSchema';
-import { Config } from '../../types';
-import openGraphiQlRoute from '../openGraphiQlRoute';
 import express from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import { GraphQLSchema } from 'graphql';
 import open from 'open';
+
+import createSchema from '../../createSchema';
+import { Config } from '../../types';
+import openGraphiQlRoute from '../openGraphiQlRoute';
 
 jest.mock('open');
 jest.mock('express');

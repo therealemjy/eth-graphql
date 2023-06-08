@@ -1,8 +1,9 @@
+import commander from 'commander';
+
 import { GRAPHIQL_ROUTE, PORT } from '../../constants';
 import { Config } from '../../types';
 import loadFile from '../loadFile';
 import openGraphiQlRoute from '../openGraphiQlRoute';
-import commander from 'commander';
 
 jest.mock('commander');
 jest.mock('../loadFile');

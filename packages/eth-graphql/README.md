@@ -336,7 +336,9 @@ export default config;
 
 Visit graphql-codegen's
 [documentation](https://the-guild.dev/graphql/codegen/docs/getting-started/installation) to see how
-to install it on your project and automatically generate TypeScript types for all your queries. You can also check out the [example](https://github.com/therealemjy/eth-graphql/tree/main/example) app to see a working demonstration.
+to install it on your project and automatically generate TypeScript types for all your queries. You
+can also check out the [example](https://github.com/therealemjy/eth-graphql/tree/main/example) app
+to see a working demonstration.
 
 ## Choices taken
 
@@ -597,7 +599,7 @@ type ContractName {
 
 ### Unnamed output properties
 
-In the GraphQL schema, unnamed output properties are assigned a generated name following the the
+In the GraphQL schema, unnamed output properties are assigned a generated name following the
 pattern: `valueX`, where `X` represents the property's position within the function output.
 
 e.g. ABI:
