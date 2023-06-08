@@ -1,5 +1,11 @@
 # eth-graphql
 
+## 0.3.6
+
+### Patch Changes
+
+- Fix links in README
+
 ## 0.3.5
 
 ### Patch Changes
