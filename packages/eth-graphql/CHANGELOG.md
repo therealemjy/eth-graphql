@@ -1,5 +1,11 @@
 # eth-graphql
 
+## 0.3.5
+
+### Patch Changes
+
+- ec05d44: Update README
+
 ## 0.3.4
 
 ### Patch Changes
