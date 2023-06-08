@@ -11,6 +11,8 @@
 🔄 Use an automatically generated GraphQL schema to fetch data from any EVM-compatible blockchain
 contract
 
+🌐 Fully client-side, no centralized API
+
 ⚡️ Requests are batched using multicall for optimal efficiency
 
 🛠 Leverage all the features of GraphQL and Apollo Client tools, such as optimistic updates and cache
@@ -68,7 +70,7 @@ export default config;
 ```
 
 _Note that if you want to use the example above, the ABI of the ERC20 contract can be found
-[here](example/src/abis/erc20.json)._
+[here](../../example/src/abis/erc20.json)._
 
 ### Link creation and connection to Apollo Client
 
@@ -334,7 +336,7 @@ export default config;
 
 Visit graphql-codegen's
 [documentation](https://the-guild.dev/graphql/codegen/docs/getting-started/installation) to see how
-to install it on your project and automatically generate TypeScript types for all your queries.
+to install it on your project and automatically generate TypeScript types for all your queries. You can also check out the [example](../../example) app to see a working demonstration.
 
 ## Choices taken
 
