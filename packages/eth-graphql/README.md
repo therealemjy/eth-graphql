@@ -70,7 +70,7 @@ export default config;
 ```
 
 _Note that if you want to use the example above, the ABI of the ERC20 contract can be found
-[here](../../example/src/abis/erc20.json)._
+[here](https://github.com/therealemjy/eth-graphql/blob/main/example/src/abis/erc20.json)._
 
 ### Link creation and connection to Apollo Client
 
@@ -336,7 +336,7 @@ export default config;
 
 Visit graphql-codegen's
 [documentation](https://the-guild.dev/graphql/codegen/docs/getting-started/installation) to see how
-to install it on your project and automatically generate TypeScript types for all your queries. You can also check out the [example](../../example) app to see a working demonstration.
+to install it on your project and automatically generate TypeScript types for all your queries. You can also check out the [example](https://github.com/therealemjy/eth-graphql/tree/main/example) app to see a working demonstration.
 
 ## Choices taken
 
