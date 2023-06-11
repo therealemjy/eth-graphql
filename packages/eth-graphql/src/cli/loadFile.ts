@@ -1,7 +1,16 @@
-import jiti from 'jiti';
 import path from 'path';
 
 import EthGraphQlError from '../EthGraphQlError';
+
+require('tsconfig-paths/register');
+
+// Programmatically set up ts-node so it transpiles TS files to JS at run time
+require('ts-node').register({
+  transpileOnly: true,
+  compilerOptions: {
+    module: 'commonjs',
+  },
+});
 
 const loadFile = (filePath: string) => {
   const configFilePathComponents = filePath.split('.');
@@ -13,10 +22,8 @@ const loadFile = (filePath: string) => {
     );
   }
 
-  const loader = jiti('', { interopDefault: true });
-
   const absoluteFilePath = path.resolve(filePath);
-  const config = loader(absoluteFilePath);
+  const config = require(absoluteFilePath).default;
 
   return config;
 };
