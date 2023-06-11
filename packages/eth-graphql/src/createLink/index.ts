@@ -1,4 +1,4 @@
-import { ApolloLink, Observable } from '@apollo/client/core';
+import { ApolloLink, Observable } from '@apollo/client';
 import { graphql } from 'graphql';
 import { print } from 'graphql/language/printer';
 
