@@ -1,5 +1,11 @@
 # eth-graphql
 
+## 0.3.9
+
+### Patch Changes
+
+- Import ApolloLink from @apollo/client
+
 ## 0.3.8
 
 ### Patch Changes
