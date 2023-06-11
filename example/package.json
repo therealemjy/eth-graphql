@@ -12,7 +12,7 @@
     "codegen": "graphql-codegen --config ./codegenConfig.ts"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.12",
+    "@apollo/client": "^3.x",
     "eth-graphql": "*",
     "ethers": "^5.7.2",
     "next": "latest",

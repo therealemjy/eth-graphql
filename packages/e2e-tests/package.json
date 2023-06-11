@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@0xsequence/wallet-contracts": "^1.10.0",
-    "@apollo/client": "^3.7.12",
+    "@apollo/client": "^3.x",
     "@ethersproject/abi": "^5.4.7",
     "@ethersproject/providers": "^5.4.7",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.0",
