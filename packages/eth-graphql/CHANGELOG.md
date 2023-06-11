@@ -1,5 +1,11 @@
 # eth-graphql
 
+## 0.3.7
+
+### Patch Changes
+
+- bc9bfb0: Update how config is loaded to handle TS path aliases
+
 ## 0.3.6
 
 ### Patch Changes
