@@ -1,5 +1,11 @@
 # eth-graphql
 
+## 0.3.10
+
+### Patch Changes
+
+- Update imports to improve compatibility with projects
+
 ## 0.3.9
 
 ### Patch Changes
