@@ -1,5 +1,11 @@
 # eth-graphql
 
+## 1.0.0
+
+### Major Changes
+
+- 500593f: Change GraphiQL route
+
 ## 0.3.10
 
 ### Patch Changes
