@@ -1,6 +1,5 @@
 import { ApolloLink, Observable } from '@apollo/client';
-import { graphql } from 'graphql';
-import { print } from 'graphql/language/printer';
+import { graphql, print } from 'graphql';
 
 import createSchema from '../createSchema';
 import { Config } from '../types';
