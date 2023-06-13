@@ -1,6 +1,6 @@
 import { expect } from '@jest/globals';
 
-import formatToEntityName from '../formatToEntityName';
+import formatToEntityName from '../../utilities/formatToEntityName';
 
 const fakeName = 'FakeName';
 

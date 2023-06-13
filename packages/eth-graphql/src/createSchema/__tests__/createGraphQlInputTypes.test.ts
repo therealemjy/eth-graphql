@@ -1,13 +1,13 @@
 import { JsonFragmentType } from '@ethersproject/abi';
 import { GraphQLInputObjectType, GraphQLNonNull } from 'graphql';
 
+import formatToEntityName from '../../utilities/formatToEntityName';
 import createGraphQlInputTypes from '../createGraphQlInputTypes';
 import createGraphQlType from '../createGraphQlType';
-import formatToEntityName from '../formatToEntityName';
 import { SharedGraphQlTypes } from '../types';
 
 jest.mock('../createGraphQlType');
-jest.mock('../formatToEntityName');
+jest.mock('../../utilities/formatToEntityName');
 
 describe('createSchema/createGraphQlInputTypes', () => {
   const mockComponents: ReadonlyArray<JsonFragmentType> = [

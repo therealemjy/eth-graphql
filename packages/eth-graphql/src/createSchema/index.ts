@@ -12,11 +12,11 @@ import {
 
 import EthGraphQlError from '../EthGraphQlError';
 import { Config, SolidityValue } from '../types';
+import filterAbiItems from '../utilities/filterAbiItems';
+import formatToSignature from '../utilities/formatToSignature';
 import createGraphQlInputTypes from './createGraphQlInputTypes';
 import createGraphQlOutputTypes from './createGraphQlOutputTypes';
-import filterAbiItems from './filterAbiItems';
 import formatToFieldName from './formatToFieldName';
-import formatToSignature from './formatToSignature';
 import makeCalls from './makeCalls';
 import { ContractMapping, FieldNameMapping, SharedGraphQlTypes } from './types';
 import validateConfig from './validateConfig';

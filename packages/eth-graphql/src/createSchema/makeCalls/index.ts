@@ -4,8 +4,8 @@ import { GraphQLResolveInfo, Kind } from 'graphql';
 
 import EthGraphQlError from '../../EthGraphQlError';
 import { Config, SolidityValue } from '../../types';
-import filterAbiItems from '../filterAbiItems';
-import formatToSignature from '../formatToSignature';
+import filterAbiItems from '../../utilities/filterAbiItems';
+import formatToSignature from '../../utilities/formatToSignature';
 import { ContractMapping, FieldNameMapping } from '../types';
 import formatGraphQlArgs from './formatGraphQlArgs';
 import formatResult from './formatResult';

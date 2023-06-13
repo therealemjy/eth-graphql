@@ -1,8 +1,8 @@
 import { JsonFragmentType } from '@ethersproject/abi';
 import { GraphQLFieldConfig, GraphQLInputObjectType, GraphQLNonNull } from 'graphql';
 
+import formatToEntityName from '../utilities/formatToEntityName';
 import createGraphQlType from './createGraphQlType';
-import formatToEntityName from './formatToEntityName';
 import { SharedGraphQlTypes } from './types';
 
 const createGraphQlInputTypes = ({
