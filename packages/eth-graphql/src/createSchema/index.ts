@@ -38,7 +38,7 @@ const createSchema = (config: Config) => {
     outputs: {},
   };
 
-  // Map contract names to their config
+  // Mapping of contract names to their config
   const contractMapping: ContractMapping = {};
 
   // Mapping of GraphQL fields to contract functions
@@ -70,16 +70,7 @@ const createSchema = (config: Config) => {
             fields: filteredContractAbiItems.reduce<
               ThunkObjMap<GraphQLFieldConfig<{ [key: string]: SolidityValue }, unknown, unknown>>
             >((accContractFields, abiItem, abiItemIndex) => {
-              // Filter out items that aren't non-mutating functions
-              if (
-                abiItem.type !== 'function' ||
-                !abiItem.name ||
-                (abiItem.stateMutability !== 'view' && abiItem.stateMutability !== 'pure')
-              ) {
-                return accContractFields;
-              }
-
-              const abiItemName = abiItem.name;
+              const abiItemName = abiItem.name!; // We've already filtered out nameless functions
               const abiInputs = abiItem.inputs || [];
 
               const contractFieldName = formatToFieldName({
@@ -101,7 +92,7 @@ const createSchema = (config: Config) => {
                   const abiItemOutputs = abiItem.outputs || [];
                   const data = _obj[contractFieldName];
 
-                  // Handle functions that return void
+                  // Handle functions that return nothing
                   if (abiItemOutputs.length === 0) {
                     return undefined;
                   }

@@ -1,5 +1,5 @@
 import { providers } from '@0xsequence/multicall';
-import { Contract, ContractFunction } from 'ethers';
+import { Contract } from 'ethers';
 import { GraphQLResolveInfo, Kind } from 'graphql';
 
 import EthGraphQlError from '../../EthGraphQlError';
@@ -8,9 +8,11 @@ import { ContractMapping, FieldNameMapping } from '../types';
 import formatGraphQlArgs from './formatGraphQlArgs';
 
 interface ContractCall {
-  call: ContractFunction;
-  fieldName: string;
+  contract: Contract;
+  methodName: string;
+  callArguments: readonly SolidityValue[];
   contractName: string;
+  fieldName: string;
   indexInResultArray?: number;
 }
 
@@ -63,7 +65,7 @@ const makeCalls = async ({
         const contractConfig = contractMapping[contractName];
 
         // Find corresponding function name in mapping
-        const fnName = fieldMapping[contractName][callSelection.name.value];
+        const methodName = fieldMapping[contractName][callSelection.name.value];
 
         // Format arguments
         const contractCallArguments = formatGraphQlArgs(callSelection.arguments || []);
@@ -95,9 +97,11 @@ const makeCalls = async ({
           const contract = new Contract(contractAddress, contractConfig.abi, multicallProvider);
 
           const contractCall: ContractCall = {
-            contractName: contractName,
+            contract,
+            contractName,
+            methodName,
+            callArguments: contractCallArguments,
             fieldName: callSelection.name.value,
-            call: contract[fnName](...contractCallArguments),
             // We use the indexInResultArray property as an indicator for
             // which result this call data needs to be inserted in if it is
             // part of a contract call using dynamic addresses
@@ -116,7 +120,9 @@ const makeCalls = async ({
   );
 
   // Merge all calls into one using multicall contract
-  const multicallResults = await Promise.all(calls.map(({ call }) => call));
+  const multicallResults = await Promise.all(
+    calls.map(({ contract, methodName, callArguments }) => contract[methodName](...callArguments)),
+  );
 
   // Format and return results
   const formattedResults = multicallResults.reduce<{
