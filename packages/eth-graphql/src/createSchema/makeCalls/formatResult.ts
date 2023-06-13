@@ -3,12 +3,10 @@ import { JsonFragment } from '@ethersproject/abi';
 import { SolidityValue } from '../../types';
 import formatToEntityName from '../../utilities/formatToEntityName';
 
-interface FormatResultInput {
+export interface FormatResultInput {
   result: SolidityValue;
   abiItem: JsonFragment;
 }
-
-// TODO: write tests
 
 const formatResult = ({ result, abiItem }: FormatResultInput) => {
   const abiItemOutputs = abiItem.outputs || [];
