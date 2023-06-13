@@ -1,7 +1,7 @@
 import { JsonFragment } from '@ethersproject/abi';
 import { expect } from '@jest/globals';
 
-import formatToSignature from '../../utilities/formatToSignature';
+import formatToSignature from '../formatToSignature';
 
 const testJsonFragment: JsonFragment = {
   inputs: [
