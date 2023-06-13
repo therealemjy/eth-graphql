@@ -1,11 +1,14 @@
-import { providers } from '@0xsequence/multicall';
+import { Multicall, providers } from '@0xsequence/multicall';
 import { Contract } from 'ethers';
 import { GraphQLResolveInfo, Kind } from 'graphql';
 
 import EthGraphQlError from '../../EthGraphQlError';
-import { SolidityValue } from '../../types';
+import { Config, SolidityValue } from '../../types';
+import filterAbiItems from '../filterAbiItems';
+import formatToSignature from '../formatToSignature';
 import { ContractMapping, FieldNameMapping } from '../types';
 import formatGraphQlArgs from './formatGraphQlArgs';
+import formatResult from './formatResult';
 
 interface ContractCall {
   contract: Contract;
@@ -24,7 +27,7 @@ export interface MakeCallsInput {
   graphqlResolveInfo: GraphQLResolveInfo;
   contractMapping: ContractMapping;
   fieldMapping: FieldNameMapping;
-  multicallProvider: providers.MulticallProvider;
+  config: Config;
   chainId: number;
 }
 
@@ -32,9 +35,26 @@ const makeCalls = async ({
   graphqlResolveInfo,
   contractMapping,
   fieldMapping,
-  multicallProvider,
+  config,
   chainId,
 }: MakeCallsInput) => {
+  const chainConfig = config.chains[chainId];
+
+  // Throw an error if no config has been provided for the requested chain ID
+  if (!chainConfig) {
+    throw new EthGraphQlError(`Missing config for chain ID ${chainId}`);
+  }
+
+  const multicallOptions: Partial<Multicall['options']> = {
+    batchSize: Infinity, // Do not limit the amount of concurrent requests per batch
+  };
+
+  if (chainConfig.multicallAddress) {
+    multicallOptions.contract = chainConfig.multicallAddress;
+  }
+
+  const multicallProvider = new providers.MulticallProvider(chainConfig.provider, multicallOptions);
+
   // Find "contracts" node
   const fieldNode = graphqlResolveInfo.fieldNodes.find(
     fieldNode => fieldNode.name.value === graphqlResolveInfo.fieldName,
@@ -130,13 +150,27 @@ const makeCalls = async ({
   }>((accResults, result, index) => {
     const contractCall = calls[index];
 
+    // Find corresponding ABI item
+    const contractFunctionSignature =
+      fieldMapping[contractCall.contractName][contractCall.fieldName];
+    const filteredAbiItems = filterAbiItems(contractMapping[contractCall.contractName].abi);
+
+    const abiItem = filteredAbiItems.find(
+      abiItem => formatToSignature(abiItem) === contractFunctionSignature,
+    )!;
+
+    const formattedResult = formatResult({
+      result,
+      abiItem,
+    });
+
     // Handle single results
     if (contractCall.indexInResultArray === undefined) {
       return {
         ...accResults,
         [contractCall.contractName]: {
           ...(accResults[contractCall.contractName] || {}),
-          [contractCall.fieldName]: result,
+          [contractCall.fieldName]: formattedResult,
         },
       };
     }
@@ -150,7 +184,7 @@ const makeCalls = async ({
 
     contractData[contractCall.indexInResultArray] = {
       ...contractData[contractCall.indexInResultArray],
-      [contractCall.fieldName]: result,
+      [contractCall.fieldName]: formattedResult,
     };
 
     return {

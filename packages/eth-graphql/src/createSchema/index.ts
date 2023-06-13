@@ -1,4 +1,3 @@
-import { Multicall, providers } from '@0xsequence/multicall';
 import {
   GraphQLFieldConfig,
   GraphQLInt,
@@ -15,7 +14,7 @@ import EthGraphQlError from '../EthGraphQlError';
 import { Config, SolidityValue } from '../types';
 import createGraphQlInputTypes from './createGraphQlInputTypes';
 import createGraphQlOutputTypes from './createGraphQlOutputTypes';
-import formatToEntityName from './formatToEntityName';
+import filterAbiItems from './filterAbiItems';
 import formatToFieldName from './formatToFieldName';
 import formatToSignature from './formatToSignature';
 import makeCalls from './makeCalls';
@@ -54,13 +53,7 @@ const createSchema = (config: Config) => {
         address: contract.address,
       };
 
-      // Filter out ABI items that aren't non-mutating named functions
-      const filteredContractAbiItems = contract.abi.filter(
-        abiItem =>
-          abiItem.type === 'function' &&
-          !!abiItem.name &&
-          (abiItem.stateMutability === 'view' || abiItem.stateMutability === 'pure'),
-      );
+      const filteredContractAbiItems = filterAbiItems(contract.abi);
 
       const contractType: GraphQLFieldConfig<{ [key: string]: SolidityValue }, unknown, unknown> = {
         type: new GraphQLNonNull(
@@ -88,37 +81,7 @@ const createSchema = (config: Config) => {
                   abiItem,
                   sharedGraphQlTypes,
                 }),
-                resolve: (_obj: { [key: string]: SolidityValue }) => {
-                  const abiItemOutputs = abiItem.outputs || [];
-                  const data = _obj[contractFieldName];
-
-                  // Handle functions that return nothing
-                  if (abiItemOutputs.length === 0) {
-                    return undefined;
-                  }
-
-                  // Handle functions that return only one value
-                  if (abiItemOutputs.length === 1 || !Array.isArray(data)) {
-                    return data;
-                  }
-
-                  // If the output in the ABI contains multiple components, we
-                  // map them to an object, similarly to how they are mapped
-                  // in the GraphQL schema
-                  return abiItemOutputs.reduce<{
-                    [key: string]: SolidityValue;
-                  }>(
-                    (accFormattedData, outputComponent, outputComponentIndex) => ({
-                      ...accFormattedData,
-                      [formatToEntityName({
-                        name: outputComponent.name,
-                        index: outputComponentIndex,
-                        type: 'value',
-                      })]: data[outputComponentIndex],
-                    }),
-                    {},
-                  );
-                },
+                resolve: (_obj: { [key: string]: SolidityValue }) => _obj[contractFieldName],
               };
 
               // Handle argument types
@@ -183,35 +146,14 @@ const createSchema = (config: Config) => {
           { chainId }: { chainId: number },
           _context: unknown,
           graphqlResolveInfo: GraphQLResolveInfo,
-        ) => {
-          const chainConfig = config.chains[chainId];
-
-          // Throw an error if no config has been provided for the requested chain ID
-          if (!chainConfig) {
-            throw new EthGraphQlError(`Missing config for chain ID ${chainId}`);
-          }
-
-          const multicallOptions: Partial<Multicall['options']> = {
-            batchSize: Infinity, // Do not limit the amount of concurrent requests per batch
-          };
-
-          if (chainConfig.multicallAddress) {
-            multicallOptions.contract = chainConfig.multicallAddress;
-          }
-
-          const multicallProvider = new providers.MulticallProvider(
-            chainConfig.provider,
-            multicallOptions,
-          );
-
-          return makeCalls({
+        ) =>
+          makeCalls({
             graphqlResolveInfo,
             contractMapping,
             fieldMapping,
-            multicallProvider,
+            config,
             chainId,
-          });
-        },
+          }),
       },
     },
   });
