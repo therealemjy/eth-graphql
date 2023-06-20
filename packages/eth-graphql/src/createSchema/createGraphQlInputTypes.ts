@@ -1,5 +1,5 @@
 import { JsonFragmentType } from '@ethersproject/abi';
-import { GraphQLFieldConfig, GraphQLInputObjectType, GraphQLNonNull } from 'graphql';
+import { GraphQLFieldConfigArgumentMap, GraphQLInputObjectType, GraphQLNonNull } from 'graphql';
 
 import formatToEntityName from '../utilities/formatToEntityName';
 import createGraphQlType from './createGraphQlType';
@@ -12,7 +12,7 @@ const createGraphQlInputTypes = ({
   components: ReadonlyArray<JsonFragmentType>;
   sharedGraphQlTypes: SharedGraphQlTypes;
 }) =>
-  components.reduce<GraphQLFieldConfig<unknown, unknown, unknown>['args']>(
+  components.reduce<GraphQLFieldConfigArgumentMap>(
     (accArgs, component, componentIndex) => ({
       ...accArgs,
       [formatToEntityName({

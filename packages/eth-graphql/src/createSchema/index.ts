@@ -15,13 +15,15 @@ import { Config, SolidityValue } from '../types';
 import filterAbiItems from '../utilities/filterAbiItems';
 import formatToSignature from '../utilities/formatToSignature';
 import createGraphQlInputTypes from './createGraphQlInputTypes';
+import createGraphQlMultInputTypes from './createGraphQlMultInputTypes';
 import createGraphQlOutputTypes from './createGraphQlOutputTypes';
 import formatToFieldName from './formatToFieldName';
 import makeCalls from './makeCalls';
 import { ContractMapping, FieldNameMapping, SharedGraphQlTypes } from './types';
 import validateConfig from './validateConfig';
 
-const ROOT_NODE_NAME = 'contracts';
+const ROOT_FIELD_NAME = 'contracts';
+const MULT_CONTRACT_FIELD_SUFFIX = '_MULT';
 const addressesGraphQlInputType = new GraphQLNonNull(new GraphQLList(GraphQLString));
 
 const createSchema = (config: Config) => {
@@ -44,7 +46,7 @@ const createSchema = (config: Config) => {
   const fieldMapping: FieldNameMapping = {};
 
   const contractsType = new GraphQLObjectType({
-    name: ROOT_NODE_NAME,
+    name: ROOT_FIELD_NAME,
     // Go through contracts and build field types
     fields: config.contracts.reduce((accContracts, contract) => {
       // Add contract to mapping
@@ -66,11 +68,25 @@ const createSchema = (config: Config) => {
               const abiItemName = abiItem.name!; // We've already filtered out nameless functions
               const abiInputs = abiItem.inputs || [];
 
+              const contractFunctionSignature = formatToSignature(abiItem);
+
               const contractFieldName = formatToFieldName({
                 name: abiItemName,
                 indexInAbi: abiItemIndex,
                 abi: filteredContractAbiItems,
               });
+
+              // Initialize contract mapping if necessary
+              if (!fieldMapping[contract.name]) {
+                fieldMapping[contract.name] = {};
+              }
+
+              // Add field to contract mapping
+              fieldMapping[contract.name][contractFieldName] = contractFunctionSignature;
+
+              const newAccContractFields: typeof accContractFields = {
+                ...accContractFields,
+              };
 
               const contractField: GraphQLFieldConfig<
                 { [key: string]: SolidityValue },
@@ -84,28 +100,36 @@ const createSchema = (config: Config) => {
                 resolve: (_obj: { [key: string]: SolidityValue }) => _obj[contractFieldName],
               };
 
+              newAccContractFields[contractFieldName] = contractField;
+
               // Handle argument types
               if (abiInputs.length > 0) {
                 contractField.args = createGraphQlInputTypes({
                   components: abiInputs,
                   sharedGraphQlTypes,
                 });
+
+                // Create a second field that can be used to call the same
+                // method with multiple sets of arguments
+                const multContractFieldName = `${contractFieldName}${MULT_CONTRACT_FIELD_SUFFIX}`;
+
+                const multContractField: GraphQLFieldConfig<
+                  { [key: string]: SolidityValue },
+                  unknown,
+                  unknown
+                > = {
+                  ...contractField,
+                  args: createGraphQlMultInputTypes({
+                    inputTypes: contractField.args,
+                    contractFieldName,
+                    sharedGraphQlTypes,
+                  }),
+                };
+
+                newAccContractFields[multContractFieldName] = multContractField;
               }
 
-              const contractFunctionSignature = formatToSignature(abiItem);
-
-              // Initialize contract mapping if necessary
-              if (!fieldMapping[contract.name]) {
-                fieldMapping[contract.name] = {};
-              }
-
-              // Add field to contract mapping
-              fieldMapping[contract.name][contractFieldName] = contractFunctionSignature;
-
-              return {
-                ...accContractFields,
-                [contractFieldName]: contractField,
-              };
+              return newAccContractFields;
             }, {}),
           }),
         ),
