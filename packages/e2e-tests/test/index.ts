@@ -51,6 +51,27 @@ describe('end-to-end tests', function () {
     console.log(`Multicall deployed at: ${deployedMulticallContract.address}`);
   });
 
+  it.skip('test', async function () {
+    // Make GraphQL request
+    const client = initClient();
+    const { data } = await client.query({
+      query: gql`
+        query ($chainId: Int!) {
+          contracts(chainId: $chainId) {
+            TestContract {
+              passInt_MULT(args: [{ someInt: 1 }, { someInt: 2 }, { someInt: 3 }])
+            }
+          }
+        }
+      `,
+      variables: {
+        chainId: MAINNET_CHAIN_ID,
+      },
+    });
+
+    expect(data).to.matchSnapshot();
+  });
+
   it('returns the correct data when calling a contract with a defined address', async function () {
     // Make GraphQL request
     const client = initClient();
