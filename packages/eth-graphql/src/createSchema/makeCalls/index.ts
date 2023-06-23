@@ -59,85 +59,82 @@ const makeCalls = async ({ graphqlResolveInfo, fieldMapping, config, chainId }: 
   }
 
   // Go through "contracts" node to extract requests to make
-  const calls = (fieldNode.selectionSet?.selections || []).reduce<ContractCall[]>(
-    (accCalls, contractSelection) => {
+  const calls: ContractCall[] = [];
+
+  (fieldNode.selectionSet?.selections || []).forEach(contractSelection => {
+    // Ignore __typename and non-field selections
+    if (contractSelection.kind !== Kind.FIELD || contractSelection.name.value === '__typename') {
+      return;
+    }
+
+    // Go through call nodes
+    (contractSelection.selectionSet?.selections || []).forEach(callSelection => {
       // Ignore __typename and non-field selections
-      if (contractSelection.kind !== Kind.FIELD || contractSelection.name.value === '__typename') {
-        return accCalls;
+      if (callSelection.kind !== Kind.FIELD || callSelection.name.value === '__typename') {
+        return;
       }
 
-      // Go through call nodes
-      const contractCalls = (contractSelection.selectionSet?.selections || []).reduce<
-        ContractCall[]
-      >((accContractCalls, callSelection) => {
-        // Ignore __typename and non-field selections
-        if (callSelection.kind !== Kind.FIELD || callSelection.name.value === '__typename') {
-          return accContractCalls;
-        }
+      const contractName = contractSelection.name.value;
 
-        const contractName = contractSelection.name.value;
+      // Find corresponding field in mapping
+      const field = fieldMapping[contractName][callSelection.name.value];
 
-        // Find corresponding field in mapping
-        const field = fieldMapping[contractName][callSelection.name.value];
+      // Format arguments
+      const contractCallArguments = formatGraphQlArgs(callSelection.arguments || []);
 
-        // Format arguments
-        const contractCallArguments = formatGraphQlArgs(callSelection.arguments || []);
+      // Throw an error if an address property was defined for the contract
+      // but no address was added for the queried chain ID
+      if (field.contract.address && !field.contract.address[chainId]) {
+        throw new EthGraphQlError(
+          `Missing address for ${contractName} contract for chain ID ${chainId}`,
+        );
+      }
 
-        // Throw an error if an address property was defined for the contract
-        // but no address was added for the queried chain ID
-        if (field.contract.address && !field.contract.address[chainId]) {
-          throw new EthGraphQlError(
-            `Missing address for ${contractName} contract for chain ID ${chainId}`,
-          );
-        }
+      // Get contract address from config if it exists
+      let contractAddresses = field.contract.address && [field.contract.address[chainId]];
 
-        // Get contract address from config if it exists
-        let contractAddresses = field.contract.address && [field.contract.address[chainId]];
+      // If contract was defined in config without an address property, then
+      // it means an array of addresses to call was passed as the first
+      // argument of the contract field
+      if (!contractAddresses) {
+        contractAddresses =
+          (graphqlResolveInfo.variableValues.addresses as string[]) ||
+          (formatGraphQlArgs(contractSelection.arguments || [])[0] as string[]);
+      }
 
-        // If contract was defined in config without an address property, then
-        // it means an array of addresses to call was passed as the first
-        // argument of the contract field
-        if (!contractAddresses) {
-          contractAddresses =
-            (graphqlResolveInfo.variableValues.addresses as string[]) ||
-            (formatGraphQlArgs(contractSelection.arguments || [])[0] as string[]);
-        }
+      const hasDefinedAddress = !!field.contract.address;
 
-        const hasDefinedAddress = !!field.contract.address;
+      // Shape a contract call for each contract address to call
+      contractAddresses.forEach((contractAddress, contractAddressIndex) => {
+        const contractInstance = new Contract(
+          contractAddress,
+          field.contract.abi,
+          multicallProvider,
+        );
 
-        // Shape a contract call for each contract address to call
-        const newContractCalls = contractAddresses.map((contractAddress, contractAddressIndex) => {
-          const contractInstance = new Contract(
-            contractAddress,
-            field.contract.abi,
-            multicallProvider,
-          );
+        const contractFunctionSignature = formatToSignature(field.abiItem);
 
-          const contractFunctionSignature = formatToSignature(field.abiItem);
+        // Shape a contract call for each set of arguments to call the
+        // contract with
+        // const callArguments = field.isMult ?
 
-          const contractCall: ContractCall = {
-            contractName,
-            contractInstance,
-            contractFunctionSignature,
-            abiItem: field.abiItem,
-            callArguments: contractCallArguments,
-            fieldName: callSelection.name.value,
-            // We use the indexInResultArray property as an indicator for
-            // which result this call data needs to be inserted in if it is
-            // part of a contract call using dynamic addresses
-            indexInResultArray: hasDefinedAddress ? undefined : contractAddressIndex,
-          };
+        const contractCall: ContractCall = {
+          contractName,
+          contractInstance,
+          contractFunctionSignature,
+          abiItem: field.abiItem,
+          callArguments: contractCallArguments,
+          fieldName: callSelection.name.value,
+          // We use the indexInResultArray property as an indicator for
+          // which result this call data needs to be inserted in if it is
+          // part of a contract call using dynamic addresses
+          indexInResultArray: hasDefinedAddress ? undefined : contractAddressIndex,
+        };
 
-          return contractCall;
-        });
-
-        return accContractCalls.concat(newContractCalls);
-      }, []);
-
-      return accCalls.concat(contractCalls);
-    },
-    [],
-  );
+        return calls.push(contractCall);
+      });
+    });
+  });
 
   // Merge all calls into one using multicall contract
   const multicallResults = await Promise.all(
