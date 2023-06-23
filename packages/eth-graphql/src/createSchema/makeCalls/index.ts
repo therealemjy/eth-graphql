@@ -114,10 +114,6 @@ const makeCalls = async ({ graphqlResolveInfo, fieldMapping, config, chainId }: 
 
         const contractFunctionSignature = formatToSignature(field.abiItem);
 
-        // Shape a contract call for each set of arguments to call the
-        // contract with
-        // const callArguments = field.isMult ?
-
         const contractCall: ContractCall = {
           contractName,
           contractInstance,
