@@ -5,7 +5,7 @@ import createGraphQlType from './createGraphQlType';
 import { GraphQlVoid } from './scalars';
 import { SharedGraphQlTypes } from './types';
 
-const createGraphQlOutputTypes = ({
+const createGraphQlOutputType = ({
   abiItem,
   sharedGraphQlTypes,
 }: {
@@ -38,4 +38,4 @@ const createGraphQlOutputTypes = ({
   }) as GraphQLOutputType;
 };
 
-export default createGraphQlOutputTypes;
+export default createGraphQlOutputType;

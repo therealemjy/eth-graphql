@@ -1,5 +1,4 @@
 import { Multicall, providers } from '@0xsequence/multicall';
-import { JsonFragment } from '@ethersproject/abi';
 import { Contract } from 'ethers';
 import { GraphQLResolveInfo, Kind } from 'graphql';
 
@@ -8,21 +7,8 @@ import { Config, SolidityValue } from '../../types';
 import formatToSignature from '../../utilities/formatToSignature';
 import { FieldNameMapping } from '../types';
 import formatGraphQlArgs from './formatGraphQlArgs';
-import formatResult from './formatResult';
-
-interface ContractCall {
-  contractName: string;
-  contractInstance: Contract;
-  contractFunctionSignature: string;
-  callArguments: readonly SolidityValue[];
-  fieldName: string;
-  abiItem: JsonFragment;
-  indexInResultArray?: number;
-}
-
-interface ContractData {
-  [methodName: string]: SolidityValue;
-}
+import formatMulticallResults from './formatMulticallResults';
+import { ContractCall } from './types';
 
 export interface MakeCallsInput {
   graphqlResolveInfo: GraphQLResolveInfo;
@@ -79,9 +65,6 @@ const makeCalls = async ({ graphqlResolveInfo, fieldMapping, config, chainId }: 
       // Find corresponding field in mapping
       const field = fieldMapping[contractName][callSelection.name.value];
 
-      // Format arguments
-      const contractCallArguments = formatGraphQlArgs(callSelection.arguments || []);
-
       // Throw an error if an address property was defined for the contract
       // but no address was added for the queried chain ID
       if (field.contract.address && !field.contract.address[chainId]) {
@@ -104,6 +87,10 @@ const makeCalls = async ({ graphqlResolveInfo, fieldMapping, config, chainId }: 
 
       const hasDefinedAddress = !!field.contract.address;
 
+      // Format arguments
+      const contractCallArguments = formatGraphQlArgs(callSelection.arguments || []);
+      const contractFunctionSignature = formatToSignature(field.abiItem);
+
       // Shape a contract call for each contract address to call
       contractAddresses.forEach((contractAddress, contractAddressIndex) => {
         const contractInstance = new Contract(
@@ -112,22 +99,28 @@ const makeCalls = async ({ graphqlResolveInfo, fieldMapping, config, chainId }: 
           multicallProvider,
         );
 
-        const contractFunctionSignature = formatToSignature(field.abiItem);
+        // Shape a contract call for each set of arguments
+        const callArgumentSets = field.isMult
+          ? (contractCallArguments[0] as readonly SolidityValue[][])
+          : [contractCallArguments];
 
-        const contractCall: ContractCall = {
-          contractName,
-          contractInstance,
-          contractFunctionSignature,
-          abiItem: field.abiItem,
-          callArguments: contractCallArguments,
-          fieldName: callSelection.name.value,
-          // We use the indexInResultArray property as an indicator for
-          // which result this call data needs to be inserted in if it is
-          // part of a contract call using dynamic addresses
-          indexInResultArray: hasDefinedAddress ? undefined : contractAddressIndex,
-        };
+        callArgumentSets.forEach(callArguments => {
+          const contractCall: ContractCall = {
+            contractName,
+            contractInstance,
+            contractFunctionSignature,
+            abiItem: field.abiItem,
+            isMult: field.isMult,
+            fieldName: callSelection.name.value,
+            // We use the indexInResultArray property as an indicator for
+            // which result this call data needs to be inserted in if it is
+            // part of a contract call using dynamic addresses
+            indexInResultArray: hasDefinedAddress ? undefined : contractAddressIndex,
+            callArguments,
+          };
 
-        return calls.push(contractCall);
+          return calls.push(contractCall);
+        });
       });
     });
   });
@@ -140,44 +133,10 @@ const makeCalls = async ({ graphqlResolveInfo, fieldMapping, config, chainId }: 
   );
 
   // Format and return results
-  const formattedResults = multicallResults.reduce<{
-    [contractName: string]: ContractData | ContractData[];
-  }>((accResults, result, index) => {
-    const contractCall = calls[index];
-
-    const formattedResult = formatResult({
-      result,
-      abiItem: contractCall.abiItem,
-    });
-
-    // Handle single results
-    if (contractCall.indexInResultArray === undefined) {
-      return {
-        ...accResults,
-        [contractCall.contractName]: {
-          ...(accResults[contractCall.contractName] || {}),
-          [contractCall.fieldName]: formattedResult,
-        },
-      };
-    }
-
-    // Handle multiple results merged into an array
-    const contractData = (accResults[contractCall.contractName] as ContractData[]) || [];
-
-    if (!contractData[contractCall.indexInResultArray]) {
-      contractData[contractCall.indexInResultArray] = {};
-    }
-
-    contractData[contractCall.indexInResultArray] = {
-      ...contractData[contractCall.indexInResultArray],
-      [contractCall.fieldName]: formattedResult,
-    };
-
-    return {
-      ...accResults,
-      [contractCall.contractName]: contractData,
-    };
-  }, {});
+  const formattedResults = formatMulticallResults({
+    multicallResults,
+    contractCalls: calls,
+  });
 
   return formattedResults;
 };

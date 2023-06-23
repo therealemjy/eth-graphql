@@ -1,13 +1,13 @@
 import { JsonFragment } from '@ethersproject/abi';
 
-import createGraphQlOutputTypes from '../createGraphQlOutputTypes';
+import createGraphQlOutputType from '../createGraphQlOutputType';
 import createGraphQlType from '../createGraphQlType';
 import { GraphQlVoid } from '../scalars';
 import { SharedGraphQlTypes } from '../types';
 
 jest.mock('../createGraphQlType');
 
-describe('createSchema/createGraphQlOutputTypes', () => {
+describe('createSchema/createGraphQlOutputType', () => {
   const mockAbiItem: JsonFragment = {
     name: 'mockName',
     type: 'mockType',
@@ -26,7 +26,7 @@ describe('createSchema/createGraphQlOutputTypes', () => {
       outputs: {},
     };
 
-    const result = createGraphQlOutputTypes({
+    const result = createGraphQlOutputType({
       abiItem: mockAbiItem,
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });
@@ -41,7 +41,7 @@ describe('createSchema/createGraphQlOutputTypes', () => {
 
     const singleOutputAbiItem = { ...mockAbiItem, outputs: [{ type: 'uint8' }] };
 
-    createGraphQlOutputTypes({
+    createGraphQlOutputType({
       abiItem: singleOutputAbiItem,
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });
@@ -64,7 +64,7 @@ describe('createSchema/createGraphQlOutputTypes', () => {
       outputs: [{ type: 'uint8' }, { type: 'uint8' }],
     };
 
-    createGraphQlOutputTypes({
+    createGraphQlOutputType({
       abiItem: multipleOutputsAbiItem,
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });

@@ -1,11 +1,11 @@
 import { JsonFragment } from '@ethersproject/abi';
 
-import formatToEntityName from '../../../utilities/formatToEntityName';
+import formatToEntityName from '../../../../utilities/formatToEntityName';
 import formatResult, { FormatResultInput } from '../formatResult';
 
-jest.mock('../../../utilities/formatToEntityName');
+jest.mock('../../../../utilities/formatToEntityName');
 
-describe('formatResult', () => {
+describe('createSchema/makeCalls/formatMulticallResults/formatResult', () => {
   it('should return undefined if abiItemOutputs is empty', () => {
     const input: FormatResultInput = {
       result: 'dummy',

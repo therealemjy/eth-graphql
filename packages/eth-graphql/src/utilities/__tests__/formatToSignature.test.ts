@@ -155,7 +155,7 @@ const testJsonFragment: JsonFragment = {
   type: 'function',
 };
 
-describe('createSchema/formatToSignature', () => {
+describe('utilities/formatToSignature', () => {
   it('formats function ABI to signature', () => {
     const result = formatToSignature(testJsonFragment);
 

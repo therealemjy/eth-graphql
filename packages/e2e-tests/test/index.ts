@@ -51,6 +51,8 @@ describe('end-to-end tests', function () {
     console.log(`Multicall deployed at: ${deployedMulticallContract.address}`);
   });
 
+  // TODO: add smaller tests for each data type (string, int, uint etc...)
+
   it('returns the correct data when calling a contract with a defined address', async function () {
     // Make GraphQL request
     const client = initClient();
@@ -108,6 +110,32 @@ describe('end-to-end tests', function () {
 
             TestContract2(addresses: $addresses) {
               ${CALL_FRAGMENT}
+            }
+          }
+        }
+      `,
+      variables: {
+        chainId: MAINNET_CHAIN_ID,
+        addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
+      },
+    });
+
+    expect(data).to.matchSnapshot();
+  });
+
+  it('returns the correct data when calling MULT fields', async function () {
+    // Make GraphQL request
+    const client = initClient();
+    const { data } = await client.query({
+      query: gql`
+        query ($chainId: Int!, $addresses: [String!]!) {
+          contracts(chainId: $chainId) {
+            TestContract {
+              passInt_MULT(args: [{ someInt: 1 }, { someInt: 2 }, { someInt: 3 }])
+            }
+
+            TestContract2(addresses: $addresses) {
+              passInt_MULT(args: [{ someInt: 1 }, { someInt: 2 }, { someInt: 3 }])
             }
           }
         }

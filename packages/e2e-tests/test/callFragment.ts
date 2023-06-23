@@ -132,4 +132,91 @@ export const CALL_FRAGMENT = /* GraphQL */ `
       walletAddress
     }
   }
+  mayhem_MULT(args: [{
+    arg0: "fake string 0"
+    someUint: 671432189
+    arg2: ["1000000000000000000", "200000000000000000"]
+    someMovies: [
+      {
+        id: "0"
+        title: "fake movie 0"
+        status: "0"
+        director: {
+          name: "fake director"
+          walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+        }
+      }
+      {
+        id: "1"
+        title: "fake movie 1"
+        status: "1"
+        director: {
+          name: "fake director"
+          walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+        }
+      }
+    ]
+    someDirectors: [
+      {
+        name: "fake director 0"
+        walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+      }
+      {
+        name: "fake director 1"
+        walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+      }
+    ]
+    someStatuses: [0, 1, 1, 1]
+  }, {
+    arg0: "fake string 1"
+    someUint: 671432189
+    arg2: ["3000000000000000000", "400000000000000000"]
+    someMovies: [
+      {
+        id: "2"
+        title: "fake movie 2"
+        status: "1"
+        director: {
+          name: "fake director 1"
+          walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+        }
+      }
+      {
+        id: "3"
+        title: "fake movie 3"
+        status: "0"
+        director: {
+          name: "fake director 1"
+          walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+        }
+      }
+    ]
+    someDirectors: [
+      {
+        name: "fake director 2"
+        walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+      }
+      {
+        name: "fake director 3"
+        walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+      }
+    ]
+    someStatuses: [1, 0, 1, 0]
+  }]) {
+    passedMovies {
+      id
+      title
+      status
+      director {
+        name
+        walletAddress
+      }
+    }
+    value1
+    statuses
+    director {
+      name
+      walletAddress
+    }
+  }
 `;

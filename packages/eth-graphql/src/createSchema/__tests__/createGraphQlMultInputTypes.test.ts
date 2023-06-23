@@ -3,7 +3,7 @@ import { GraphQLBoolean, GraphQLInputObjectType, GraphQLList, GraphQLNonNull } f
 import createGraphQlMultInputTypes from '../createGraphQlMultInputTypes';
 import { SharedGraphQlTypes } from '../types';
 
-describe('createGraphQlMultInputTypes', () => {
+describe('createSchema/createGraphQlMultInputTypes', () => {
   it('creates a new type if one does not exist', () => {
     const sharedGraphQlTypes: SharedGraphQlTypes = { inputs: {}, outputs: {} };
     const inputTypes = {

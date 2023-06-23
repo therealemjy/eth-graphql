@@ -2,7 +2,7 @@ import { JsonFragment } from '@ethersproject/abi';
 
 import filterAbiItems from '../filterAbiItems';
 
-describe('filterAbiItems', () => {
+describe('utilities/filterAbiItems', () => {
   it('should filter out non-function items', () => {
     const input: JsonFragment[] = [
       { type: 'function', name: 'function1', stateMutability: 'view' },

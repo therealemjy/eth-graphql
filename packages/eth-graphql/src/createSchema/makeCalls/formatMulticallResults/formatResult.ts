@@ -1,7 +1,7 @@
 import { JsonFragment } from '@ethersproject/abi';
 
-import { SolidityValue } from '../../types';
-import formatToEntityName from '../../utilities/formatToEntityName';
+import { SolidityValue } from '../../../types';
+import formatToEntityName from '../../../utilities/formatToEntityName';
 
 export interface FormatResultInput {
   result: SolidityValue;

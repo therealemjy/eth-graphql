@@ -22,7 +22,7 @@ export interface GetOrSetSharedGraphQlType {
   sharedGraphQlTypes: SharedGraphQlTypes;
 }
 
-function getOrSetSharedGraphQlType({
+function createSharedGraphQlType({
   isInput,
   component,
   sharedGraphQlTypes,
@@ -102,7 +102,7 @@ function createGraphQlType({ isInput, component, sharedGraphQlTypes }: CreateGra
 
   // Handle structs
   if (componentBaseType === 'tuple' && component.internalType) {
-    graphQlType = getOrSetSharedGraphQlType({
+    graphQlType = createSharedGraphQlType({
       isInput,
       component,
       sharedGraphQlTypes,

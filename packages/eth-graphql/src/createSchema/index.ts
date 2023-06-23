@@ -15,9 +15,11 @@ import { Config, SolidityValue } from '../types';
 import filterAbiItems from '../utilities/filterAbiItems';
 import createGraphQlInputTypes from './createGraphQlInputTypes';
 import createGraphQlMultInputTypes from './createGraphQlMultInputTypes';
-import createGraphQlOutputTypes from './createGraphQlOutputTypes';
+import createGraphQlMultOutputType from './createGraphQlMultOutputType';
+import createGraphQlOutputType from './createGraphQlOutputType';
 import formatToFieldName from './formatToFieldName';
 import makeCalls from './makeCalls';
+import resolve from './resolve';
 import { FieldNameMapping, SharedGraphQlTypes } from './types';
 import validateConfig from './validateConfig';
 
@@ -86,11 +88,11 @@ const createSchema = (config: Config) => {
                 unknown,
                 unknown
               > = {
-                type: createGraphQlOutputTypes({
+                type: createGraphQlOutputType({
                   abiItem,
                   sharedGraphQlTypes,
                 }),
-                resolve: (_obj: { [key: string]: SolidityValue }) => _obj[contractFieldName],
+                resolve,
               };
 
               newAccContractFields[contractFieldName] = contractField;
@@ -120,6 +122,11 @@ const createSchema = (config: Config) => {
                   unknown
                 > = {
                   ...contractField,
+                  type: createGraphQlMultOutputType({
+                    outputType: contractField.type,
+                    contractFieldName,
+                    sharedGraphQlTypes,
+                  }),
                   args: createGraphQlMultInputTypes({
                     inputTypes: contractField.args,
                     contractFieldName,
@@ -134,7 +141,7 @@ const createSchema = (config: Config) => {
             }, {}),
           }),
         ),
-        resolve: (_obj: { [key: string]: SolidityValue }) => _obj[contract.name],
+        resolve,
       };
 
       // Add "addresses" input argument if contract in config does not have an

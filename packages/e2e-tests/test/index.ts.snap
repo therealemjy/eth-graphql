@@ -1,5 +1,39 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`end-to-end tests returns the correct data when calling MULT fields 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "passInt_MULT": Array [
+        "1",
+        "2",
+        "3",
+      ],
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "passInt_MULT": Array [
+          "1",
+          "2",
+          "3",
+        ],
+      },
+      Object {
+        "__typename": "TestContract2",
+        "passInt_MULT": Array [
+          "1",
+          "2",
+          "3",
+        ],
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
 exports[`end-to-end tests returns the correct data when calling a contract with a defined address 1`] = `
 Object {
   "contracts": Object {
@@ -15,26 +49,26 @@ Object {
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
           "id": "0",
-          "status": "1",
-          "title": "fake movie",
+          "status": "0",
+          "title": "fake movie 0",
         },
         Object {
           "__typename": "TestContract_Movie",
           "director": Object {
             "__typename": "TestContract_Director",
-            "name": "Robert Zemeckis",
-            "walletAddress": "0x86f11f319E53481493Ea50d97eAc684c5Ca8403D",
+            "name": "fake director",
+            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
           "id": "1",
           "status": "1",
-          "title": "Forrest Gump",
+          "title": "fake movie 1",
         },
       ],
       "getAnyMovie": Object {
         "__typename": "TestContract_Movie",
         "id": "0",
-        "status": "1",
-        "title": "fake movie",
+        "status": "0",
+        "title": "fake movie 0",
       },
       "getBoolean": true,
       "getBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
@@ -74,8 +108,8 @@ Object {
               "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
             },
             "id": "0",
-            "status": "1",
-            "title": "fake movie",
+            "status": "0",
+            "title": "fake movie 0",
           },
           Object {
             "__typename": "TestContract_Movie",
@@ -85,8 +119,8 @@ Object {
               "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
             },
             "id": "0",
-            "status": "1",
-            "title": "fake movie",
+            "status": "0",
+            "title": "fake movie 0",
           },
         ],
         "statuses": Array [
@@ -97,6 +131,86 @@ Object {
         ],
         "value1": "671432189",
       },
+      "mayhem_MULT": Array [
+        Object {
+          "__typename": "mayhemOutput",
+          "director": Object {
+            "__typename": "TestContract_Director",
+            "name": "fake director 0",
+            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+          },
+          "passedMovies": Array [
+            Object {
+              "__typename": "TestContract_Movie",
+              "director": Object {
+                "__typename": "TestContract_Director",
+                "name": "fake director",
+                "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+              },
+              "id": "0",
+              "status": "0",
+              "title": "fake movie 0",
+            },
+            Object {
+              "__typename": "TestContract_Movie",
+              "director": Object {
+                "__typename": "TestContract_Director",
+                "name": "fake director",
+                "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+              },
+              "id": "1",
+              "status": "1",
+              "title": "fake movie 1",
+            },
+          ],
+          "statuses": Array [
+            "0",
+            "1",
+            "1",
+            "1",
+          ],
+          "value1": "671432189",
+        },
+        Object {
+          "__typename": "mayhemOutput",
+          "director": Object {
+            "__typename": "TestContract_Director",
+            "name": "fake director 2",
+            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+          },
+          "passedMovies": Array [
+            Object {
+              "__typename": "TestContract_Movie",
+              "director": Object {
+                "__typename": "TestContract_Director",
+                "name": "fake director 1",
+                "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+              },
+              "id": "2",
+              "status": "1",
+              "title": "fake movie 2",
+            },
+            Object {
+              "__typename": "TestContract_Movie",
+              "director": Object {
+                "__typename": "TestContract_Director",
+                "name": "fake director 1",
+                "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+              },
+              "id": "3",
+              "status": "0",
+              "title": "fake movie 3",
+            },
+          ],
+          "statuses": Array [
+            "1",
+            "0",
+            "1",
+            "0",
+          ],
+          "value1": "671432189",
+        },
+      ],
       "movies": Object {
         "__typename": "moviesOutput",
         "director": Object {
@@ -135,8 +249,8 @@ Object {
           "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
         },
         "id": "0",
-        "status": "1",
-        "title": "fake movie",
+        "status": "0",
+        "title": "fake movie 0",
       },
       "passString": "some-string",
       "passTuple": Array [
@@ -168,26 +282,26 @@ Object {
               "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
             },
             "id": "0",
-            "status": "1",
-            "title": "fake movie",
+            "status": "0",
+            "title": "fake movie 0",
           },
           Object {
             "__typename": "TestContract_Movie",
             "director": Object {
               "__typename": "TestContract_Director",
-              "name": "Robert Zemeckis",
-              "walletAddress": "0x86f11f319E53481493Ea50d97eAc684c5Ca8403D",
+              "name": "fake director",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
             },
             "id": "1",
             "status": "1",
-            "title": "Forrest Gump",
+            "title": "fake movie 1",
           },
         ],
         "getAnyMovie": Object {
           "__typename": "TestContract_Movie",
           "id": "0",
-          "status": "1",
-          "title": "fake movie",
+          "status": "0",
+          "title": "fake movie 0",
         },
         "getBoolean": true,
         "getBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
@@ -227,8 +341,8 @@ Object {
                 "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
               },
               "id": "0",
-              "status": "1",
-              "title": "fake movie",
+              "status": "0",
+              "title": "fake movie 0",
             },
             Object {
               "__typename": "TestContract_Movie",
@@ -238,8 +352,8 @@ Object {
                 "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
               },
               "id": "0",
-              "status": "1",
-              "title": "fake movie",
+              "status": "0",
+              "title": "fake movie 0",
             },
           ],
           "statuses": Array [
@@ -250,6 +364,86 @@ Object {
           ],
           "value1": "671432189",
         },
+        "mayhem_MULT": Array [
+          Object {
+            "__typename": "mayhemOutput",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "fake director 0",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            },
+            "passedMovies": Array [
+              Object {
+                "__typename": "TestContract_Movie",
+                "director": Object {
+                  "__typename": "TestContract_Director",
+                  "name": "fake director",
+                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+                },
+                "id": "0",
+                "status": "0",
+                "title": "fake movie 0",
+              },
+              Object {
+                "__typename": "TestContract_Movie",
+                "director": Object {
+                  "__typename": "TestContract_Director",
+                  "name": "fake director",
+                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+                },
+                "id": "1",
+                "status": "1",
+                "title": "fake movie 1",
+              },
+            ],
+            "statuses": Array [
+              "0",
+              "1",
+              "1",
+              "1",
+            ],
+            "value1": "671432189",
+          },
+          Object {
+            "__typename": "mayhemOutput",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "fake director 2",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            },
+            "passedMovies": Array [
+              Object {
+                "__typename": "TestContract_Movie",
+                "director": Object {
+                  "__typename": "TestContract_Director",
+                  "name": "fake director 1",
+                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+                },
+                "id": "2",
+                "status": "1",
+                "title": "fake movie 2",
+              },
+              Object {
+                "__typename": "TestContract_Movie",
+                "director": Object {
+                  "__typename": "TestContract_Director",
+                  "name": "fake director 1",
+                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+                },
+                "id": "3",
+                "status": "0",
+                "title": "fake movie 3",
+              },
+            ],
+            "statuses": Array [
+              "1",
+              "0",
+              "1",
+              "0",
+            ],
+            "value1": "671432189",
+          },
+        ],
         "movies": Object {
           "__typename": "moviesOutput",
           "director": Object {
@@ -288,8 +482,8 @@ Object {
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
           "id": "0",
-          "status": "1",
-          "title": "fake movie",
+          "status": "0",
+          "title": "fake movie 0",
         },
         "passString": "some-string",
         "passTuple": Array [
@@ -312,26 +506,26 @@ Object {
               "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
             },
             "id": "0",
-            "status": "1",
-            "title": "fake movie",
+            "status": "0",
+            "title": "fake movie 0",
           },
           Object {
             "__typename": "TestContract_Movie",
             "director": Object {
               "__typename": "TestContract_Director",
-              "name": "Robert Zemeckis",
-              "walletAddress": "0x86f11f319E53481493Ea50d97eAc684c5Ca8403D",
+              "name": "fake director",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
             },
             "id": "1",
             "status": "1",
-            "title": "Forrest Gump",
+            "title": "fake movie 1",
           },
         ],
         "getAnyMovie": Object {
           "__typename": "TestContract_Movie",
           "id": "0",
-          "status": "1",
-          "title": "fake movie",
+          "status": "0",
+          "title": "fake movie 0",
         },
         "getBoolean": true,
         "getBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
@@ -371,8 +565,8 @@ Object {
                 "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
               },
               "id": "0",
-              "status": "1",
-              "title": "fake movie",
+              "status": "0",
+              "title": "fake movie 0",
             },
             Object {
               "__typename": "TestContract_Movie",
@@ -382,8 +576,8 @@ Object {
                 "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
               },
               "id": "0",
-              "status": "1",
-              "title": "fake movie",
+              "status": "0",
+              "title": "fake movie 0",
             },
           ],
           "statuses": Array [
@@ -394,6 +588,86 @@ Object {
           ],
           "value1": "671432189",
         },
+        "mayhem_MULT": Array [
+          Object {
+            "__typename": "mayhemOutput",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "fake director 0",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            },
+            "passedMovies": Array [
+              Object {
+                "__typename": "TestContract_Movie",
+                "director": Object {
+                  "__typename": "TestContract_Director",
+                  "name": "fake director",
+                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+                },
+                "id": "0",
+                "status": "0",
+                "title": "fake movie 0",
+              },
+              Object {
+                "__typename": "TestContract_Movie",
+                "director": Object {
+                  "__typename": "TestContract_Director",
+                  "name": "fake director",
+                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+                },
+                "id": "1",
+                "status": "1",
+                "title": "fake movie 1",
+              },
+            ],
+            "statuses": Array [
+              "0",
+              "1",
+              "1",
+              "1",
+            ],
+            "value1": "671432189",
+          },
+          Object {
+            "__typename": "mayhemOutput",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "fake director 2",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            },
+            "passedMovies": Array [
+              Object {
+                "__typename": "TestContract_Movie",
+                "director": Object {
+                  "__typename": "TestContract_Director",
+                  "name": "fake director 1",
+                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+                },
+                "id": "2",
+                "status": "1",
+                "title": "fake movie 2",
+              },
+              Object {
+                "__typename": "TestContract_Movie",
+                "director": Object {
+                  "__typename": "TestContract_Director",
+                  "name": "fake director 1",
+                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+                },
+                "id": "3",
+                "status": "0",
+                "title": "fake movie 3",
+              },
+            ],
+            "statuses": Array [
+              "1",
+              "0",
+              "1",
+              "0",
+            ],
+            "value1": "671432189",
+          },
+        ],
         "movies": Object {
           "__typename": "moviesOutput",
           "director": Object {
@@ -432,8 +706,8 @@ Object {
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
           "id": "0",
-          "status": "1",
-          "title": "fake movie",
+          "status": "0",
+          "title": "fake movie 0",
         },
         "passString": "some-string",
         "passTuple": Array [
@@ -465,26 +739,26 @@ Object {
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
           "id": "0",
-          "status": "1",
-          "title": "fake movie",
+          "status": "0",
+          "title": "fake movie 0",
         },
         Object {
           "__typename": "TestContract_Movie",
           "director": Object {
             "__typename": "TestContract_Director",
-            "name": "Robert Zemeckis",
-            "walletAddress": "0x86f11f319E53481493Ea50d97eAc684c5Ca8403D",
+            "name": "fake director",
+            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
           "id": "1",
           "status": "1",
-          "title": "Forrest Gump",
+          "title": "fake movie 1",
         },
       ],
       "getAnyMovie": Object {
         "__typename": "TestContract_Movie",
         "id": "0",
-        "status": "1",
-        "title": "fake movie",
+        "status": "0",
+        "title": "fake movie 0",
       },
       "getBoolean": true,
       "getBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
@@ -524,8 +798,8 @@ Object {
               "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
             },
             "id": "0",
-            "status": "1",
-            "title": "fake movie",
+            "status": "0",
+            "title": "fake movie 0",
           },
           Object {
             "__typename": "TestContract_Movie",
@@ -535,8 +809,8 @@ Object {
               "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
             },
             "id": "0",
-            "status": "1",
-            "title": "fake movie",
+            "status": "0",
+            "title": "fake movie 0",
           },
         ],
         "statuses": Array [
@@ -547,6 +821,86 @@ Object {
         ],
         "value1": "671432189",
       },
+      "mayhem_MULT": Array [
+        Object {
+          "__typename": "mayhemOutput",
+          "director": Object {
+            "__typename": "TestContract_Director",
+            "name": "fake director 0",
+            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+          },
+          "passedMovies": Array [
+            Object {
+              "__typename": "TestContract_Movie",
+              "director": Object {
+                "__typename": "TestContract_Director",
+                "name": "fake director",
+                "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+              },
+              "id": "0",
+              "status": "0",
+              "title": "fake movie 0",
+            },
+            Object {
+              "__typename": "TestContract_Movie",
+              "director": Object {
+                "__typename": "TestContract_Director",
+                "name": "fake director",
+                "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+              },
+              "id": "1",
+              "status": "1",
+              "title": "fake movie 1",
+            },
+          ],
+          "statuses": Array [
+            "0",
+            "1",
+            "1",
+            "1",
+          ],
+          "value1": "671432189",
+        },
+        Object {
+          "__typename": "mayhemOutput",
+          "director": Object {
+            "__typename": "TestContract_Director",
+            "name": "fake director 2",
+            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+          },
+          "passedMovies": Array [
+            Object {
+              "__typename": "TestContract_Movie",
+              "director": Object {
+                "__typename": "TestContract_Director",
+                "name": "fake director 1",
+                "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+              },
+              "id": "2",
+              "status": "1",
+              "title": "fake movie 2",
+            },
+            Object {
+              "__typename": "TestContract_Movie",
+              "director": Object {
+                "__typename": "TestContract_Director",
+                "name": "fake director 1",
+                "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+              },
+              "id": "3",
+              "status": "0",
+              "title": "fake movie 3",
+            },
+          ],
+          "statuses": Array [
+            "1",
+            "0",
+            "1",
+            "0",
+          ],
+          "value1": "671432189",
+        },
+      ],
       "movies": Object {
         "__typename": "moviesOutput",
         "director": Object {
@@ -585,8 +939,8 @@ Object {
           "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
         },
         "id": "0",
-        "status": "1",
-        "title": "fake movie",
+        "status": "0",
+        "title": "fake movie 0",
       },
       "passString": "some-string",
       "passTuple": Array [
@@ -610,26 +964,26 @@ Object {
               "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
             },
             "id": "0",
-            "status": "1",
-            "title": "fake movie",
+            "status": "0",
+            "title": "fake movie 0",
           },
           Object {
             "__typename": "TestContract_Movie",
             "director": Object {
               "__typename": "TestContract_Director",
-              "name": "Robert Zemeckis",
-              "walletAddress": "0x86f11f319E53481493Ea50d97eAc684c5Ca8403D",
+              "name": "fake director",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
             },
             "id": "1",
             "status": "1",
-            "title": "Forrest Gump",
+            "title": "fake movie 1",
           },
         ],
         "getAnyMovie": Object {
           "__typename": "TestContract_Movie",
           "id": "0",
-          "status": "1",
-          "title": "fake movie",
+          "status": "0",
+          "title": "fake movie 0",
         },
         "getBoolean": true,
         "getBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
@@ -669,8 +1023,8 @@ Object {
                 "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
               },
               "id": "0",
-              "status": "1",
-              "title": "fake movie",
+              "status": "0",
+              "title": "fake movie 0",
             },
             Object {
               "__typename": "TestContract_Movie",
@@ -680,8 +1034,8 @@ Object {
                 "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
               },
               "id": "0",
-              "status": "1",
-              "title": "fake movie",
+              "status": "0",
+              "title": "fake movie 0",
             },
           ],
           "statuses": Array [
@@ -692,6 +1046,86 @@ Object {
           ],
           "value1": "671432189",
         },
+        "mayhem_MULT": Array [
+          Object {
+            "__typename": "mayhemOutput",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "fake director 0",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            },
+            "passedMovies": Array [
+              Object {
+                "__typename": "TestContract_Movie",
+                "director": Object {
+                  "__typename": "TestContract_Director",
+                  "name": "fake director",
+                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+                },
+                "id": "0",
+                "status": "0",
+                "title": "fake movie 0",
+              },
+              Object {
+                "__typename": "TestContract_Movie",
+                "director": Object {
+                  "__typename": "TestContract_Director",
+                  "name": "fake director",
+                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+                },
+                "id": "1",
+                "status": "1",
+                "title": "fake movie 1",
+              },
+            ],
+            "statuses": Array [
+              "0",
+              "1",
+              "1",
+              "1",
+            ],
+            "value1": "671432189",
+          },
+          Object {
+            "__typename": "mayhemOutput",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "fake director 2",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            },
+            "passedMovies": Array [
+              Object {
+                "__typename": "TestContract_Movie",
+                "director": Object {
+                  "__typename": "TestContract_Director",
+                  "name": "fake director 1",
+                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+                },
+                "id": "2",
+                "status": "1",
+                "title": "fake movie 2",
+              },
+              Object {
+                "__typename": "TestContract_Movie",
+                "director": Object {
+                  "__typename": "TestContract_Director",
+                  "name": "fake director 1",
+                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+                },
+                "id": "3",
+                "status": "0",
+                "title": "fake movie 3",
+              },
+            ],
+            "statuses": Array [
+              "1",
+              "0",
+              "1",
+              "0",
+            ],
+            "value1": "671432189",
+          },
+        ],
         "movies": Object {
           "__typename": "moviesOutput",
           "director": Object {
@@ -730,8 +1164,8 @@ Object {
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
           "id": "0",
-          "status": "1",
-          "title": "fake movie",
+          "status": "0",
+          "title": "fake movie 0",
         },
         "passString": "some-string",
         "passTuple": Array [
@@ -754,26 +1188,26 @@ Object {
               "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
             },
             "id": "0",
-            "status": "1",
-            "title": "fake movie",
+            "status": "0",
+            "title": "fake movie 0",
           },
           Object {
             "__typename": "TestContract_Movie",
             "director": Object {
               "__typename": "TestContract_Director",
-              "name": "Robert Zemeckis",
-              "walletAddress": "0x86f11f319E53481493Ea50d97eAc684c5Ca8403D",
+              "name": "fake director",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
             },
             "id": "1",
             "status": "1",
-            "title": "Forrest Gump",
+            "title": "fake movie 1",
           },
         ],
         "getAnyMovie": Object {
           "__typename": "TestContract_Movie",
           "id": "0",
-          "status": "1",
-          "title": "fake movie",
+          "status": "0",
+          "title": "fake movie 0",
         },
         "getBoolean": true,
         "getBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
@@ -813,8 +1247,8 @@ Object {
                 "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
               },
               "id": "0",
-              "status": "1",
-              "title": "fake movie",
+              "status": "0",
+              "title": "fake movie 0",
             },
             Object {
               "__typename": "TestContract_Movie",
@@ -824,8 +1258,8 @@ Object {
                 "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
               },
               "id": "0",
-              "status": "1",
-              "title": "fake movie",
+              "status": "0",
+              "title": "fake movie 0",
             },
           ],
           "statuses": Array [
@@ -836,6 +1270,86 @@ Object {
           ],
           "value1": "671432189",
         },
+        "mayhem_MULT": Array [
+          Object {
+            "__typename": "mayhemOutput",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "fake director 0",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            },
+            "passedMovies": Array [
+              Object {
+                "__typename": "TestContract_Movie",
+                "director": Object {
+                  "__typename": "TestContract_Director",
+                  "name": "fake director",
+                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+                },
+                "id": "0",
+                "status": "0",
+                "title": "fake movie 0",
+              },
+              Object {
+                "__typename": "TestContract_Movie",
+                "director": Object {
+                  "__typename": "TestContract_Director",
+                  "name": "fake director",
+                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+                },
+                "id": "1",
+                "status": "1",
+                "title": "fake movie 1",
+              },
+            ],
+            "statuses": Array [
+              "0",
+              "1",
+              "1",
+              "1",
+            ],
+            "value1": "671432189",
+          },
+          Object {
+            "__typename": "mayhemOutput",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "fake director 2",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            },
+            "passedMovies": Array [
+              Object {
+                "__typename": "TestContract_Movie",
+                "director": Object {
+                  "__typename": "TestContract_Director",
+                  "name": "fake director 1",
+                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+                },
+                "id": "2",
+                "status": "1",
+                "title": "fake movie 2",
+              },
+              Object {
+                "__typename": "TestContract_Movie",
+                "director": Object {
+                  "__typename": "TestContract_Director",
+                  "name": "fake director 1",
+                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+                },
+                "id": "3",
+                "status": "0",
+                "title": "fake movie 3",
+              },
+            ],
+            "statuses": Array [
+              "1",
+              "0",
+              "1",
+              "0",
+            ],
+            "value1": "671432189",
+          },
+        ],
         "movies": Object {
           "__typename": "moviesOutput",
           "director": Object {
@@ -874,8 +1388,8 @@ Object {
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
           "id": "0",
-          "status": "1",
-          "title": "fake movie",
+          "status": "0",
+          "title": "fake movie 0",
         },
         "passString": "some-string",
         "passTuple": Array [
@@ -885,6 +1399,40 @@ Object {
         ],
         "passUint": "128738121231267831231323",
         "passUnnamedString": "passUnnamedString result",
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests test 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "passInt_MULT": Array [
+        "1",
+        "2",
+        "3",
+      ],
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "passInt_MULT": Array [
+          "1",
+          "2",
+          "3",
+        ],
+      },
+      Object {
+        "__typename": "TestContract2",
+        "passInt_MULT": Array [
+          "1",
+          "2",
+          "3",
+        ],
       },
     ],
     "__typename": "contracts",
