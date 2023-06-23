@@ -94,7 +94,6 @@ function createGraphQlType({ isInput, component, sharedGraphQlTypes }: CreateGra
     return GraphQLString;
   }
 
-  // TODO: use .replace(/\[.*?\]/g, '') instead (?)
   const firstBracketIndex = component.type.indexOf('[');
   const componentBaseType = (
     firstBracketIndex > 0 ? component.type.substring(0, firstBracketIndex) : component.type
