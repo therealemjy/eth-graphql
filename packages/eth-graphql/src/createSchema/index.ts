@@ -13,13 +13,12 @@ import {
 import EthGraphQlError from '../EthGraphQlError';
 import { Config, SolidityValue } from '../types';
 import filterAbiItems from '../utilities/filterAbiItems';
-import formatToSignature from '../utilities/formatToSignature';
 import createGraphQlInputTypes from './createGraphQlInputTypes';
 import createGraphQlMultInputTypes from './createGraphQlMultInputTypes';
 import createGraphQlOutputTypes from './createGraphQlOutputTypes';
 import formatToFieldName from './formatToFieldName';
 import makeCalls from './makeCalls';
-import { ContractMapping, FieldNameMapping, SharedGraphQlTypes } from './types';
+import { FieldNameMapping, SharedGraphQlTypes } from './types';
 import validateConfig from './validateConfig';
 
 const ROOT_FIELD_NAME = 'contracts';
@@ -39,22 +38,13 @@ const createSchema = (config: Config) => {
     outputs: {},
   };
 
-  // Mapping of contract names to their config
-  const contractMapping: ContractMapping = {};
-
-  // Mapping of GraphQL fields to contract functions
+  // Mapping of GraphQL fields to contracts
   const fieldMapping: FieldNameMapping = {};
 
   const contractsType = new GraphQLObjectType({
     name: ROOT_FIELD_NAME,
     // Go through contracts and build field types
     fields: config.contracts.reduce((accContracts, contract) => {
-      // Add contract to mapping
-      contractMapping[contract.name] = {
-        abi: contract.abi,
-        address: contract.address,
-      };
-
       const filteredContractAbiItems = filterAbiItems(contract.abi);
 
       const contractType: GraphQLFieldConfig<{ [key: string]: SolidityValue }, unknown, unknown> = {
@@ -68,26 +58,29 @@ const createSchema = (config: Config) => {
               const abiItemName = abiItem.name!; // We've already filtered out nameless functions
               const abiInputs = abiItem.inputs || [];
 
-              const contractFunctionSignature = formatToSignature(abiItem);
-
               const contractFieldName = formatToFieldName({
                 name: abiItemName,
                 indexInAbi: abiItemIndex,
                 abi: filteredContractAbiItems,
               });
 
-              // Initialize contract mapping if necessary
+              // Initialize field mapping if necessary
               if (!fieldMapping[contract.name]) {
                 fieldMapping[contract.name] = {};
               }
 
-              // Add field to contract mapping
-              fieldMapping[contract.name][contractFieldName] = contractFunctionSignature;
+              // Add field to field mapping
+              fieldMapping[contract.name][contractFieldName] = {
+                contract,
+                abiItem,
+                isMult: false,
+              };
 
               const newAccContractFields: typeof accContractFields = {
                 ...accContractFields,
               };
 
+              // Add field to schema
               const contractField: GraphQLFieldConfig<
                 { [key: string]: SolidityValue },
                 unknown,
@@ -109,10 +102,18 @@ const createSchema = (config: Config) => {
                   sharedGraphQlTypes,
                 });
 
-                // Create a second field that can be used to call the same
-                // method with multiple sets of arguments
+                // Create a MULT field that can be used to call the same method
+                // with multiple sets of arguments
                 const multContractFieldName = `${contractFieldName}${MULT_CONTRACT_FIELD_SUFFIX}`;
 
+                // Add MULT field to field mapping
+                fieldMapping[contract.name][multContractFieldName] = {
+                  contract,
+                  abiItem,
+                  isMult: true,
+                };
+
+                // Add MULT field to schema
                 const multContractField: GraphQLFieldConfig<
                   { [key: string]: SolidityValue },
                   unknown,
@@ -173,7 +174,6 @@ const createSchema = (config: Config) => {
         ) =>
           makeCalls({
             graphqlResolveInfo,
-            contractMapping,
             fieldMapping,
             config,
             chainId,

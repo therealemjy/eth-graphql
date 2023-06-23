@@ -1,21 +1,22 @@
 import { Multicall, providers } from '@0xsequence/multicall';
+import { JsonFragment } from '@ethersproject/abi';
 import { Contract } from 'ethers';
 import { GraphQLResolveInfo, Kind } from 'graphql';
 
 import EthGraphQlError from '../../EthGraphQlError';
 import { Config, SolidityValue } from '../../types';
-import filterAbiItems from '../../utilities/filterAbiItems';
 import formatToSignature from '../../utilities/formatToSignature';
-import { ContractMapping, FieldNameMapping } from '../types';
+import { FieldNameMapping } from '../types';
 import formatGraphQlArgs from './formatGraphQlArgs';
 import formatResult from './formatResult';
 
 interface ContractCall {
-  contract: Contract;
-  methodName: string;
-  callArguments: readonly SolidityValue[];
   contractName: string;
+  contractInstance: Contract;
+  contractFunctionSignature: string;
+  callArguments: readonly SolidityValue[];
   fieldName: string;
+  abiItem: JsonFragment;
   indexInResultArray?: number;
 }
 
@@ -25,19 +26,12 @@ interface ContractData {
 
 export interface MakeCallsInput {
   graphqlResolveInfo: GraphQLResolveInfo;
-  contractMapping: ContractMapping;
   fieldMapping: FieldNameMapping;
   config: Config;
   chainId: number;
 }
 
-const makeCalls = async ({
-  graphqlResolveInfo,
-  contractMapping,
-  fieldMapping,
-  config,
-  chainId,
-}: MakeCallsInput) => {
+const makeCalls = async ({ graphqlResolveInfo, fieldMapping, config, chainId }: MakeCallsInput) => {
   const chainConfig = config.chains[chainId];
 
   // Throw an error if no config has been provided for the requested chain ID
@@ -82,24 +76,23 @@ const makeCalls = async ({
         }
 
         const contractName = contractSelection.name.value;
-        const contractConfig = contractMapping[contractName];
 
-        // Find corresponding function name in mapping
-        const methodName = fieldMapping[contractName][callSelection.name.value];
+        // Find corresponding field in mapping
+        const field = fieldMapping[contractName][callSelection.name.value];
 
         // Format arguments
         const contractCallArguments = formatGraphQlArgs(callSelection.arguments || []);
 
         // Throw an error if an address property was defined for the contract
         // but no address was added for the queried chain ID
-        if (contractConfig.address && !contractConfig.address[chainId]) {
+        if (field.contract.address && !field.contract.address[chainId]) {
           throw new EthGraphQlError(
             `Missing address for ${contractName} contract for chain ID ${chainId}`,
           );
         }
 
         // Get contract address from config if it exists
-        let contractAddresses = contractConfig.address && [contractConfig.address[chainId]];
+        let contractAddresses = field.contract.address && [field.contract.address[chainId]];
 
         // If contract was defined in config without an address property, then
         // it means an array of addresses to call was passed as the first
@@ -110,16 +103,23 @@ const makeCalls = async ({
             (formatGraphQlArgs(contractSelection.arguments || [])[0] as string[]);
         }
 
-        const hasDefinedAddress = !!contractConfig.address;
+        const hasDefinedAddress = !!field.contract.address;
 
         // Shape a contract call for each contract address to call
         const newContractCalls = contractAddresses.map((contractAddress, contractAddressIndex) => {
-          const contract = new Contract(contractAddress, contractConfig.abi, multicallProvider);
+          const contractInstance = new Contract(
+            contractAddress,
+            field.contract.abi,
+            multicallProvider,
+          );
+
+          const contractFunctionSignature = formatToSignature(field.abiItem);
 
           const contractCall: ContractCall = {
-            contract,
             contractName,
-            methodName,
+            contractInstance,
+            contractFunctionSignature,
+            abiItem: field.abiItem,
             callArguments: contractCallArguments,
             fieldName: callSelection.name.value,
             // We use the indexInResultArray property as an indicator for
@@ -141,7 +141,9 @@ const makeCalls = async ({
 
   // Merge all calls into one using multicall contract
   const multicallResults = await Promise.all(
-    calls.map(({ contract, methodName, callArguments }) => contract[methodName](...callArguments)),
+    calls.map(({ contractInstance, contractFunctionSignature, callArguments }) =>
+      contractInstance[contractFunctionSignature](...callArguments),
+    ),
   );
 
   // Format and return results
@@ -150,18 +152,9 @@ const makeCalls = async ({
   }>((accResults, result, index) => {
     const contractCall = calls[index];
 
-    // Find corresponding ABI item
-    const contractFunctionSignature =
-      fieldMapping[contractCall.contractName][contractCall.fieldName];
-    const filteredAbiItems = filterAbiItems(contractMapping[contractCall.contractName].abi);
-
-    const abiItem = filteredAbiItems.find(
-      abiItem => formatToSignature(abiItem) === contractFunctionSignature,
-    )!;
-
     const formattedResult = formatResult({
       result,
-      abiItem,
+      abiItem: contractCall.abiItem,
     });
 
     // Handle single results

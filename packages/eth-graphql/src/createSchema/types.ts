@@ -1,3 +1,4 @@
+import { JsonFragment } from '@ethersproject/abi';
 import { GraphQLInputType, GraphQLOutputType } from 'graphql';
 
 import { ContractConfig } from '../types';
@@ -11,12 +12,12 @@ export interface SharedGraphQlTypes {
   };
 }
 
-export interface ContractMapping {
-  [contractName: string]: Omit<ContractConfig, 'name'>;
-}
-
 export interface FieldNameMapping {
   [contractName: string]: {
-    [fieldName: string]: string;
+    [fieldName: string]: {
+      contract: ContractConfig;
+      abiItem: JsonFragment;
+      isMult: boolean;
+    };
   };
 }
