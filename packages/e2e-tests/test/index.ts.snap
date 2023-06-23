@@ -1,31 +1,149 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`end-to-end tests returns the correct data when calling MULT fields 1`] = `
+exports[`end-to-end tests returns the correct data when calling a method that returns a boolean 1`] = `
 Object {
   "contracts": Object {
     "TestContract": Object {
       "__typename": "TestContract",
-      "passInt_MULT": Array [
+      "getBoolean": true,
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "getBoolean": true,
+      },
+      Object {
+        "__typename": "TestContract2",
+        "getBoolean": true,
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that returns a named string 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "getNamedString": "named string example",
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "getNamedString": "named string example",
+      },
+      Object {
+        "__typename": "TestContract2",
+        "getNamedString": "named string example",
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that returns a string 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "getString": "string example",
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "getString": "string example",
+      },
+      Object {
+        "__typename": "TestContract2",
+        "getString": "string example",
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that returns a struct 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "getAnyMovie": Object {
+        "__typename": "TestContract_Movie",
+        "director": Object {
+          "__typename": "TestContract_Director",
+          "name": "Steven Spielberg",
+          "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+        },
+        "id": "0",
+        "status": "0",
+        "title": "Catch Me If You Can",
+      },
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "getAnyMovie": Object {
+          "__typename": "TestContract_Movie",
+          "director": Object {
+            "__typename": "TestContract_Director",
+            "name": "Steven Spielberg",
+            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+          },
+          "id": "0",
+          "status": "0",
+          "title": "Catch Me If You Can",
+        },
+      },
+      Object {
+        "__typename": "TestContract2",
+        "getAnyMovie": Object {
+          "__typename": "TestContract_Movie",
+          "director": Object {
+            "__typename": "TestContract_Director",
+            "name": "Steven Spielberg",
+            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+          },
+          "id": "0",
+          "status": "0",
+          "title": "Catch Me If You Can",
+        },
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that returns a tuple 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "getTuple": Array [
+        "0",
         "1",
         "2",
-        "3",
       ],
     },
     "TestContract2": Array [
       Object {
         "__typename": "TestContract2",
-        "passInt_MULT": Array [
+        "getTuple": Array [
+          "0",
           "1",
           "2",
-          "3",
         ],
       },
       Object {
         "__typename": "TestContract2",
-        "passInt_MULT": Array [
+        "getTuple": Array [
+          "0",
           "1",
           "2",
-          "3",
         ],
       },
     ],
@@ -34,45 +152,190 @@ Object {
 }
 `;
 
-exports[`end-to-end tests returns the correct data when calling a contract with a defined address 1`] = `
+exports[`end-to-end tests returns the correct data when calling a method that returns a uint 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "getUint": "1256374125673412563451263546712536712536712573612",
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "getUint": "1256374125673412563451263546712536712536712573612",
+      },
+      Object {
+        "__typename": "TestContract2",
+        "getUint": "1256374125673412563451263546712536712536712573612",
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that returns an address 1`] = `
 Object {
   "contracts": Object {
     "TestContract": Object {
       "__typename": "TestContract",
       "getAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "getAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+      },
+      Object {
+        "__typename": "TestContract2",
+        "getAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that returns an array of structs 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
       "getAllMovies": Array [
         Object {
           "__typename": "TestContract_Movie",
           "director": Object {
             "__typename": "TestContract_Director",
-            "name": "fake director",
+            "name": "Steven Spielberg",
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
           "id": "0",
           "status": "0",
-          "title": "fake movie 0",
+          "title": "Catch Me If You Can",
         },
         Object {
           "__typename": "TestContract_Movie",
           "director": Object {
             "__typename": "TestContract_Director",
-            "name": "fake director",
-            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            "name": "Robert Zemeckis",
+            "walletAddress": "0x86f11f319E53481493Ea50d97eAc684c5Ca8403D",
           },
           "id": "1",
           "status": "1",
-          "title": "fake movie 1",
+          "title": "Forrest Gump",
         },
       ],
-      "getAnyMovie": Object {
-        "__typename": "TestContract_Movie",
-        "id": "0",
-        "status": "0",
-        "title": "fake movie 0",
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "getAllMovies": Array [
+          Object {
+            "__typename": "TestContract_Movie",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "Steven Spielberg",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            },
+            "id": "0",
+            "status": "0",
+            "title": "Catch Me If You Can",
+          },
+          Object {
+            "__typename": "TestContract_Movie",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "Robert Zemeckis",
+              "walletAddress": "0x86f11f319E53481493Ea50d97eAc684c5Ca8403D",
+            },
+            "id": "1",
+            "status": "1",
+            "title": "Forrest Gump",
+          },
+        ],
       },
-      "getBoolean": true,
-      "getBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+      Object {
+        "__typename": "TestContract2",
+        "getAllMovies": Array [
+          Object {
+            "__typename": "TestContract_Movie",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "Steven Spielberg",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            },
+            "id": "0",
+            "status": "0",
+            "title": "Catch Me If You Can",
+          },
+          Object {
+            "__typename": "TestContract_Movie",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "Robert Zemeckis",
+              "walletAddress": "0x86f11f319E53481493Ea50d97eAc684c5Ca8403D",
+            },
+            "id": "1",
+            "status": "1",
+            "title": "Forrest Gump",
+          },
+        ],
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that returns an int 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
       "getInt": "125637412567341",
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "getInt": "125637412567341",
+      },
+      Object {
+        "__typename": "TestContract2",
+        "getInt": "125637412567341",
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that returns bytes 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "getBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "getBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+      },
+      Object {
+        "__typename": "TestContract2",
+        "getBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that returns multiple values 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
       "getMultipleValues": Object {
         "__typename": "getMultipleValuesOutput",
         "value0": "Catch Me If You Can",
@@ -83,640 +346,55 @@ Object {
           "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
         },
       },
-      "getNamedString": "Catch Me If You Can",
-      "getNothing": null,
-      "getString": "string example",
-      "getTuple": Array [
-        "0",
-        "1",
-        "2",
-      ],
-      "getUint": "1256374125673412563451263546712536712536712573612",
-      "mayhem": Object {
-        "__typename": "mayhemOutput",
-        "director": Object {
-          "__typename": "TestContract_Director",
-          "name": "fake director",
-          "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-        },
-        "passedMovies": Array [
-          Object {
-            "__typename": "TestContract_Movie",
-            "director": Object {
-              "__typename": "TestContract_Director",
-              "name": "fake director",
-              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-            },
-            "id": "0",
-            "status": "0",
-            "title": "fake movie 0",
-          },
-          Object {
-            "__typename": "TestContract_Movie",
-            "director": Object {
-              "__typename": "TestContract_Director",
-              "name": "fake director",
-              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-            },
-            "id": "0",
-            "status": "0",
-            "title": "fake movie 0",
-          },
-        ],
-        "statuses": Array [
-          "0",
-          "1",
-          "1",
-          "1",
-        ],
-        "value1": "671432189",
-      },
-      "mayhem_MULT": Array [
-        Object {
-          "__typename": "mayhemOutput",
-          "director": Object {
-            "__typename": "TestContract_Director",
-            "name": "fake director 0",
-            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-          },
-          "passedMovies": Array [
-            Object {
-              "__typename": "TestContract_Movie",
-              "director": Object {
-                "__typename": "TestContract_Director",
-                "name": "fake director",
-                "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-              },
-              "id": "0",
-              "status": "0",
-              "title": "fake movie 0",
-            },
-            Object {
-              "__typename": "TestContract_Movie",
-              "director": Object {
-                "__typename": "TestContract_Director",
-                "name": "fake director",
-                "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-              },
-              "id": "1",
-              "status": "1",
-              "title": "fake movie 1",
-            },
-          ],
-          "statuses": Array [
-            "0",
-            "1",
-            "1",
-            "1",
-          ],
-          "value1": "671432189",
-        },
-        Object {
-          "__typename": "mayhemOutput",
-          "director": Object {
-            "__typename": "TestContract_Director",
-            "name": "fake director 2",
-            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-          },
-          "passedMovies": Array [
-            Object {
-              "__typename": "TestContract_Movie",
-              "director": Object {
-                "__typename": "TestContract_Director",
-                "name": "fake director 1",
-                "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-              },
-              "id": "2",
-              "status": "1",
-              "title": "fake movie 2",
-            },
-            Object {
-              "__typename": "TestContract_Movie",
-              "director": Object {
-                "__typename": "TestContract_Director",
-                "name": "fake director 1",
-                "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-              },
-              "id": "3",
-              "status": "0",
-              "title": "fake movie 3",
-            },
-          ],
-          "statuses": Array [
-            "1",
-            "0",
-            "1",
-            "0",
-          ],
-          "value1": "671432189",
-        },
-      ],
-      "movies": Object {
-        "__typename": "moviesOutput",
-        "director": Object {
-          "__typename": "TestContract_Director",
-          "name": "Steven Spielberg",
-          "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-        },
-        "id": "0",
-        "status": "0",
-        "title": "Catch Me If You Can",
-      },
-      "overloadedFn0": Object {
-        "__typename": "overloadedFnOutput",
-        "value0": "overloaded result 1",
-        "value1": "1",
-      },
-      "overloadedFn1": Object {
-        "__typename": "overloadedFnOutput",
-        "value0": "overloaded result 0",
-        "value1": "0",
-      },
-      "overloadedFn2": Object {
-        "__typename": "overloadedFnOutput",
-        "value0": "overloaded result 2",
-        "value1": "2",
-      },
-      "passAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-      "passBoolean": true,
-      "passBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
-      "passInt": "1265341",
-      "passMovie": Object {
-        "__typename": "TestContract_Movie",
-        "director": Object {
-          "__typename": "TestContract_Director",
-          "name": "fake director",
-          "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-        },
-        "id": "0",
-        "status": "0",
-        "title": "fake movie 0",
-      },
-      "passString": "some-string",
-      "passTuple": Array [
-        "0",
-        "1",
-        "2",
-      ],
-      "passUint": "128738121231267831231323",
-      "passUnnamedString": "passUnnamedString result",
     },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "getMultipleValues": Object {
+          "__typename": "getMultipleValuesOutput",
+          "value0": "Catch Me If You Can",
+          "value1": "0",
+          "value2": Object {
+            "__typename": "TestContract_Director",
+            "name": "Steven Spielberg",
+            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+          },
+        },
+      },
+      Object {
+        "__typename": "TestContract2",
+        "getMultipleValues": Object {
+          "__typename": "getMultipleValuesOutput",
+          "value0": "Catch Me If You Can",
+          "value1": "0",
+          "value2": Object {
+            "__typename": "TestContract_Director",
+            "name": "Steven Spielberg",
+            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+          },
+        },
+      },
+    ],
     "__typename": "contracts",
   },
 }
 `;
 
-exports[`end-to-end tests returns the correct data when calling a contract with dynamic addresses 1`] = `
+exports[`end-to-end tests returns the correct data when calling a method that returns nothing 1`] = `
 Object {
   "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "getNothing": null,
+    },
     "TestContract2": Array [
       Object {
         "__typename": "TestContract2",
-        "getAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-        "getAllMovies": Array [
-          Object {
-            "__typename": "TestContract_Movie",
-            "director": Object {
-              "__typename": "TestContract_Director",
-              "name": "fake director",
-              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-            },
-            "id": "0",
-            "status": "0",
-            "title": "fake movie 0",
-          },
-          Object {
-            "__typename": "TestContract_Movie",
-            "director": Object {
-              "__typename": "TestContract_Director",
-              "name": "fake director",
-              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-            },
-            "id": "1",
-            "status": "1",
-            "title": "fake movie 1",
-          },
-        ],
-        "getAnyMovie": Object {
-          "__typename": "TestContract_Movie",
-          "id": "0",
-          "status": "0",
-          "title": "fake movie 0",
-        },
-        "getBoolean": true,
-        "getBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
-        "getInt": "125637412567341",
-        "getMultipleValues": Object {
-          "__typename": "getMultipleValuesOutput",
-          "value0": "Catch Me If You Can",
-          "value1": "0",
-          "value2": Object {
-            "__typename": "TestContract_Director",
-            "name": "Steven Spielberg",
-            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-          },
-        },
-        "getNamedString": "Catch Me If You Can",
         "getNothing": null,
-        "getString": "string example",
-        "getTuple": Array [
-          "0",
-          "1",
-          "2",
-        ],
-        "getUint": "1256374125673412563451263546712536712536712573612",
-        "mayhem": Object {
-          "__typename": "mayhemOutput",
-          "director": Object {
-            "__typename": "TestContract_Director",
-            "name": "fake director",
-            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-          },
-          "passedMovies": Array [
-            Object {
-              "__typename": "TestContract_Movie",
-              "director": Object {
-                "__typename": "TestContract_Director",
-                "name": "fake director",
-                "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-              },
-              "id": "0",
-              "status": "0",
-              "title": "fake movie 0",
-            },
-            Object {
-              "__typename": "TestContract_Movie",
-              "director": Object {
-                "__typename": "TestContract_Director",
-                "name": "fake director",
-                "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-              },
-              "id": "0",
-              "status": "0",
-              "title": "fake movie 0",
-            },
-          ],
-          "statuses": Array [
-            "0",
-            "1",
-            "1",
-            "1",
-          ],
-          "value1": "671432189",
-        },
-        "mayhem_MULT": Array [
-          Object {
-            "__typename": "mayhemOutput",
-            "director": Object {
-              "__typename": "TestContract_Director",
-              "name": "fake director 0",
-              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-            },
-            "passedMovies": Array [
-              Object {
-                "__typename": "TestContract_Movie",
-                "director": Object {
-                  "__typename": "TestContract_Director",
-                  "name": "fake director",
-                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-                },
-                "id": "0",
-                "status": "0",
-                "title": "fake movie 0",
-              },
-              Object {
-                "__typename": "TestContract_Movie",
-                "director": Object {
-                  "__typename": "TestContract_Director",
-                  "name": "fake director",
-                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-                },
-                "id": "1",
-                "status": "1",
-                "title": "fake movie 1",
-              },
-            ],
-            "statuses": Array [
-              "0",
-              "1",
-              "1",
-              "1",
-            ],
-            "value1": "671432189",
-          },
-          Object {
-            "__typename": "mayhemOutput",
-            "director": Object {
-              "__typename": "TestContract_Director",
-              "name": "fake director 2",
-              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-            },
-            "passedMovies": Array [
-              Object {
-                "__typename": "TestContract_Movie",
-                "director": Object {
-                  "__typename": "TestContract_Director",
-                  "name": "fake director 1",
-                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-                },
-                "id": "2",
-                "status": "1",
-                "title": "fake movie 2",
-              },
-              Object {
-                "__typename": "TestContract_Movie",
-                "director": Object {
-                  "__typename": "TestContract_Director",
-                  "name": "fake director 1",
-                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-                },
-                "id": "3",
-                "status": "0",
-                "title": "fake movie 3",
-              },
-            ],
-            "statuses": Array [
-              "1",
-              "0",
-              "1",
-              "0",
-            ],
-            "value1": "671432189",
-          },
-        ],
-        "movies": Object {
-          "__typename": "moviesOutput",
-          "director": Object {
-            "__typename": "TestContract_Director",
-            "name": "Steven Spielberg",
-            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-          },
-          "id": "0",
-          "status": "0",
-          "title": "Catch Me If You Can",
-        },
-        "overloadedFn0": Object {
-          "__typename": "overloadedFnOutput",
-          "value0": "overloaded result 1",
-          "value1": "1",
-        },
-        "overloadedFn1": Object {
-          "__typename": "overloadedFnOutput",
-          "value0": "overloaded result 0",
-          "value1": "0",
-        },
-        "overloadedFn2": Object {
-          "__typename": "overloadedFnOutput",
-          "value0": "overloaded result 2",
-          "value1": "2",
-        },
-        "passAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-        "passBoolean": true,
-        "passBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
-        "passInt": "1265341",
-        "passMovie": Object {
-          "__typename": "TestContract_Movie",
-          "director": Object {
-            "__typename": "TestContract_Director",
-            "name": "fake director",
-            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-          },
-          "id": "0",
-          "status": "0",
-          "title": "fake movie 0",
-        },
-        "passString": "some-string",
-        "passTuple": Array [
-          "0",
-          "1",
-          "2",
-        ],
-        "passUint": "128738121231267831231323",
-        "passUnnamedString": "passUnnamedString result",
       },
       Object {
         "__typename": "TestContract2",
-        "getAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-        "getAllMovies": Array [
-          Object {
-            "__typename": "TestContract_Movie",
-            "director": Object {
-              "__typename": "TestContract_Director",
-              "name": "fake director",
-              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-            },
-            "id": "0",
-            "status": "0",
-            "title": "fake movie 0",
-          },
-          Object {
-            "__typename": "TestContract_Movie",
-            "director": Object {
-              "__typename": "TestContract_Director",
-              "name": "fake director",
-              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-            },
-            "id": "1",
-            "status": "1",
-            "title": "fake movie 1",
-          },
-        ],
-        "getAnyMovie": Object {
-          "__typename": "TestContract_Movie",
-          "id": "0",
-          "status": "0",
-          "title": "fake movie 0",
-        },
-        "getBoolean": true,
-        "getBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
-        "getInt": "125637412567341",
-        "getMultipleValues": Object {
-          "__typename": "getMultipleValuesOutput",
-          "value0": "Catch Me If You Can",
-          "value1": "0",
-          "value2": Object {
-            "__typename": "TestContract_Director",
-            "name": "Steven Spielberg",
-            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-          },
-        },
-        "getNamedString": "Catch Me If You Can",
         "getNothing": null,
-        "getString": "string example",
-        "getTuple": Array [
-          "0",
-          "1",
-          "2",
-        ],
-        "getUint": "1256374125673412563451263546712536712536712573612",
-        "mayhem": Object {
-          "__typename": "mayhemOutput",
-          "director": Object {
-            "__typename": "TestContract_Director",
-            "name": "fake director",
-            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-          },
-          "passedMovies": Array [
-            Object {
-              "__typename": "TestContract_Movie",
-              "director": Object {
-                "__typename": "TestContract_Director",
-                "name": "fake director",
-                "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-              },
-              "id": "0",
-              "status": "0",
-              "title": "fake movie 0",
-            },
-            Object {
-              "__typename": "TestContract_Movie",
-              "director": Object {
-                "__typename": "TestContract_Director",
-                "name": "fake director",
-                "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-              },
-              "id": "0",
-              "status": "0",
-              "title": "fake movie 0",
-            },
-          ],
-          "statuses": Array [
-            "0",
-            "1",
-            "1",
-            "1",
-          ],
-          "value1": "671432189",
-        },
-        "mayhem_MULT": Array [
-          Object {
-            "__typename": "mayhemOutput",
-            "director": Object {
-              "__typename": "TestContract_Director",
-              "name": "fake director 0",
-              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-            },
-            "passedMovies": Array [
-              Object {
-                "__typename": "TestContract_Movie",
-                "director": Object {
-                  "__typename": "TestContract_Director",
-                  "name": "fake director",
-                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-                },
-                "id": "0",
-                "status": "0",
-                "title": "fake movie 0",
-              },
-              Object {
-                "__typename": "TestContract_Movie",
-                "director": Object {
-                  "__typename": "TestContract_Director",
-                  "name": "fake director",
-                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-                },
-                "id": "1",
-                "status": "1",
-                "title": "fake movie 1",
-              },
-            ],
-            "statuses": Array [
-              "0",
-              "1",
-              "1",
-              "1",
-            ],
-            "value1": "671432189",
-          },
-          Object {
-            "__typename": "mayhemOutput",
-            "director": Object {
-              "__typename": "TestContract_Director",
-              "name": "fake director 2",
-              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-            },
-            "passedMovies": Array [
-              Object {
-                "__typename": "TestContract_Movie",
-                "director": Object {
-                  "__typename": "TestContract_Director",
-                  "name": "fake director 1",
-                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-                },
-                "id": "2",
-                "status": "1",
-                "title": "fake movie 2",
-              },
-              Object {
-                "__typename": "TestContract_Movie",
-                "director": Object {
-                  "__typename": "TestContract_Director",
-                  "name": "fake director 1",
-                  "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-                },
-                "id": "3",
-                "status": "0",
-                "title": "fake movie 3",
-              },
-            ],
-            "statuses": Array [
-              "1",
-              "0",
-              "1",
-              "0",
-            ],
-            "value1": "671432189",
-          },
-        ],
-        "movies": Object {
-          "__typename": "moviesOutput",
-          "director": Object {
-            "__typename": "TestContract_Director",
-            "name": "Steven Spielberg",
-            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-          },
-          "id": "0",
-          "status": "0",
-          "title": "Catch Me If You Can",
-        },
-        "overloadedFn0": Object {
-          "__typename": "overloadedFnOutput",
-          "value0": "overloaded result 1",
-          "value1": "1",
-        },
-        "overloadedFn1": Object {
-          "__typename": "overloadedFnOutput",
-          "value0": "overloaded result 0",
-          "value1": "0",
-        },
-        "overloadedFn2": Object {
-          "__typename": "overloadedFnOutput",
-          "value0": "overloaded result 2",
-          "value1": "2",
-        },
-        "passAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-        "passBoolean": true,
-        "passBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
-        "passInt": "1265341",
-        "passMovie": Object {
-          "__typename": "TestContract_Movie",
-          "director": Object {
-            "__typename": "TestContract_Director",
-            "name": "fake director",
-            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
-          },
-          "id": "0",
-          "status": "0",
-          "title": "fake movie 0",
-        },
-        "passString": "some-string",
-        "passTuple": Array [
-          "0",
-          "1",
-          "2",
-        ],
-        "passUint": "128738121231267831231323",
-        "passUnnamedString": "passUnnamedString result",
       },
     ],
     "__typename": "contracts",
@@ -773,7 +451,7 @@ Object {
           "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
         },
       },
-      "getNamedString": "Catch Me If You Can",
+      "getNamedString": "named string example",
       "getNothing": null,
       "getString": "string example",
       "getTuple": Array [
@@ -998,7 +676,7 @@ Object {
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
         },
-        "getNamedString": "Catch Me If You Can",
+        "getNamedString": "named string example",
         "getNothing": null,
         "getString": "string example",
         "getTuple": Array [
@@ -1222,7 +900,7 @@ Object {
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
         },
-        "getNamedString": "Catch Me If You Can",
+        "getNamedString": "named string example",
         "getNothing": null,
         "getString": "string example",
         "getTuple": Array [
@@ -1399,40 +1077,6 @@ Object {
         ],
         "passUint": "128738121231267831231323",
         "passUnnamedString": "passUnnamedString result",
-      },
-    ],
-    "__typename": "contracts",
-  },
-}
-`;
-
-exports[`end-to-end tests test 1`] = `
-Object {
-  "contracts": Object {
-    "TestContract": Object {
-      "__typename": "TestContract",
-      "passInt_MULT": Array [
-        "1",
-        "2",
-        "3",
-      ],
-    },
-    "TestContract2": Array [
-      Object {
-        "__typename": "TestContract2",
-        "passInt_MULT": Array [
-          "1",
-          "2",
-          "3",
-        ],
-      },
-      Object {
-        "__typename": "TestContract2",
-        "passInt_MULT": Array [
-          "1",
-          "2",
-          "3",
-        ],
       },
     ],
     "__typename": "contracts",
