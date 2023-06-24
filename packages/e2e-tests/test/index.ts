@@ -281,7 +281,41 @@ describe('end-to-end tests', function () {
   it('returns the correct data when calling a method that takes and returns a tuple', async function () {
     const data = await makeQuery(/* GraphQL */ `
       passTuple(someTuple: ["0", "1", "2"])
-      passTuple_MULT(args: [{ someTuple: ["0", "1", "2"] }, { someTuple: ["1", "0", "1"] }])
+      passTuple_MULT(
+        args: [{ someTuple: ["0", "1", "2"] }, { someTuple: ["1", "0", "1"] }]
+      )
+    `);
+
+    expect(data).to.matchSnapshot();
+  });
+
+  it('returns the correct data when calling overloaded methods', async function () {
+    const data = await makeQuery(/* GraphQL */ `
+      overloadedFn0(arg0: 10) {
+        value0
+        value1
+      }
+      overloadedFn0_MULT(args: [{ arg0: 10 }, { arg0: 6 }]) {
+        value0
+        value1
+      }
+      overloadedFn1 {
+        value0
+        value1
+      }
+      overloadedFn2(arg0: "some-string", arg1: "10000000000000000000", arg2: "") {
+        value0
+        value1
+      }
+      overloadedFn2_MULT(
+        args: [
+          { arg0: "some-string-0", arg1: "10000000000000000000", arg2: "1" }
+          { arg0: "some-string-1", arg1: "20000000000000000000", arg2: "8" }
+        ]
+      ) {
+        value0
+        value1
+      }
     `);
 
     expect(data).to.matchSnapshot();

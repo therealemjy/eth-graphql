@@ -1503,3 +1503,139 @@ Object {
   },
 }
 `;
+
+exports[`end-to-end tests returns the correct data when calling overloaded methods 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "overloadedFn0": Object {
+        "__typename": "overloadedFnOutput",
+        "value0": "overloaded result 1",
+        "value1": "1",
+      },
+      "overloadedFn0_MULT": Array [
+        Object {
+          "__typename": "overloadedFnOutput",
+          "value0": "overloaded result 1",
+          "value1": "1",
+        },
+        Object {
+          "__typename": "overloadedFnOutput",
+          "value0": "overloaded result 1",
+          "value1": "1",
+        },
+      ],
+      "overloadedFn1": Object {
+        "__typename": "overloadedFnOutput",
+        "value0": "overloaded result 0",
+        "value1": "0",
+      },
+      "overloadedFn2": Object {
+        "__typename": "overloadedFnOutput",
+        "value0": "overloaded result 2",
+        "value1": "2",
+      },
+      "overloadedFn2_MULT": Array [
+        Object {
+          "__typename": "overloadedFnOutput",
+          "value0": "overloaded result 2",
+          "value1": "2",
+        },
+        Object {
+          "__typename": "overloadedFnOutput",
+          "value0": "overloaded result 2",
+          "value1": "2",
+        },
+      ],
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "overloadedFn0": Object {
+          "__typename": "overloadedFnOutput",
+          "value0": "overloaded result 1",
+          "value1": "1",
+        },
+        "overloadedFn0_MULT": Array [
+          Object {
+            "__typename": "overloadedFnOutput",
+            "value0": "overloaded result 1",
+            "value1": "1",
+          },
+          Object {
+            "__typename": "overloadedFnOutput",
+            "value0": "overloaded result 1",
+            "value1": "1",
+          },
+        ],
+        "overloadedFn1": Object {
+          "__typename": "overloadedFnOutput",
+          "value0": "overloaded result 0",
+          "value1": "0",
+        },
+        "overloadedFn2": Object {
+          "__typename": "overloadedFnOutput",
+          "value0": "overloaded result 2",
+          "value1": "2",
+        },
+        "overloadedFn2_MULT": Array [
+          Object {
+            "__typename": "overloadedFnOutput",
+            "value0": "overloaded result 2",
+            "value1": "2",
+          },
+          Object {
+            "__typename": "overloadedFnOutput",
+            "value0": "overloaded result 2",
+            "value1": "2",
+          },
+        ],
+      },
+      Object {
+        "__typename": "TestContract2",
+        "overloadedFn0": Object {
+          "__typename": "overloadedFnOutput",
+          "value0": "overloaded result 1",
+          "value1": "1",
+        },
+        "overloadedFn0_MULT": Array [
+          Object {
+            "__typename": "overloadedFnOutput",
+            "value0": "overloaded result 1",
+            "value1": "1",
+          },
+          Object {
+            "__typename": "overloadedFnOutput",
+            "value0": "overloaded result 1",
+            "value1": "1",
+          },
+        ],
+        "overloadedFn1": Object {
+          "__typename": "overloadedFnOutput",
+          "value0": "overloaded result 0",
+          "value1": "0",
+        },
+        "overloadedFn2": Object {
+          "__typename": "overloadedFnOutput",
+          "value0": "overloaded result 2",
+          "value1": "2",
+        },
+        "overloadedFn2_MULT": Array [
+          Object {
+            "__typename": "overloadedFnOutput",
+            "value0": "overloaded result 2",
+            "value1": "2",
+          },
+          Object {
+            "__typename": "overloadedFnOutput",
+            "value0": "overloaded result 2",
+            "value1": "2",
+          },
+        ],
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;

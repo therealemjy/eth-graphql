@@ -128,7 +128,7 @@ npm run eth-graphql --config ./ethGraphQlConfig.ts
 ```
 
 _Note that the config option signifies the location of your config file, relative to the directory
-from which you're executing the command_
+from which you're executing the command._
 
 The command will automatically open
 [http://localhost:8008/eth-call-graphiql](http://localhost:8008/eth-call-graphiql) in your browser.
@@ -264,6 +264,41 @@ console.log(data.contracts.ERC20);
   name: 'Uniswap'
 }]
 */
+```
+
+## Calling the same method multiple times
+
+For each field in the generated GraphQL schema that can take arguments and that represents a
+contract method that can be called, a second field suffixed with "\_MULT" is created. The latter
+always accepts only one `args` argument, which represents an array of argument sets to call the
+method with.
+
+e.g. ABI:
+
+```json
+
+```
+
+Generated GraphQL:
+
+```graphql
+type ContractName {
+  # TODO:
+  passAddress(someAddress: String!): String!
+  passAddress_MULT(args: [ContractName_passAddressInput!]!): [String!]!
+}
+
+input ContractName_passAddressInput {
+  someAddress: String!
+}
+```
+
+You can use the mult fields to call the same contract method multiple times with different sets of
+arguments. Results will be returned as an array of outputs, sorted in the same order as the input
+arguments:
+
+```typescript
+// TODO: add example
 ```
 
 ## Using custom multicall addresses
@@ -471,10 +506,11 @@ Generated GraphQL:
 
 ```graphql
 type ContractName {
-  getMovie(category: ContractName_CategoryInput!): ContractName_Movie!
+  getMovie(category: ContractName_Category!): ContractName_Movie!
+  # A getMovie_MULT field will also be created, as described in the "Calling the same method multiple times" section
 }
 
-input ContractName_CategoryInput {
+input ContractName_Category {
   id: BigInt!
   name: String!
 }
@@ -550,6 +586,7 @@ Generated GraphQL:
 ```graphql
 type ContractName {
   getTuple(someTuple: [String!]!): [String!]!
+  # A getTuple_MULT field will also be created, as described in the "Calling the same method multiple times" section
 }
 ```
 
@@ -594,6 +631,7 @@ Generated GraphQL:
 ```graphql
 type ContractName {
   passUnnamedString(arg0: String!, arg1: BigInt!): String!
+  # A passUnnamedString_MULT field will also be created, as described in the "Calling the same method multiple times" section
 }
 ```
 
@@ -631,10 +669,10 @@ Generated GraphQL:
 
 ```graphql
 type ContractName {
-  getUnnamedValues: getUnnamedValuesOutput!
+  getUnnamedValues: ContractName_getUnnamedValuesOutput!
 }
 
-type getUnnamedValuesOutput {
+type ContractName_getUnnamedValuesOutput {
   value0: String!
   value1: BigInt!
 }
@@ -698,8 +736,9 @@ Generated GraphQL:
 
 ```graphql
 type ContractName {
-  overloadedFn0: overloadedFnOutput!
-  overloadedFn1(arg0: BigInt!): overloadedFnOutput!
+  overloadedFn0: ContractName_overloadedFnOutput!
+  overloadedFn1(arg0: BigInt!): ContractName_overloadedFnOutput!
+  # An overloadedFn1_MULT field will also be created, as described in the "Calling the same method multiple times" section
 }
 
 type overloadedFnOutput {
