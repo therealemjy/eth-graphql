@@ -402,6 +402,426 @@ Object {
 }
 `;
 
+exports[`end-to-end tests returns the correct data when calling a method that takes and returns a boolean 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "passBoolean": true,
+      "passBoolean_MULT": Array [
+        true,
+        false,
+      ],
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "passBoolean": true,
+        "passBoolean_MULT": Array [
+          true,
+          false,
+        ],
+      },
+      Object {
+        "__typename": "TestContract2",
+        "passBoolean": true,
+        "passBoolean_MULT": Array [
+          true,
+          false,
+        ],
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that takes and returns a string 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "passString": "some string",
+      "passString_MULT": Array [
+        "some string 0",
+        "some string 1",
+      ],
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "passString": "some string",
+        "passString_MULT": Array [
+          "some string 0",
+          "some string 1",
+        ],
+      },
+      Object {
+        "__typename": "TestContract2",
+        "passString": "some string",
+        "passString_MULT": Array [
+          "some string 0",
+          "some string 1",
+        ],
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that takes and returns a struct 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "passMovie": Object {
+        "__typename": "TestContract_Movie",
+        "director": Object {
+          "__typename": "TestContract_Director",
+          "name": "fake director 0",
+          "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+        },
+        "id": "0",
+        "status": "1",
+        "title": "fake movie 0",
+      },
+      "passMovie_MULT": Array [
+        Object {
+          "__typename": "TestContract_Movie",
+          "director": Object {
+            "__typename": "TestContract_Director",
+            "name": "fake director 0",
+            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+          },
+          "id": "0",
+          "status": "1",
+          "title": "fake movie 0",
+        },
+        Object {
+          "__typename": "TestContract_Movie",
+          "director": Object {
+            "__typename": "TestContract_Director",
+            "name": "fake director 1",
+            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+          },
+          "id": "1",
+          "status": "0",
+          "title": "fake movie 1",
+        },
+      ],
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "passMovie": Object {
+          "__typename": "TestContract_Movie",
+          "director": Object {
+            "__typename": "TestContract_Director",
+            "name": "fake director 0",
+            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+          },
+          "id": "0",
+          "status": "1",
+          "title": "fake movie 0",
+        },
+        "passMovie_MULT": Array [
+          Object {
+            "__typename": "TestContract_Movie",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "fake director 0",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            },
+            "id": "0",
+            "status": "1",
+            "title": "fake movie 0",
+          },
+          Object {
+            "__typename": "TestContract_Movie",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "fake director 1",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            },
+            "id": "1",
+            "status": "0",
+            "title": "fake movie 1",
+          },
+        ],
+      },
+      Object {
+        "__typename": "TestContract2",
+        "passMovie": Object {
+          "__typename": "TestContract_Movie",
+          "director": Object {
+            "__typename": "TestContract_Director",
+            "name": "fake director 0",
+            "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+          },
+          "id": "0",
+          "status": "1",
+          "title": "fake movie 0",
+        },
+        "passMovie_MULT": Array [
+          Object {
+            "__typename": "TestContract_Movie",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "fake director 0",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            },
+            "id": "0",
+            "status": "1",
+            "title": "fake movie 0",
+          },
+          Object {
+            "__typename": "TestContract_Movie",
+            "director": Object {
+              "__typename": "TestContract_Director",
+              "name": "fake director 1",
+              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+            },
+            "id": "1",
+            "status": "0",
+            "title": "fake movie 1",
+          },
+        ],
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that takes and returns a tuple 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "passTuple": Array [
+        "0",
+        "1",
+        "2",
+      ],
+      "passTuple_MULT": Array [
+        Array [
+          "0",
+          "1",
+          "2",
+        ],
+        Array [
+          "1",
+          "0",
+          "1",
+        ],
+      ],
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "passTuple": Array [
+          "0",
+          "1",
+          "2",
+        ],
+        "passTuple_MULT": Array [
+          Array [
+            "0",
+            "1",
+            "2",
+          ],
+          Array [
+            "1",
+            "0",
+            "1",
+          ],
+        ],
+      },
+      Object {
+        "__typename": "TestContract2",
+        "passTuple": Array [
+          "0",
+          "1",
+          "2",
+        ],
+        "passTuple_MULT": Array [
+          Array [
+            "0",
+            "1",
+            "2",
+          ],
+          Array [
+            "1",
+            "0",
+            "1",
+          ],
+        ],
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that takes and returns a uint 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "passUint": "128738121231267831231323",
+      "passUint_MULT": Array [
+        "128738121231267831231323",
+        "1678238",
+      ],
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "passUint": "128738121231267831231323",
+        "passUint_MULT": Array [
+          "128738121231267831231323",
+          "1678238",
+        ],
+      },
+      Object {
+        "__typename": "TestContract2",
+        "passUint": "128738121231267831231323",
+        "passUint_MULT": Array [
+          "128738121231267831231323",
+          "1678238",
+        ],
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that takes and returns an address 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "passAddress": "0xD2547e4AA4f5a2b0a512BFd45C9E3360FeEa48Df",
+      "passAddress_MULT": Array [
+        "0xD2547e4AA4f5a2b0a512BFd45C9E3360FeEa48Df",
+        "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+      ],
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "passAddress": "0xD2547e4AA4f5a2b0a512BFd45C9E3360FeEa48Df",
+        "passAddress_MULT": Array [
+          "0xD2547e4AA4f5a2b0a512BFd45C9E3360FeEa48Df",
+          "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+        ],
+      },
+      Object {
+        "__typename": "TestContract2",
+        "passAddress": "0xD2547e4AA4f5a2b0a512BFd45C9E3360FeEa48Df",
+        "passAddress_MULT": Array [
+          "0xD2547e4AA4f5a2b0a512BFd45C9E3360FeEa48Df",
+          "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+        ],
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that takes and returns an int 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "passInt": "1265341",
+      "passInt_MULT": Array [
+        "1265341",
+        "9871",
+      ],
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "passInt": "1265341",
+        "passInt_MULT": Array [
+          "1265341",
+          "9871",
+        ],
+      },
+      Object {
+        "__typename": "TestContract2",
+        "passInt": "1265341",
+        "passInt_MULT": Array [
+          "1265341",
+          "9871",
+        ],
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that takes and returns an unnamed string 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "passUnnamedString": "passUnnamedString result",
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "passUnnamedString": "passUnnamedString result",
+      },
+      Object {
+        "__typename": "TestContract2",
+        "passUnnamedString": "passUnnamedString result",
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
+exports[`end-to-end tests returns the correct data when calling a method that takes and returns bytes 1`] = `
+Object {
+  "contracts": Object {
+    "TestContract": Object {
+      "__typename": "TestContract",
+      "passBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+      "passBytes_MULT": Array [
+        "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+        "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+      ],
+    },
+    "TestContract2": Array [
+      Object {
+        "__typename": "TestContract2",
+        "passBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+        "passBytes_MULT": Array [
+          "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+          "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+        ],
+      },
+      Object {
+        "__typename": "TestContract2",
+        "passBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+        "passBytes_MULT": Array [
+          "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+          "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
+        ],
+      },
+    ],
+    "__typename": "contracts",
+  },
+}
+`;
+
 exports[`end-to-end tests returns the correct data when calling multiple contracts with either a defined address of dynamic addresses 1`] = `
 Object {
   "contracts": Object {

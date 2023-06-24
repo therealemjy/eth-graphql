@@ -8,7 +8,7 @@ import { ethers } from 'hardhat';
 
 import { MAINNET_CHAIN_ID, TEST_CONTRACT_2_ADDRESS, TEST_CONTRACT_ADDRESS } from '../constants';
 import config from '../ethGraphQlConfig';
-import { CALL_FRAGMENT } from './callFragment';
+import { FINAL_BOSS_CALL_FRAGMENT } from './finalBossCallFragment';
 
 chai.use(chaiJestSnapshot);
 
@@ -31,6 +31,32 @@ const initClient = () => {
   return client;
 };
 
+const makeQuery = async (fields: string) => {
+  const client = initClient();
+
+  const { data } = await client.query({
+    query: gql`
+      query ($chainId: Int!, $addresses: [String!]!) {
+        contracts(chainId: $chainId) {
+          TestContract {
+            ${fields}
+          }
+
+          TestContract2(addresses: $addresses) {
+            ${fields}
+          }
+        }
+      }
+    `,
+    variables: {
+      chainId: MAINNET_CHAIN_ID,
+      addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
+    },
+  });
+
+  return data;
+};
+
 describe('end-to-end tests', function () {
   this.beforeAll(async function () {
     // Deploy test contracts
@@ -51,426 +77,278 @@ describe('end-to-end tests', function () {
     console.log(`Multicall deployed at: ${deployedMulticallContract.address}`);
   });
 
-  // TODO: add smaller tests for each data type (string, int, uint etc...)
-
   it('returns the correct data when calling a method that returns nothing', async function () {
-    // Make GraphQL request
-    const client = initClient();
-
-    const { data } = await client.query({
-      query: gql`
-        query ($chainId: Int!, $addresses: [String!]!) {
-          contracts(chainId: $chainId) {
-            TestContract {
-              getNothing
-            }
-
-            TestContract2(addresses: $addresses) {
-              getNothing
-            }
-          }
-        }
-      `,
-      variables: {
-        chainId: MAINNET_CHAIN_ID,
-        addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
-      },
-    });
+    const data = await makeQuery(/* GraphQL */ `
+      getNothing
+    `);
 
     expect(data).to.matchSnapshot();
   });
 
   it('returns the correct data when calling a method that returns a string', async function () {
-    // Make GraphQL request
-    const client = initClient();
-
-    const { data } = await client.query({
-      query: gql`
-        query ($chainId: Int!, $addresses: [String!]!) {
-          contracts(chainId: $chainId) {
-            TestContract {
-              getString
-            }
-
-            TestContract2(addresses: $addresses) {
-              getString
-            }
-          }
-        }
-      `,
-      variables: {
-        chainId: MAINNET_CHAIN_ID,
-        addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
-      },
-    });
+    const data = await makeQuery(/* GraphQL */ `
+      getString
+    `);
 
     expect(data).to.matchSnapshot();
   });
 
   it('returns the correct data when calling a method that returns a named string', async function () {
-    // Make GraphQL request
-    const client = initClient();
-
-    const { data } = await client.query({
-      query: gql`
-        query ($chainId: Int!, $addresses: [String!]!) {
-          contracts(chainId: $chainId) {
-            TestContract {
-              getNamedString
-            }
-
-            TestContract2(addresses: $addresses) {
-              getNamedString
-            }
-          }
-        }
-      `,
-      variables: {
-        chainId: MAINNET_CHAIN_ID,
-        addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
-      },
-    });
+    const data = await makeQuery(/* GraphQL */ `
+      getNamedString
+    `);
 
     expect(data).to.matchSnapshot();
   });
 
   it('returns the correct data when calling a method that returns a boolean', async function () {
-    // Make GraphQL request
-    const client = initClient();
-
-    const { data } = await client.query({
-      query: gql`
-        query ($chainId: Int!, $addresses: [String!]!) {
-          contracts(chainId: $chainId) {
-            TestContract {
-              getBoolean
-            }
-
-            TestContract2(addresses: $addresses) {
-              getBoolean
-            }
-          }
-        }
-      `,
-      variables: {
-        chainId: MAINNET_CHAIN_ID,
-        addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
-      },
-    });
+    const data = await makeQuery(/* GraphQL */ `
+      getBoolean
+    `);
 
     expect(data).to.matchSnapshot();
   });
 
   it('returns the correct data when calling a method that returns an address', async function () {
-    // Make GraphQL request
-    const client = initClient();
-
-    const { data } = await client.query({
-      query: gql`
-        query ($chainId: Int!, $addresses: [String!]!) {
-          contracts(chainId: $chainId) {
-            TestContract {
-              getAddress
-            }
-
-            TestContract2(addresses: $addresses) {
-              getAddress
-            }
-          }
-        }
-      `,
-      variables: {
-        chainId: MAINNET_CHAIN_ID,
-        addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
-      },
-    });
+    const data = await makeQuery(/* GraphQL */ `
+      getAddress
+    `);
 
     expect(data).to.matchSnapshot();
   });
 
   it('returns the correct data when calling a method that returns bytes', async function () {
-    // Make GraphQL request
-    const client = initClient();
-
-    const { data } = await client.query({
-      query: gql`
-        query ($chainId: Int!, $addresses: [String!]!) {
-          contracts(chainId: $chainId) {
-            TestContract {
-              getBytes
-            }
-
-            TestContract2(addresses: $addresses) {
-              getBytes
-            }
-          }
-        }
-      `,
-      variables: {
-        chainId: MAINNET_CHAIN_ID,
-        addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
-      },
-    });
+    const data = await makeQuery(/* GraphQL */ `
+      getBytes
+    `);
 
     expect(data).to.matchSnapshot();
   });
 
   it('returns the correct data when calling a method that returns a uint', async function () {
-    // Make GraphQL request
-    const client = initClient();
-
-    const { data } = await client.query({
-      query: gql`
-        query ($chainId: Int!, $addresses: [String!]!) {
-          contracts(chainId: $chainId) {
-            TestContract {
-              getUint
-            }
-
-            TestContract2(addresses: $addresses) {
-              getUint
-            }
-          }
-        }
-      `,
-      variables: {
-        chainId: MAINNET_CHAIN_ID,
-        addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
-      },
-    });
+    const data = await makeQuery(/* GraphQL */ `
+      getUint
+    `);
 
     expect(data).to.matchSnapshot();
   });
 
   it('returns the correct data when calling a method that returns an int', async function () {
-    // Make GraphQL request
-    const client = initClient();
-
-    const { data } = await client.query({
-      query: gql`
-        query ($chainId: Int!, $addresses: [String!]!) {
-          contracts(chainId: $chainId) {
-            TestContract {
-              getInt
-            }
-
-            TestContract2(addresses: $addresses) {
-              getInt
-            }
-          }
-        }
-      `,
-      variables: {
-        chainId: MAINNET_CHAIN_ID,
-        addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
-      },
-    });
+    const data = await makeQuery(/* GraphQL */ `
+      getInt
+    `);
 
     expect(data).to.matchSnapshot();
   });
 
   it('returns the correct data when calling a method that returns a tuple', async function () {
-    // Make GraphQL request
-    const client = initClient();
-
-    const { data } = await client.query({
-      query: gql`
-        query ($chainId: Int!, $addresses: [String!]!) {
-          contracts(chainId: $chainId) {
-            TestContract {
-              getTuple
-            }
-
-            TestContract2(addresses: $addresses) {
-              getTuple
-            }
-          }
-        }
-      `,
-      variables: {
-        chainId: MAINNET_CHAIN_ID,
-        addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
-      },
-    });
+    const data = await makeQuery(/* GraphQL */ `
+      getTuple
+    `);
 
     expect(data).to.matchSnapshot();
   });
 
   it('returns the correct data when calling a method that returns multiple values', async function () {
-    // Make GraphQL request
-    const client = initClient();
-
-    const { data } = await client.query({
-      query: gql`
-        query ($chainId: Int!, $addresses: [String!]!) {
-          contracts(chainId: $chainId) {
-            TestContract {
-              getMultipleValues {
-                value0
-                value1
-                value2 {
-                  name
-                  walletAddress
-                }
-              }
-            }
-
-            TestContract2(addresses: $addresses) {
-              getMultipleValues {
-                value0
-                value1
-                value2 {
-                  name
-                  walletAddress
-                }
-              }
-            }
-          }
+    const data = await makeQuery(/* GraphQL */ `
+      getMultipleValues {
+        value0
+        value1
+        value2 {
+          name
+          walletAddress
         }
-      `,
-      variables: {
-        chainId: MAINNET_CHAIN_ID,
-        addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
-      },
-    });
+      }
+    `);
 
     expect(data).to.matchSnapshot();
   });
 
   it('returns the correct data when calling a method that returns a struct', async function () {
-    // Make GraphQL request
-    const client = initClient();
-
-    const { data } = await client.query({
-      query: gql`
-        query ($chainId: Int!, $addresses: [String!]!) {
-          contracts(chainId: $chainId) {
-            TestContract {
-              getAnyMovie {
-                id
-                title
-                status
-                director {
-                  name
-                  walletAddress
-                }
-              }
-            }
-
-            TestContract2(addresses: $addresses) {
-              getAnyMovie {
-                id
-                title
-                status
-                director {
-                  name
-                  walletAddress
-                }
-              }
-            }
-          }
+    const data = await makeQuery(/* GraphQL */ `
+      getAnyMovie {
+        id
+        title
+        status
+        director {
+          name
+          walletAddress
         }
-      `,
-      variables: {
-        chainId: MAINNET_CHAIN_ID,
-        addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
-      },
-    });
+      }
+    `);
 
     expect(data).to.matchSnapshot();
   });
 
   it('returns the correct data when calling a method that returns an array of structs', async function () {
-    // Make GraphQL request
-    const client = initClient();
+    const data = await makeQuery(/* GraphQL */ `
+      getAllMovies {
+        id
+        title
+        status
+        director {
+          name
+          walletAddress
+        }
+      }
+    `);
 
-    const { data } = await client.query({
-      query: gql`
-        query ($chainId: Int!, $addresses: [String!]!) {
-          contracts(chainId: $chainId) {
-            TestContract {
-              getAllMovies {
-                id
-                title
-                status
-                director {
-                  name
-                  walletAddress
-                }
-              }
-            }
+    expect(data).to.matchSnapshot();
+  });
 
-            TestContract2(addresses: $addresses) {
-              getAllMovies {
-                id
-                title
-                status
-                director {
-                  name
-                  walletAddress
-                }
+  it('returns the correct data when calling a method that takes and returns an unnamed string', async function () {
+    const data = await makeQuery(/* GraphQL */ `
+      passUnnamedString(arg0: "some string")
+    `);
+
+    expect(data).to.matchSnapshot();
+  });
+
+  it('returns the correct data when calling a method that takes and returns a string', async function () {
+    const data = await makeQuery(/* GraphQL */ `
+      passString(someString: "some string")
+      passString_MULT(
+        args: [{ someString: "some string 0" }, { someString: "some string 1" }]
+      )
+    `);
+
+    expect(data).to.matchSnapshot();
+  });
+
+  it('returns the correct data when calling a method that takes and returns a boolean', async function () {
+    const data = await makeQuery(/* GraphQL */ `
+      passBoolean(someBoolean: true)
+      passBoolean_MULT(args: [{ someBoolean: true }, { someBoolean: false }])
+    `);
+
+    expect(data).to.matchSnapshot();
+  });
+
+  it('returns the correct data when calling a method that takes and returns an address', async function () {
+    const data = await makeQuery(/* GraphQL */ `
+      passAddress(someAddress: "0xD2547e4AA4f5a2b0a512BFd45C9E3360FeEa48Df")
+      passAddress_MULT(
+        args: [
+          { someAddress: "0xD2547e4AA4f5a2b0a512BFd45C9E3360FeEa48Df" }
+          { someAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111" }
+        ]
+      )
+    `);
+
+    expect(data).to.matchSnapshot();
+  });
+
+  it('returns the correct data when calling a method that takes and returns bytes', async function () {
+    const data = await makeQuery(/* GraphQL */ `
+      passBytes(
+        someBytes: "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd"
+      )
+      passBytes_MULT(
+        args: [
+          {
+            someBytes: "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd"
+          }
+          {
+            someBytes: "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd"
+          }
+        ]
+      )
+    `);
+
+    expect(data).to.matchSnapshot();
+  });
+
+  it('returns the correct data when calling a method that takes and returns a uint', async function () {
+    const data = await makeQuery(/* GraphQL */ `
+      passUint(someUint: "128738121231267831231323")
+      passUint_MULT(
+        args: [{ someUint: "128738121231267831231323" }, { someUint: "1678238" }]
+      )
+    `);
+
+    expect(data).to.matchSnapshot();
+  });
+
+  it('returns the correct data when calling a method that takes and returns an int', async function () {
+    const data = await makeQuery(/* GraphQL */ `
+      passInt(someInt: 1265341)
+      passInt_MULT(args: [{ someInt: 1265341 }, { someInt: 9871 }])
+    `);
+
+    expect(data).to.matchSnapshot();
+  });
+
+  it('returns the correct data when calling a method that takes and returns a tuple', async function () {
+    const data = await makeQuery(/* GraphQL */ `
+      passTuple(someTuple: ["0", "1", "2"])
+      passTuple_MULT(args: [{ someTuple: ["0", "1", "2"] }, { someTuple: ["1", "0", "1"] }])
+    `);
+
+    expect(data).to.matchSnapshot();
+  });
+
+  it('returns the correct data when calling a method that takes and returns a struct', async function () {
+    const data = await makeQuery(/* GraphQL */ `
+      passMovie(
+        someMovie: {
+          id: "0"
+          title: "fake movie"
+          status: "1"
+          director: {
+            name: "fake director"
+            walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+          }
+        }
+      ) {
+        id
+        title
+        status
+        director {
+          name
+          walletAddress
+        }
+      }
+      passMovie_MULT(
+        args: [
+          {
+            someMovie: {
+              id: "0"
+              title: "fake movie 0"
+              status: "1"
+              director: {
+                name: "fake director 0"
+                walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
               }
             }
           }
+          {
+            someMovie: {
+              id: "1"
+              title: "fake movie 1"
+              status: "0"
+              director: {
+                name: "fake director 1"
+                walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+              }
+            }
+          }
+        ]
+      ) {
+        id
+        title
+        status
+        director {
+          name
+          walletAddress
         }
-      `,
-      variables: {
-        chainId: MAINNET_CHAIN_ID,
-        addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
-      },
-    });
+      }
+    `);
 
     expect(data).to.matchSnapshot();
   });
 
   it('returns the correct data when calling multiple contracts with either a defined address of dynamic addresses', async function () {
-    // Make GraphQL request
-    const client = initClient();
-    const { data } = await client.query({
-      query: gql`
-        query ($chainId: Int!, $addresses: [String!]!) {
-          contracts(chainId: $chainId) {
-            TestContract {
-              ${CALL_FRAGMENT}
-            }
-
-            TestContract2(addresses: $addresses) {
-              ${CALL_FRAGMENT}
-            }
-          }
-        }
-      `,
-      variables: {
-        chainId: MAINNET_CHAIN_ID,
-        addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
-      },
-    });
-
-    expect(data).to.matchSnapshot();
-  });
-
-  it.skip('returns the correct data when calling MULT fields', async function () {
-    // Make GraphQL request
-    const client = initClient();
-    const { data } = await client.query({
-      query: gql`
-        query ($chainId: Int!, $addresses: [String!]!) {
-          contracts(chainId: $chainId) {
-            TestContract {
-              passInt_MULT(args: [{ someInt: 1 }, { someInt: 2 }, { someInt: 3 }])
-            }
-
-            TestContract2(addresses: $addresses) {
-              passInt_MULT(args: [{ someInt: 1 }, { someInt: 2 }, { someInt: 3 }])
-            }
-          }
-        }
-      `,
-      variables: {
-        chainId: MAINNET_CHAIN_ID,
-        addresses: [TEST_CONTRACT_ADDRESS, TEST_CONTRACT_2_ADDRESS],
-      },
-    });
+    const data = await makeQuery(FINAL_BOSS_CALL_FRAGMENT);
 
     expect(data).to.matchSnapshot();
   });

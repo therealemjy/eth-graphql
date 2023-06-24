@@ -1,4 +1,4 @@
-export const CALL_FRAGMENT = /* GraphQL */ `
+export const FINAL_BOSS_CALL_FRAGMENT = /* GraphQL */ `
   getAnyMovie {
     id
     title
