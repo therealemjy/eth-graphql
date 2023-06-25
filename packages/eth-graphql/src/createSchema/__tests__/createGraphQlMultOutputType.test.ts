@@ -3,8 +3,8 @@ import { GraphQLInt, GraphQLList, GraphQLNonNull } from 'graphql';
 import createGraphQlMultOutputType from '../createGraphQlMultOutputType';
 import { SharedGraphQlTypes } from '../types';
 
-describe('GraphQL Output Type Creation Tests', () => {
-  it('Should correctly create a new output type', () => {
+describe('createSchema/createGraphQlMultOutputType', () => {
+  it('should correctly create a new output type', () => {
     const sharedGraphQlTypes: SharedGraphQlTypes = { inputs: {}, outputs: {} };
     const outputType = GraphQLInt;
     const contractFieldName = 'testField';
@@ -18,7 +18,7 @@ describe('GraphQL Output Type Creation Tests', () => {
     expect(sharedGraphQlTypes.outputs[contractFieldName]).toBe(result);
   });
 
-  it('Should return the existing output type if it already exists', () => {
+  it('should return the existing output type if it already exists', () => {
     const outputType = GraphQLInt;
     const contractFieldName = 'testField';
     const existingOutputType = new GraphQLNonNull(new GraphQLList(outputType));

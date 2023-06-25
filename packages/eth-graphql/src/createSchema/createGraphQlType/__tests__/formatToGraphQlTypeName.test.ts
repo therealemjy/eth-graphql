@@ -1,6 +1,6 @@
 import formatToGraphQlTypeName, { FormatToGraphQlTypeNameInput } from '../formatToGraphQlTypeName';
 
-describe('formatToGraphQlTypeName', () => {
+describe('createSchema/createGraphQlType/formatToGraphQlTypeName', () => {
   it('should format type name correctly when isInput is false and type is not a struct', () => {
     const params: FormatToGraphQlTypeNameInput = {
       componentInternalType: 'Movie[3]',
