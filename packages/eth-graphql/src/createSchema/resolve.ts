@@ -1,8 +1,8 @@
-import { GraphQLFieldConfig } from 'graphql';
+import { GraphQLFieldResolver } from 'graphql';
 
 import { SolidityValue } from '../types';
 
-const resolve: GraphQLFieldConfig<{ [key: string]: SolidityValue }, unknown, unknown>['resolve'] = (
+const resolve: GraphQLFieldResolver<{ [key: string]: SolidityValue }, unknown, unknown> = (
   _obj: { [key: string]: SolidityValue },
   _args,
   _context,
