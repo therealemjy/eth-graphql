@@ -7,9 +7,11 @@ import { SharedGraphQlTypes } from './types';
 
 const createGraphQlInputTypes = ({
   components,
+  contractName,
   sharedGraphQlTypes,
 }: {
   components: ReadonlyArray<JsonFragmentType>;
+  contractName: string;
   sharedGraphQlTypes: SharedGraphQlTypes;
 }) =>
   components.reduce<GraphQLFieldConfigArgumentMap>(
@@ -22,6 +24,7 @@ const createGraphQlInputTypes = ({
       })]: {
         type: createGraphQlType({
           isInput: true,
+          contractName,
           component,
           sharedGraphQlTypes,
         }) as GraphQLNonNull<GraphQLInputObjectType>,

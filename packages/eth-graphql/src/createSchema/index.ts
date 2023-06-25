@@ -90,6 +90,7 @@ const createSchema = (config: Config) => {
               > = {
                 type: createGraphQlOutputType({
                   abiItem,
+                  contractName: contract.name,
                   sharedGraphQlTypes,
                 }),
                 resolve,
@@ -101,6 +102,7 @@ const createSchema = (config: Config) => {
               if (abiInputs.length > 0) {
                 contractField.args = createGraphQlInputTypes({
                   components: abiInputs,
+                  contractName: contract.name,
                   sharedGraphQlTypes,
                 });
 

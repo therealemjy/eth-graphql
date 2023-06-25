@@ -8,6 +8,8 @@ import { SharedGraphQlTypes } from '../types';
 jest.mock('../createGraphQlType');
 
 describe('createSchema/createGraphQlOutputType', () => {
+  const mockContractName = 'FakeContract';
+
   const mockAbiItem: JsonFragment = {
     name: 'mockName',
     type: 'mockType',
@@ -28,6 +30,7 @@ describe('createSchema/createGraphQlOutputType', () => {
 
     const result = createGraphQlOutputType({
       abiItem: mockAbiItem,
+      contractName: mockContractName,
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });
     expect(result).toEqual(GraphQlVoid);
@@ -43,11 +46,13 @@ describe('createSchema/createGraphQlOutputType', () => {
 
     createGraphQlOutputType({
       abiItem: singleOutputAbiItem,
+      contractName: mockContractName,
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });
 
     expect(createGraphQlType).toBeCalledWith({
       isInput: false,
+      contractName: mockContractName,
       component: singleOutputAbiItem.outputs[0],
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });
@@ -66,16 +71,18 @@ describe('createSchema/createGraphQlOutputType', () => {
 
     createGraphQlOutputType({
       abiItem: multipleOutputsAbiItem,
+      contractName: mockContractName,
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });
 
     expect(createGraphQlType).toBeCalledWith({
       isInput: false,
+      contractName: mockContractName,
       component: {
         ...multipleOutputsAbiItem,
         components: multipleOutputsAbiItem.outputs,
         type: 'tuple',
-        internalType: `${multipleOutputsAbiItem.name}Output`,
+        internalType: multipleOutputsAbiItem.name,
       },
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });

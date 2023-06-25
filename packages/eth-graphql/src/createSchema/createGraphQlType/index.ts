@@ -18,21 +18,22 @@ import formatToGraphQlTypeName from './formatToGraphQlTypeName';
 
 export interface GetOrSetSharedGraphQlType {
   isInput: boolean;
+  contractName: string;
   component: JsonFragmentType;
   sharedGraphQlTypes: SharedGraphQlTypes;
 }
 
 function createSharedGraphQlType({
   isInput,
+  contractName,
   component,
   sharedGraphQlTypes,
 }: GetOrSetSharedGraphQlType) {
-  let sharedGraphQlTypeName = formatToGraphQlTypeName(component.internalType);
-  // Add suffix if type is an input to prevent a potential duplicate with an
-  // output type
-  if (isInput) {
-    sharedGraphQlTypeName += 'Input';
-  }
+  const sharedGraphQlTypeName = formatToGraphQlTypeName({
+    contractName,
+    componentInternalType: component.internalType,
+    isInput,
+  });
 
   const keyType = isInput ? 'inputs' : 'outputs';
 
@@ -47,6 +48,7 @@ function createSharedGraphQlType({
               [formatToEntityName({ name: component.name, index: componentIndex, type: 'arg' })]: {
                 type: createGraphQlType({
                   isInput,
+                  contractName,
                   component,
                   sharedGraphQlTypes,
                 }) as GraphQLNonNull<GraphQLInputObjectType>,
@@ -66,6 +68,7 @@ function createSharedGraphQlType({
                 {
                   type: createGraphQlType({
                     isInput,
+                    contractName,
                     component,
                     sharedGraphQlTypes,
                   }) as GraphQLNonNull<GraphQLObjectType>,
@@ -81,11 +84,17 @@ function createSharedGraphQlType({
 
 export interface CreateGraphQlTypeInput {
   isInput: boolean;
+  contractName: string;
   component: JsonFragmentType;
   sharedGraphQlTypes: SharedGraphQlTypes;
 }
 
-function createGraphQlType({ isInput, component, sharedGraphQlTypes }: CreateGraphQlTypeInput) {
+function createGraphQlType({
+  isInput,
+  contractName,
+  component,
+  sharedGraphQlTypes,
+}: CreateGraphQlTypeInput) {
   let graphQlType;
 
   // Use string as the fallback type. In this context, the type property should
@@ -103,6 +112,7 @@ function createGraphQlType({ isInput, component, sharedGraphQlTypes }: CreateGra
   if (componentBaseType === 'tuple' && component.internalType) {
     graphQlType = createSharedGraphQlType({
       isInput,
+      contractName,
       component,
       sharedGraphQlTypes,
     });

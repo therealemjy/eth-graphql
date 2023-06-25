@@ -7,9 +7,11 @@ import { SharedGraphQlTypes } from './types';
 
 const createGraphQlOutputType = ({
   abiItem,
+  contractName,
   sharedGraphQlTypes,
 }: {
   abiItem: JsonFragment;
+  contractName: string;
   sharedGraphQlTypes: SharedGraphQlTypes;
 }) => {
   const abiItemOutputs = abiItem.outputs || [];
@@ -23,6 +25,7 @@ const createGraphQlOutputType = ({
 
   return createGraphQlType({
     isInput: false,
+    contractName,
     component:
       abiItemOutputs.length === 1
         ? // Map single output to a single type
@@ -32,7 +35,7 @@ const createGraphQlOutputType = ({
             ...abiItem,
             components: abiItemOutputs,
             type: 'tuple',
-            internalType: `${abiItem.name}Output`,
+            internalType: abiItem.name,
           },
     sharedGraphQlTypes,
   }) as GraphQLOutputType;

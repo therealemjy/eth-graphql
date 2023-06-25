@@ -87,9 +87,9 @@ Object {
       Object {
         "__typename": "TestContract2",
         "getAnyMovie": Object {
-          "__typename": "TestContract_Movie",
+          "__typename": "TestContract2_Movie",
           "director": Object {
-            "__typename": "TestContract_Director",
+            "__typename": "TestContract2_Director",
             "name": "Steven Spielberg",
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
@@ -101,9 +101,9 @@ Object {
       Object {
         "__typename": "TestContract2",
         "getAnyMovie": Object {
-          "__typename": "TestContract_Movie",
+          "__typename": "TestContract2_Movie",
           "director": Object {
-            "__typename": "TestContract_Director",
+            "__typename": "TestContract2_Director",
             "name": "Steven Spielberg",
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
@@ -231,9 +231,9 @@ Object {
         "__typename": "TestContract2",
         "getAllMovies": Array [
           Object {
-            "__typename": "TestContract_Movie",
+            "__typename": "TestContract2_Movie",
             "director": Object {
-              "__typename": "TestContract_Director",
+              "__typename": "TestContract2_Director",
               "name": "Steven Spielberg",
               "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
             },
@@ -242,9 +242,9 @@ Object {
             "title": "Catch Me If You Can",
           },
           Object {
-            "__typename": "TestContract_Movie",
+            "__typename": "TestContract2_Movie",
             "director": Object {
-              "__typename": "TestContract_Director",
+              "__typename": "TestContract2_Director",
               "name": "Robert Zemeckis",
               "walletAddress": "0x86f11f319E53481493Ea50d97eAc684c5Ca8403D",
             },
@@ -258,9 +258,9 @@ Object {
         "__typename": "TestContract2",
         "getAllMovies": Array [
           Object {
-            "__typename": "TestContract_Movie",
+            "__typename": "TestContract2_Movie",
             "director": Object {
-              "__typename": "TestContract_Director",
+              "__typename": "TestContract2_Director",
               "name": "Steven Spielberg",
               "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
             },
@@ -269,9 +269,9 @@ Object {
             "title": "Catch Me If You Can",
           },
           Object {
-            "__typename": "TestContract_Movie",
+            "__typename": "TestContract2_Movie",
             "director": Object {
-              "__typename": "TestContract_Director",
+              "__typename": "TestContract2_Director",
               "name": "Robert Zemeckis",
               "walletAddress": "0x86f11f319E53481493Ea50d97eAc684c5Ca8403D",
             },
@@ -337,7 +337,7 @@ Object {
     "TestContract": Object {
       "__typename": "TestContract",
       "getMultipleValues": Object {
-        "__typename": "getMultipleValuesOutput",
+        "__typename": "TestContract_getMultipleValuesOutput",
         "value0": "Catch Me If You Can",
         "value1": "0",
         "value2": Object {
@@ -351,11 +351,11 @@ Object {
       Object {
         "__typename": "TestContract2",
         "getMultipleValues": Object {
-          "__typename": "getMultipleValuesOutput",
+          "__typename": "TestContract2_getMultipleValuesOutput",
           "value0": "Catch Me If You Can",
           "value1": "0",
           "value2": Object {
-            "__typename": "TestContract_Director",
+            "__typename": "TestContract2_Director",
             "name": "Steven Spielberg",
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
@@ -364,11 +364,11 @@ Object {
       Object {
         "__typename": "TestContract2",
         "getMultipleValues": Object {
-          "__typename": "getMultipleValuesOutput",
+          "__typename": "TestContract2_getMultipleValuesOutput",
           "value0": "Catch Me If You Can",
           "value1": "0",
           "value2": Object {
-            "__typename": "TestContract_Director",
+            "__typename": "TestContract2_Director",
             "name": "Steven Spielberg",
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
@@ -515,15 +515,15 @@ Object {
       Object {
         "__typename": "TestContract2",
         "passMovie": Object {
-          "__typename": "TestContract_Movie",
+          "__typename": "TestContract2_Movie",
           "director": Object {
-            "__typename": "TestContract_Director",
-            "name": "fake director 0",
+            "__typename": "TestContract2_Director",
+            "name": "fake director",
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
           "id": "0",
           "status": "1",
-          "title": "fake movie 0",
+          "title": "fake movie",
         },
         "passMovie_MULT": Array [
           Object {
@@ -553,15 +553,15 @@ Object {
       Object {
         "__typename": "TestContract2",
         "passMovie": Object {
-          "__typename": "TestContract_Movie",
+          "__typename": "TestContract2_Movie",
           "director": Object {
-            "__typename": "TestContract_Director",
-            "name": "fake director 0",
+            "__typename": "TestContract2_Director",
+            "name": "fake director",
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
           "id": "0",
           "status": "1",
-          "title": "fake movie 0",
+          "title": "fake movie",
         },
         "passMovie_MULT": Array [
           Object {
@@ -862,7 +862,7 @@ Object {
       "getBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
       "getInt": "125637412567341",
       "getMultipleValues": Object {
-        "__typename": "getMultipleValuesOutput",
+        "__typename": "TestContract_getMultipleValuesOutput",
         "value0": "Catch Me If You Can",
         "value1": "0",
         "value2": Object {
@@ -881,7 +881,7 @@ Object {
       ],
       "getUint": "1256374125673412563451263546712536712536712573612",
       "mayhem": Object {
-        "__typename": "mayhemOutput",
+        "__typename": "TestContract_mayhemOutput",
         "director": Object {
           "__typename": "TestContract_Director",
           "name": "fake director",
@@ -921,7 +921,7 @@ Object {
       },
       "mayhem_MULT": Array [
         Object {
-          "__typename": "mayhemOutput",
+          "__typename": "TestContract_mayhemOutput",
           "director": Object {
             "__typename": "TestContract_Director",
             "name": "fake director 0",
@@ -960,7 +960,7 @@ Object {
           "value1": "671432189",
         },
         Object {
-          "__typename": "mayhemOutput",
+          "__typename": "TestContract_mayhemOutput",
           "director": Object {
             "__typename": "TestContract_Director",
             "name": "fake director 2",
@@ -1000,7 +1000,7 @@ Object {
         },
       ],
       "movies": Object {
-        "__typename": "moviesOutput",
+        "__typename": "TestContract_moviesOutput",
         "director": Object {
           "__typename": "TestContract_Director",
           "name": "Steven Spielberg",
@@ -1011,17 +1011,17 @@ Object {
         "title": "Catch Me If You Can",
       },
       "overloadedFn0": Object {
-        "__typename": "overloadedFnOutput",
+        "__typename": "TestContract_overloadedFnOutput",
         "value0": "overloaded result 1",
         "value1": "1",
       },
       "overloadedFn1": Object {
-        "__typename": "overloadedFnOutput",
+        "__typename": "TestContract_overloadedFnOutput",
         "value0": "overloaded result 0",
         "value1": "0",
       },
       "overloadedFn2": Object {
-        "__typename": "overloadedFnOutput",
+        "__typename": "TestContract_overloadedFnOutput",
         "value0": "overloaded result 2",
         "value1": "2",
       },
@@ -1055,43 +1055,43 @@ Object {
         "getAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
         "getAllMovies": Array [
           Object {
-            "__typename": "TestContract_Movie",
+            "__typename": "TestContract2_Movie",
             "director": Object {
-              "__typename": "TestContract_Director",
+              "__typename": "TestContract2_Director",
               "name": "fake director",
               "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
             },
             "id": "0",
-            "status": "0",
-            "title": "fake movie 0",
+            "status": "1",
+            "title": "fake movie",
           },
           Object {
-            "__typename": "TestContract_Movie",
+            "__typename": "TestContract2_Movie",
             "director": Object {
-              "__typename": "TestContract_Director",
-              "name": "fake director",
-              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+              "__typename": "TestContract2_Director",
+              "name": "Robert Zemeckis",
+              "walletAddress": "0x86f11f319E53481493Ea50d97eAc684c5Ca8403D",
             },
             "id": "1",
             "status": "1",
-            "title": "fake movie 1",
+            "title": "Forrest Gump",
           },
         ],
         "getAnyMovie": Object {
-          "__typename": "TestContract_Movie",
+          "__typename": "TestContract2_Movie",
           "id": "0",
-          "status": "0",
-          "title": "fake movie 0",
+          "status": "1",
+          "title": "fake movie",
         },
         "getBoolean": true,
         "getBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
         "getInt": "125637412567341",
         "getMultipleValues": Object {
-          "__typename": "getMultipleValuesOutput",
+          "__typename": "TestContract2_getMultipleValuesOutput",
           "value0": "Catch Me If You Can",
           "value1": "0",
           "value2": Object {
-            "__typename": "TestContract_Director",
+            "__typename": "TestContract2_Director",
             "name": "Steven Spielberg",
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
@@ -1106,34 +1106,34 @@ Object {
         ],
         "getUint": "1256374125673412563451263546712536712536712573612",
         "mayhem": Object {
-          "__typename": "mayhemOutput",
+          "__typename": "TestContract2_mayhemOutput",
           "director": Object {
-            "__typename": "TestContract_Director",
+            "__typename": "TestContract2_Director",
             "name": "fake director",
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
           "passedMovies": Array [
             Object {
-              "__typename": "TestContract_Movie",
+              "__typename": "TestContract2_Movie",
               "director": Object {
-                "__typename": "TestContract_Director",
+                "__typename": "TestContract2_Director",
                 "name": "fake director",
                 "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
               },
               "id": "0",
-              "status": "0",
-              "title": "fake movie 0",
+              "status": "1",
+              "title": "fake movie",
             },
             Object {
-              "__typename": "TestContract_Movie",
+              "__typename": "TestContract2_Movie",
               "director": Object {
-                "__typename": "TestContract_Director",
+                "__typename": "TestContract2_Director",
                 "name": "fake director",
                 "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
               },
               "id": "0",
-              "status": "0",
-              "title": "fake movie 0",
+              "status": "1",
+              "title": "fake movie",
             },
           ],
           "statuses": Array [
@@ -1146,7 +1146,7 @@ Object {
         },
         "mayhem_MULT": Array [
           Object {
-            "__typename": "mayhemOutput",
+            "__typename": "TestContract_mayhemOutput",
             "director": Object {
               "__typename": "TestContract_Director",
               "name": "fake director 0",
@@ -1185,7 +1185,7 @@ Object {
             "value1": "671432189",
           },
           Object {
-            "__typename": "mayhemOutput",
+            "__typename": "TestContract_mayhemOutput",
             "director": Object {
               "__typename": "TestContract_Director",
               "name": "fake director 2",
@@ -1225,9 +1225,9 @@ Object {
           },
         ],
         "movies": Object {
-          "__typename": "moviesOutput",
+          "__typename": "TestContract2_moviesOutput",
           "director": Object {
-            "__typename": "TestContract_Director",
+            "__typename": "TestContract2_Director",
             "name": "Steven Spielberg",
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
@@ -1236,17 +1236,17 @@ Object {
           "title": "Catch Me If You Can",
         },
         "overloadedFn0": Object {
-          "__typename": "overloadedFnOutput",
+          "__typename": "TestContract2_overloadedFnOutput",
           "value0": "overloaded result 1",
           "value1": "1",
         },
         "overloadedFn1": Object {
-          "__typename": "overloadedFnOutput",
+          "__typename": "TestContract2_overloadedFnOutput",
           "value0": "overloaded result 0",
           "value1": "0",
         },
         "overloadedFn2": Object {
-          "__typename": "overloadedFnOutput",
+          "__typename": "TestContract2_overloadedFnOutput",
           "value0": "overloaded result 2",
           "value1": "2",
         },
@@ -1255,15 +1255,15 @@ Object {
         "passBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
         "passInt": "1265341",
         "passMovie": Object {
-          "__typename": "TestContract_Movie",
+          "__typename": "TestContract2_Movie",
           "director": Object {
-            "__typename": "TestContract_Director",
+            "__typename": "TestContract2_Director",
             "name": "fake director",
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
           "id": "0",
-          "status": "0",
-          "title": "fake movie 0",
+          "status": "1",
+          "title": "fake movie",
         },
         "passString": "some-string",
         "passTuple": Array [
@@ -1279,43 +1279,43 @@ Object {
         "getAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
         "getAllMovies": Array [
           Object {
-            "__typename": "TestContract_Movie",
+            "__typename": "TestContract2_Movie",
             "director": Object {
-              "__typename": "TestContract_Director",
+              "__typename": "TestContract2_Director",
               "name": "fake director",
               "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
             },
             "id": "0",
-            "status": "0",
-            "title": "fake movie 0",
+            "status": "1",
+            "title": "fake movie",
           },
           Object {
-            "__typename": "TestContract_Movie",
+            "__typename": "TestContract2_Movie",
             "director": Object {
-              "__typename": "TestContract_Director",
-              "name": "fake director",
-              "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
+              "__typename": "TestContract2_Director",
+              "name": "Robert Zemeckis",
+              "walletAddress": "0x86f11f319E53481493Ea50d97eAc684c5Ca8403D",
             },
             "id": "1",
             "status": "1",
-            "title": "fake movie 1",
+            "title": "Forrest Gump",
           },
         ],
         "getAnyMovie": Object {
-          "__typename": "TestContract_Movie",
+          "__typename": "TestContract2_Movie",
           "id": "0",
-          "status": "0",
-          "title": "fake movie 0",
+          "status": "1",
+          "title": "fake movie",
         },
         "getBoolean": true,
         "getBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
         "getInt": "125637412567341",
         "getMultipleValues": Object {
-          "__typename": "getMultipleValuesOutput",
+          "__typename": "TestContract2_getMultipleValuesOutput",
           "value0": "Catch Me If You Can",
           "value1": "0",
           "value2": Object {
-            "__typename": "TestContract_Director",
+            "__typename": "TestContract2_Director",
             "name": "Steven Spielberg",
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
@@ -1330,34 +1330,34 @@ Object {
         ],
         "getUint": "1256374125673412563451263546712536712536712573612",
         "mayhem": Object {
-          "__typename": "mayhemOutput",
+          "__typename": "TestContract2_mayhemOutput",
           "director": Object {
-            "__typename": "TestContract_Director",
+            "__typename": "TestContract2_Director",
             "name": "fake director",
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
           "passedMovies": Array [
             Object {
-              "__typename": "TestContract_Movie",
+              "__typename": "TestContract2_Movie",
               "director": Object {
-                "__typename": "TestContract_Director",
+                "__typename": "TestContract2_Director",
                 "name": "fake director",
                 "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
               },
               "id": "0",
-              "status": "0",
-              "title": "fake movie 0",
+              "status": "1",
+              "title": "fake movie",
             },
             Object {
-              "__typename": "TestContract_Movie",
+              "__typename": "TestContract2_Movie",
               "director": Object {
-                "__typename": "TestContract_Director",
+                "__typename": "TestContract2_Director",
                 "name": "fake director",
                 "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
               },
               "id": "0",
-              "status": "0",
-              "title": "fake movie 0",
+              "status": "1",
+              "title": "fake movie",
             },
           ],
           "statuses": Array [
@@ -1370,7 +1370,7 @@ Object {
         },
         "mayhem_MULT": Array [
           Object {
-            "__typename": "mayhemOutput",
+            "__typename": "TestContract_mayhemOutput",
             "director": Object {
               "__typename": "TestContract_Director",
               "name": "fake director 0",
@@ -1409,7 +1409,7 @@ Object {
             "value1": "671432189",
           },
           Object {
-            "__typename": "mayhemOutput",
+            "__typename": "TestContract_mayhemOutput",
             "director": Object {
               "__typename": "TestContract_Director",
               "name": "fake director 2",
@@ -1449,9 +1449,9 @@ Object {
           },
         ],
         "movies": Object {
-          "__typename": "moviesOutput",
+          "__typename": "TestContract2_moviesOutput",
           "director": Object {
-            "__typename": "TestContract_Director",
+            "__typename": "TestContract2_Director",
             "name": "Steven Spielberg",
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
@@ -1460,17 +1460,17 @@ Object {
           "title": "Catch Me If You Can",
         },
         "overloadedFn0": Object {
-          "__typename": "overloadedFnOutput",
+          "__typename": "TestContract2_overloadedFnOutput",
           "value0": "overloaded result 1",
           "value1": "1",
         },
         "overloadedFn1": Object {
-          "__typename": "overloadedFnOutput",
+          "__typename": "TestContract2_overloadedFnOutput",
           "value0": "overloaded result 0",
           "value1": "0",
         },
         "overloadedFn2": Object {
-          "__typename": "overloadedFnOutput",
+          "__typename": "TestContract2_overloadedFnOutput",
           "value0": "overloaded result 2",
           "value1": "2",
         },
@@ -1479,15 +1479,15 @@ Object {
         "passBytes": "0xed6c11b0b5b808960df26f5bfc471d04c1995b0ffd2055925ad1be28d6baadfd",
         "passInt": "1265341",
         "passMovie": Object {
-          "__typename": "TestContract_Movie",
+          "__typename": "TestContract2_Movie",
           "director": Object {
-            "__typename": "TestContract_Director",
+            "__typename": "TestContract2_Director",
             "name": "fake director",
             "walletAddress": "0xA5ae0b2386De51Aba852551A1EE828BfD598E111",
           },
           "id": "0",
-          "status": "0",
-          "title": "fake movie 0",
+          "status": "1",
+          "title": "fake movie",
         },
         "passString": "some-string",
         "passTuple": Array [
@@ -1510,40 +1510,40 @@ Object {
     "TestContract": Object {
       "__typename": "TestContract",
       "overloadedFn0": Object {
-        "__typename": "overloadedFnOutput",
+        "__typename": "TestContract_overloadedFnOutput",
         "value0": "overloaded result 1",
         "value1": "1",
       },
       "overloadedFn0_MULT": Array [
         Object {
-          "__typename": "overloadedFnOutput",
+          "__typename": "TestContract_overloadedFnOutput",
           "value0": "overloaded result 1",
           "value1": "1",
         },
         Object {
-          "__typename": "overloadedFnOutput",
+          "__typename": "TestContract_overloadedFnOutput",
           "value0": "overloaded result 1",
           "value1": "1",
         },
       ],
       "overloadedFn1": Object {
-        "__typename": "overloadedFnOutput",
+        "__typename": "TestContract_overloadedFnOutput",
         "value0": "overloaded result 0",
         "value1": "0",
       },
       "overloadedFn2": Object {
-        "__typename": "overloadedFnOutput",
+        "__typename": "TestContract_overloadedFnOutput",
         "value0": "overloaded result 2",
         "value1": "2",
       },
       "overloadedFn2_MULT": Array [
         Object {
-          "__typename": "overloadedFnOutput",
+          "__typename": "TestContract_overloadedFnOutput",
           "value0": "overloaded result 2",
           "value1": "2",
         },
         Object {
-          "__typename": "overloadedFnOutput",
+          "__typename": "TestContract_overloadedFnOutput",
           "value0": "overloaded result 2",
           "value1": "2",
         },
@@ -1553,40 +1553,40 @@ Object {
       Object {
         "__typename": "TestContract2",
         "overloadedFn0": Object {
-          "__typename": "overloadedFnOutput",
+          "__typename": "TestContract2_overloadedFnOutput",
           "value0": "overloaded result 1",
           "value1": "1",
         },
         "overloadedFn0_MULT": Array [
           Object {
-            "__typename": "overloadedFnOutput",
+            "__typename": "TestContract_overloadedFnOutput",
             "value0": "overloaded result 1",
             "value1": "1",
           },
           Object {
-            "__typename": "overloadedFnOutput",
+            "__typename": "TestContract_overloadedFnOutput",
             "value0": "overloaded result 1",
             "value1": "1",
           },
         ],
         "overloadedFn1": Object {
-          "__typename": "overloadedFnOutput",
+          "__typename": "TestContract2_overloadedFnOutput",
           "value0": "overloaded result 0",
           "value1": "0",
         },
         "overloadedFn2": Object {
-          "__typename": "overloadedFnOutput",
+          "__typename": "TestContract2_overloadedFnOutput",
           "value0": "overloaded result 2",
           "value1": "2",
         },
         "overloadedFn2_MULT": Array [
           Object {
-            "__typename": "overloadedFnOutput",
+            "__typename": "TestContract_overloadedFnOutput",
             "value0": "overloaded result 2",
             "value1": "2",
           },
           Object {
-            "__typename": "overloadedFnOutput",
+            "__typename": "TestContract_overloadedFnOutput",
             "value0": "overloaded result 2",
             "value1": "2",
           },
@@ -1595,40 +1595,40 @@ Object {
       Object {
         "__typename": "TestContract2",
         "overloadedFn0": Object {
-          "__typename": "overloadedFnOutput",
+          "__typename": "TestContract2_overloadedFnOutput",
           "value0": "overloaded result 1",
           "value1": "1",
         },
         "overloadedFn0_MULT": Array [
           Object {
-            "__typename": "overloadedFnOutput",
+            "__typename": "TestContract_overloadedFnOutput",
             "value0": "overloaded result 1",
             "value1": "1",
           },
           Object {
-            "__typename": "overloadedFnOutput",
+            "__typename": "TestContract_overloadedFnOutput",
             "value0": "overloaded result 1",
             "value1": "1",
           },
         ],
         "overloadedFn1": Object {
-          "__typename": "overloadedFnOutput",
+          "__typename": "TestContract2_overloadedFnOutput",
           "value0": "overloaded result 0",
           "value1": "0",
         },
         "overloadedFn2": Object {
-          "__typename": "overloadedFnOutput",
+          "__typename": "TestContract2_overloadedFnOutput",
           "value0": "overloaded result 2",
           "value1": "2",
         },
         "overloadedFn2_MULT": Array [
           Object {
-            "__typename": "overloadedFnOutput",
+            "__typename": "TestContract_overloadedFnOutput",
             "value0": "overloaded result 2",
             "value1": "2",
           },
           Object {
-            "__typename": "overloadedFnOutput",
+            "__typename": "TestContract_overloadedFnOutput",
             "value0": "overloaded result 2",
             "value1": "2",
           },
