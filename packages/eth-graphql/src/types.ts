@@ -21,5 +21,5 @@ export interface Config {
   contracts: ContractConfig[];
 }
 
-export type SoliditySingleValue = string | number | bigint | boolean | object;
+export type SoliditySingleValue = string | number | boolean | null | undefined | object;
 export type SolidityValue = SoliditySingleValue | SoliditySingleValue[];

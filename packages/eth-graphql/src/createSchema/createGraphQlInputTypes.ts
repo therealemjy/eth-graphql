@@ -1,18 +1,20 @@
 import { JsonFragmentType } from '@ethersproject/abi';
-import { GraphQLFieldConfig, GraphQLInputObjectType, GraphQLNonNull } from 'graphql';
+import { GraphQLFieldConfigArgumentMap, GraphQLInputObjectType, GraphQLNonNull } from 'graphql';
 
+import formatToEntityName from '../utilities/formatToEntityName';
 import createGraphQlType from './createGraphQlType';
-import formatToEntityName from './formatToEntityName';
 import { SharedGraphQlTypes } from './types';
 
 const createGraphQlInputTypes = ({
   components,
+  contractName,
   sharedGraphQlTypes,
 }: {
   components: ReadonlyArray<JsonFragmentType>;
+  contractName: string;
   sharedGraphQlTypes: SharedGraphQlTypes;
 }) =>
-  components.reduce<GraphQLFieldConfig<unknown, unknown, unknown>['args']>(
+  components.reduce<GraphQLFieldConfigArgumentMap>(
     (accArgs, component, componentIndex) => ({
       ...accArgs,
       [formatToEntityName({
@@ -22,6 +24,7 @@ const createGraphQlInputTypes = ({
       })]: {
         type: createGraphQlType({
           isInput: true,
+          contractName,
           component,
           sharedGraphQlTypes,
         }) as GraphQLNonNull<GraphQLInputObjectType>,

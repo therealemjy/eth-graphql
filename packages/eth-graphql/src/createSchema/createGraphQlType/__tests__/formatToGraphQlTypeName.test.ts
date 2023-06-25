@@ -1,25 +1,58 @@
-import { expect } from '@jest/globals';
-
-import formatToGraphQlTypeName from '../formatToGraphQlTypeName';
+import formatToGraphQlTypeName, { FormatToGraphQlTypeNameInput } from '../formatToGraphQlTypeName';
 
 describe('createSchema/createGraphQlType/formatToGraphQlTypeName', () => {
-  it('removes "struct "', () => {
-    const result = formatToGraphQlTypeName('struct FakeStruct');
-    expect(result).toMatchInlineSnapshot(`"FakeStruct"`);
+  it('should format type name correctly when isInput is false and type is not a struct', () => {
+    const params: FormatToGraphQlTypeNameInput = {
+      componentInternalType: 'Movie[3]',
+      contractName: 'ContractA',
+      isInput: false,
+    };
+
+    const result = formatToGraphQlTypeName(params);
+    expect(result).toEqual('ContractA_MovieOutput');
   });
 
-  it('replaces square brackets and their content', () => {
-    const result = formatToGraphQlTypeName('string[3]');
-    expect(result).toMatchInlineSnapshot(`"string"`);
+  it('should format type name correctly when isInput is true and type is not a struct', () => {
+    const params: FormatToGraphQlTypeNameInput = {
+      componentInternalType: 'Movie[3]',
+      contractName: 'ContractA',
+      isInput: true,
+    };
+
+    const result = formatToGraphQlTypeName(params);
+    expect(result).toEqual('ContractA_MovieInput');
   });
 
-  it('replaces dots with underscores', () => {
-    const result = formatToGraphQlTypeName('FakeContract.FakeStruct');
-    expect(result).toMatchInlineSnapshot(`"FakeContract_FakeStruct"`);
+  it('should format type name correctly when type is a struct and isInput is false', () => {
+    const params: FormatToGraphQlTypeNameInput = {
+      componentInternalType: 'struct ContractA.Movie[3]',
+      contractName: 'ContractA',
+      isInput: false,
+    };
+
+    const result = formatToGraphQlTypeName(params);
+    expect(result).toEqual('ContractA_Movie');
   });
 
-  it('formats argument to a valid GraphQL type name', () => {
-    const result = formatToGraphQlTypeName('struct FakeContract.FakeStruct[19]');
-    expect(result).toMatchInlineSnapshot(`"FakeContract_FakeStruct"`);
+  it('should format type name correctly when type is a struct and isInput is true', () => {
+    const params: FormatToGraphQlTypeNameInput = {
+      componentInternalType: 'struct ContractA.Movie[3]',
+      contractName: 'ContractA',
+      isInput: true,
+    };
+
+    const result = formatToGraphQlTypeName(params);
+    expect(result).toEqual('ContractA_MovieInput');
+  });
+
+  it('should handle type without special characters correctly', () => {
+    const params: FormatToGraphQlTypeNameInput = {
+      componentInternalType: 'Movie',
+      contractName: 'ContractA',
+      isInput: false,
+    };
+
+    const result = formatToGraphQlTypeName(params);
+    expect(result).toEqual('ContractA_MovieOutput');
   });
 });

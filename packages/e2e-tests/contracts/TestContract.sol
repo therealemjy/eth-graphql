@@ -64,8 +64,8 @@ contract TestContract {
     return 'string example';
   }
 
-  function getNamedString() public view returns (string memory movieTitle) {
-    return movies[0].title;
+  function getNamedString() public pure returns (string memory movieTitle) {
+    return 'named string example';
   }
 
   function getBoolean() public pure returns (bool) {

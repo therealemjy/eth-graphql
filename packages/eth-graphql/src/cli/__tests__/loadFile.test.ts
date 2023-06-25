@@ -8,7 +8,7 @@ jest.mock('jiti');
 jest.mock('path');
 jest.mock('../../EthGraphQlError');
 
-describe('loadFile', () => {
+describe('cli/loadFile', () => {
   test('should throw EthGraphQlError when given an invalid file extension', async () => {
     const invalidFileExtension = 'invalid';
     const filePath = `test.${invalidFileExtension}`;

@@ -1,6 +1,8 @@
+import { JsonFragment } from '@ethersproject/abi';
+import { Contract } from 'ethers';
 import { GraphQLInputType, GraphQLOutputType } from 'graphql';
 
-import { ContractConfig } from '../types';
+import { ContractConfig, SolidityValue } from '../types';
 
 export interface SharedGraphQlTypes {
   inputs: {
@@ -11,12 +13,23 @@ export interface SharedGraphQlTypes {
   };
 }
 
-export interface ContractMapping {
-  [contractName: string]: Omit<ContractConfig, 'name'>;
-}
-
 export interface FieldNameMapping {
   [contractName: string]: {
-    [fieldName: string]: string;
+    [fieldName: string]: {
+      contract: ContractConfig;
+      abiItem: JsonFragment;
+      isMult: boolean;
+    };
   };
+}
+
+export interface ContractCall {
+  contractName: string;
+  contractInstance: Contract;
+  contractFunctionSignature: string;
+  callArguments: readonly SolidityValue[];
+  fieldName: string;
+  abiItem: JsonFragment;
+  isMult: boolean;
+  indexInResultArray?: number;
 }

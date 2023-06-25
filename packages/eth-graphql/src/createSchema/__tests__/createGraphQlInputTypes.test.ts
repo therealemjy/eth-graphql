@@ -1,15 +1,17 @@
 import { JsonFragmentType } from '@ethersproject/abi';
 import { GraphQLInputObjectType, GraphQLNonNull } from 'graphql';
 
+import formatToEntityName from '../../utilities/formatToEntityName';
 import createGraphQlInputTypes from '../createGraphQlInputTypes';
 import createGraphQlType from '../createGraphQlType';
-import formatToEntityName from '../formatToEntityName';
 import { SharedGraphQlTypes } from '../types';
 
 jest.mock('../createGraphQlType');
-jest.mock('../formatToEntityName');
+jest.mock('../../utilities/formatToEntityName');
 
 describe('createSchema/createGraphQlInputTypes', () => {
+  const mockContractName = 'FakeContract';
+
   const mockComponents: ReadonlyArray<JsonFragmentType> = [
     { name: 'mockName1', type: 'string' },
     { name: 'mockName2', type: 'number' },
@@ -36,6 +38,7 @@ describe('createSchema/createGraphQlInputTypes', () => {
 
     const result = createGraphQlInputTypes({
       components: mockComponents,
+      contractName: mockContractName,
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });
     expect(result).toMatchInlineSnapshot(`
@@ -58,18 +61,21 @@ describe('createSchema/createGraphQlInputTypes', () => {
 
     createGraphQlInputTypes({
       components: mockComponents,
+      contractName: mockContractName,
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });
 
     expect(createGraphQlType).toBeCalledWith({
       isInput: true,
       component: mockComponents[0],
+      contractName: mockContractName,
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });
 
     expect(createGraphQlType).toBeCalledWith({
       isInput: true,
       component: mockComponents[1],
+      contractName: mockContractName,
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });
 

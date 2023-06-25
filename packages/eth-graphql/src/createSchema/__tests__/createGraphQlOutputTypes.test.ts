@@ -1,13 +1,15 @@
 import { JsonFragment } from '@ethersproject/abi';
 
-import createGraphQlOutputTypes from '../createGraphQlOutputTypes';
+import createGraphQlOutputType from '../createGraphQlOutputType';
 import createGraphQlType from '../createGraphQlType';
 import { GraphQlVoid } from '../scalars';
 import { SharedGraphQlTypes } from '../types';
 
 jest.mock('../createGraphQlType');
 
-describe('createSchema/createGraphQlOutputTypes', () => {
+describe('createSchema/createGraphQlOutputType', () => {
+  const mockContractName = 'FakeContract';
+
   const mockAbiItem: JsonFragment = {
     name: 'mockName',
     type: 'mockType',
@@ -26,8 +28,9 @@ describe('createSchema/createGraphQlOutputTypes', () => {
       outputs: {},
     };
 
-    const result = createGraphQlOutputTypes({
+    const result = createGraphQlOutputType({
       abiItem: mockAbiItem,
+      contractName: mockContractName,
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });
     expect(result).toEqual(GraphQlVoid);
@@ -41,13 +44,15 @@ describe('createSchema/createGraphQlOutputTypes', () => {
 
     const singleOutputAbiItem = { ...mockAbiItem, outputs: [{ type: 'uint8' }] };
 
-    createGraphQlOutputTypes({
+    createGraphQlOutputType({
       abiItem: singleOutputAbiItem,
+      contractName: mockContractName,
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });
 
     expect(createGraphQlType).toBeCalledWith({
       isInput: false,
+      contractName: mockContractName,
       component: singleOutputAbiItem.outputs[0],
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });
@@ -64,18 +69,20 @@ describe('createSchema/createGraphQlOutputTypes', () => {
       outputs: [{ type: 'uint8' }, { type: 'uint8' }],
     };
 
-    createGraphQlOutputTypes({
+    createGraphQlOutputType({
       abiItem: multipleOutputsAbiItem,
+      contractName: mockContractName,
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });
 
     expect(createGraphQlType).toBeCalledWith({
       isInput: false,
+      contractName: mockContractName,
       component: {
         ...multipleOutputsAbiItem,
         components: multipleOutputsAbiItem.outputs,
         type: 'tuple',
-        internalType: `${multipleOutputsAbiItem.name}Output`,
+        internalType: multipleOutputsAbiItem.name,
       },
       sharedGraphQlTypes: mockedSharedGraphQlTypes,
     });

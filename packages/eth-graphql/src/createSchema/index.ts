@@ -1,4 +1,3 @@
-import { Multicall, providers } from '@0xsequence/multicall';
 import {
   GraphQLFieldConfig,
   GraphQLInt,
@@ -13,16 +12,19 @@ import {
 
 import EthGraphQlError from '../EthGraphQlError';
 import { Config, SolidityValue } from '../types';
+import filterAbiItems from '../utilities/filterAbiItems';
 import createGraphQlInputTypes from './createGraphQlInputTypes';
-import createGraphQlOutputTypes from './createGraphQlOutputTypes';
-import formatToEntityName from './formatToEntityName';
+import createGraphQlMultInputTypes from './createGraphQlMultInputTypes';
+import createGraphQlMultOutputType from './createGraphQlMultOutputType';
+import createGraphQlOutputType from './createGraphQlOutputType';
 import formatToFieldName from './formatToFieldName';
-import formatToSignature from './formatToSignature';
 import makeCalls from './makeCalls';
-import { ContractMapping, FieldNameMapping, SharedGraphQlTypes } from './types';
+import resolve from './resolve';
+import { FieldNameMapping, SharedGraphQlTypes } from './types';
 import validateConfig from './validateConfig';
 
-const ROOT_NODE_NAME = 'contracts';
+const ROOT_FIELD_NAME = 'contracts';
+const MULT_CONTRACT_FIELD_SUFFIX = '_MULT';
 const addressesGraphQlInputType = new GraphQLNonNull(new GraphQLList(GraphQLString));
 
 const createSchema = (config: Config) => {
@@ -38,29 +40,14 @@ const createSchema = (config: Config) => {
     outputs: {},
   };
 
-  // Map contract names to their config
-  const contractMapping: ContractMapping = {};
-
-  // Mapping of GraphQL fields to contract functions
+  // Mapping of GraphQL fields to contracts
   const fieldMapping: FieldNameMapping = {};
 
   const contractsType = new GraphQLObjectType({
-    name: ROOT_NODE_NAME,
+    name: ROOT_FIELD_NAME,
     // Go through contracts and build field types
     fields: config.contracts.reduce((accContracts, contract) => {
-      // Add contract to mapping
-      contractMapping[contract.name] = {
-        abi: contract.abi,
-        address: contract.address,
-      };
-
-      // Filter out ABI items that aren't non-mutating named functions
-      const filteredContractAbiItems = contract.abi.filter(
-        abiItem =>
-          abiItem.type === 'function' &&
-          !!abiItem.name &&
-          (abiItem.stateMutability === 'view' || abiItem.stateMutability === 'pure'),
-      );
+      const filteredContractAbiItems = filterAbiItems(contract.abi);
 
       const contractType: GraphQLFieldConfig<{ [key: string]: SolidityValue }, unknown, unknown> = {
         type: new GraphQLNonNull(
@@ -70,16 +57,7 @@ const createSchema = (config: Config) => {
             fields: filteredContractAbiItems.reduce<
               ThunkObjMap<GraphQLFieldConfig<{ [key: string]: SolidityValue }, unknown, unknown>>
             >((accContractFields, abiItem, abiItemIndex) => {
-              // Filter out items that aren't non-mutating functions
-              if (
-                abiItem.type !== 'function' ||
-                !abiItem.name ||
-                (abiItem.stateMutability !== 'view' && abiItem.stateMutability !== 'pure')
-              ) {
-                return accContractFields;
-              }
-
-              const abiItemName = abiItem.name;
+              const abiItemName = abiItem.name!; // We've already filtered out nameless functions
               const abiInputs = abiItem.inputs || [];
 
               const contractFieldName = formatToFieldName({
@@ -88,74 +66,84 @@ const createSchema = (config: Config) => {
                 abi: filteredContractAbiItems,
               });
 
+              // Initialize field mapping if necessary
+              if (!fieldMapping[contract.name]) {
+                fieldMapping[contract.name] = {};
+              }
+
+              // Add field to field mapping
+              fieldMapping[contract.name][contractFieldName] = {
+                contract,
+                abiItem,
+                isMult: false,
+              };
+
+              const newAccContractFields: typeof accContractFields = {
+                ...accContractFields,
+              };
+
+              // Add field to schema
               const contractField: GraphQLFieldConfig<
                 { [key: string]: SolidityValue },
                 unknown,
                 unknown
               > = {
-                type: createGraphQlOutputTypes({
+                type: createGraphQlOutputType({
                   abiItem,
+                  contractName: contract.name,
                   sharedGraphQlTypes,
                 }),
-                resolve: (_obj: { [key: string]: SolidityValue }) => {
-                  const abiItemOutputs = abiItem.outputs || [];
-                  const data = _obj[contractFieldName];
-
-                  // Handle functions that return void
-                  if (abiItemOutputs.length === 0) {
-                    return undefined;
-                  }
-
-                  // Handle functions that return only one value
-                  if (abiItemOutputs.length === 1 || !Array.isArray(data)) {
-                    return data;
-                  }
-
-                  // If the output in the ABI contains multiple components, we
-                  // map them to an object, similarly to how they are mapped
-                  // in the GraphQL schema
-                  return abiItemOutputs.reduce<{
-                    [key: string]: SolidityValue;
-                  }>(
-                    (accFormattedData, outputComponent, outputComponentIndex) => ({
-                      ...accFormattedData,
-                      [formatToEntityName({
-                        name: outputComponent.name,
-                        index: outputComponentIndex,
-                        type: 'value',
-                      })]: data[outputComponentIndex],
-                    }),
-                    {},
-                  );
-                },
+                resolve,
               };
+
+              newAccContractFields[contractFieldName] = contractField;
 
               // Handle argument types
               if (abiInputs.length > 0) {
                 contractField.args = createGraphQlInputTypes({
                   components: abiInputs,
+                  contractName: contract.name,
                   sharedGraphQlTypes,
                 });
+
+                // Create a MULT field that can be used to call the same method
+                // with multiple sets of arguments
+                const multContractFieldName = `${contractFieldName}${MULT_CONTRACT_FIELD_SUFFIX}`;
+
+                // Add MULT field to field mapping
+                fieldMapping[contract.name][multContractFieldName] = {
+                  contract,
+                  abiItem,
+                  isMult: true,
+                };
+
+                // Add MULT field to schema
+                const multContractField: GraphQLFieldConfig<
+                  { [key: string]: SolidityValue },
+                  unknown,
+                  unknown
+                > = {
+                  ...contractField,
+                  type: createGraphQlMultOutputType({
+                    outputType: contractField.type,
+                    contractFieldName,
+                    sharedGraphQlTypes,
+                  }),
+                  args: createGraphQlMultInputTypes({
+                    inputTypes: contractField.args,
+                    contractFieldName,
+                    sharedGraphQlTypes,
+                  }),
+                };
+
+                newAccContractFields[multContractFieldName] = multContractField;
               }
 
-              const contractFunctionSignature = formatToSignature(abiItem);
-
-              // Initialize contract mapping if necessary
-              if (!fieldMapping[contract.name]) {
-                fieldMapping[contract.name] = {};
-              }
-
-              // Add field to contract mapping
-              fieldMapping[contract.name][contractFieldName] = contractFunctionSignature;
-
-              return {
-                ...accContractFields,
-                [contractFieldName]: contractField,
-              };
+              return newAccContractFields;
             }, {}),
           }),
         ),
-        resolve: (_obj: { [key: string]: SolidityValue }) => _obj[contract.name],
+        resolve,
       };
 
       // Add "addresses" input argument if contract in config does not have an
@@ -192,35 +180,13 @@ const createSchema = (config: Config) => {
           { chainId }: { chainId: number },
           _context: unknown,
           graphqlResolveInfo: GraphQLResolveInfo,
-        ) => {
-          const chainConfig = config.chains[chainId];
-
-          // Throw an error if no config has been provided for the requested chain ID
-          if (!chainConfig) {
-            throw new EthGraphQlError(`Missing config for chain ID ${chainId}`);
-          }
-
-          const multicallOptions: Partial<Multicall['options']> = {
-            batchSize: Infinity, // Do not limit the amount of concurrent requests per batch
-          };
-
-          if (chainConfig.multicallAddress) {
-            multicallOptions.contract = chainConfig.multicallAddress;
-          }
-
-          const multicallProvider = new providers.MulticallProvider(
-            chainConfig.provider,
-            multicallOptions,
-          );
-
-          return makeCalls({
+        ) =>
+          makeCalls({
             graphqlResolveInfo,
-            contractMapping,
             fieldMapping,
-            multicallProvider,
+            config,
             chainId,
-          });
-        },
+          }),
       },
     },
   });

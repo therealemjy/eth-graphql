@@ -4,7 +4,7 @@ import formatToEntityName from '../formatToEntityName';
 
 const fakeName = 'FakeName';
 
-describe('createSchema/formatToEntityName', () => {
+describe('utilities/formatToEntityName', () => {
   it('return name if it is defined', () => {
     const result = formatToEntityName({
       name: fakeName,

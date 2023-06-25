@@ -3,7 +3,7 @@ const formatToEntityName = ({
   index,
   type,
 }: {
-  name: string | undefined;
+  name?: string;
   index: number;
   type: 'arg' | 'value';
 }) =>
