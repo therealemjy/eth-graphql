@@ -1,5 +1,11 @@
 # eth-graphql
 
+## 1.1.0
+
+### Minor Changes
+
+- 2937d24: Add support for MULT field
+
 ## 1.0.0
 
 ### Major Changes
