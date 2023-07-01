@@ -1,6 +1,6 @@
 {
   "name": "eth-graphql",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Apollo link for retrieving contract data from EVM-compatible blockchains using GraphQL",
   "license": "MIT",
   "main": "./dist/index.js",

@@ -1,5 +1,11 @@
 # eth-graphql
 
+## 1.1.1
+
+### Patch Changes
+
+- a977137: make address arg of addresses input mandatory
+
 ## 1.1.0
 
 ### Minor Changes
