@@ -25,7 +25,9 @@ import validateConfig from './validateConfig';
 
 const ROOT_FIELD_NAME = 'contracts';
 const MULT_CONTRACT_FIELD_SUFFIX = '_MULT';
-const addressesGraphQlInputType = new GraphQLNonNull(new GraphQLList(GraphQLString));
+const addressesGraphQlInputType = new GraphQLNonNull(
+  new GraphQLList(new GraphQLNonNull(GraphQLString)),
+);
 
 const createSchema = (config: Config) => {
   // Validate user config
