@@ -1,5 +1,11 @@
 # eth-graphql
 
+## 1.1.2
+
+### Patch Changes
+
+- ff143d8: Fix issue where variables passed as arguments of a contract field would return an error
+
 ## 1.1.1
 
 ### Patch Changes
