@@ -1,37 +1,11 @@
-import { ArgumentNode, Kind, ValueNode } from 'graphql';
+import { ArgumentNode, Kind } from 'graphql';
 
 import formatGraphQlArgs from '../formatGraphQlArgs';
 
 describe('createSchema/makeCalls/formatGraphQlArgs', () => {
-  it.each([Kind.NULL, Kind.VARIABLE])(
-    'throws an error if one of the argument values is of the kind %s',
-    kind => {
-      const args: ArgumentNode[] = [
-        {
-          kind: Kind.ARGUMENT,
-          name: {
-            kind: Kind.NAME,
-            value: 'fake argument name',
-          },
-          value: {
-            kind,
-            value: 'fake value',
-          } as ValueNode,
-        },
-      ];
-
-      try {
-        formatGraphQlArgs(args);
-
-        throw new Error('formatGraphQlArgs should have thrown an error but did not');
-      } catch (error) {
-        expect(error).toMatchSnapshot();
-      }
-    },
-  );
-
   it('converts argument nodes to valid arguments', () => {
-    const args: ArgumentNode[] = [
+    const fakeVariableName = 'fakeVariable';
+    const argumentNodes: ArgumentNode[] = [
       {
         kind: Kind.ARGUMENT,
         name: {
@@ -143,9 +117,28 @@ describe('createSchema/makeCalls/formatGraphQlArgs', () => {
           value: '0',
         },
       },
+      {
+        kind: Kind.ARGUMENT,
+        name: {
+          kind: Kind.NAME,
+          value: 'fake name 8',
+        },
+        value: {
+          kind: Kind.VARIABLE,
+          name: {
+            kind: Kind.NAME,
+            value: fakeVariableName,
+          },
+        },
+      },
     ];
 
-    const res = formatGraphQlArgs(args);
+    const res = formatGraphQlArgs({
+      argumentNodes,
+      variableValues: {
+        [fakeVariableName]: 'fake variable value',
+      },
+    });
 
     expect(res).toMatchSnapshot();
   });

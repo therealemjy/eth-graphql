@@ -17,9 +17,6 @@ exports[`createSchema/makeCalls/formatGraphQlArgs converts argument nodes to val
   "100",
   "0.1",
   "0",
+  "fake variable value",
 ]
 `;
-
-exports[`createSchema/makeCalls/formatGraphQlArgs throws an error if one of the argument values is of the kind NullValue 1`] = `[Error: [eth-graphql] Incorrect valueNode kind detected: NullValue. There is likely an issue with an ABI inside your eth-graphql config file]`;
-
-exports[`createSchema/makeCalls/formatGraphQlArgs throws an error if one of the argument values is of the kind Variable 1`] = `[Error: [eth-graphql] Incorrect valueNode kind detected: Variable. There is likely an issue with an ABI inside your eth-graphql config file]`;

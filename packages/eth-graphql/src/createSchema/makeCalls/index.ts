@@ -76,19 +76,28 @@ const makeCalls = async ({ graphqlResolveInfo, fieldMapping, config, chainId }: 
       // Get contract address from config if it exists
       let contractAddresses = field.contract.address && [field.contract.address[chainId]];
 
-      // If contract was defined in config without an address property, then
-      // it means an array of addresses to call was passed as the first
+      // If contract was defined in config without an address property, then it
+      // means an array of addresses to call was passed as the first and only
       // argument of the contract field
       if (!contractAddresses) {
-        contractAddresses =
-          (graphqlResolveInfo.variableValues.addresses as string[]) ||
-          (formatGraphQlArgs(contractSelection.arguments || [])[0] as string[]);
+        const contractArguments = formatGraphQlArgs({
+          argumentNodes: contractSelection.arguments || [],
+          variableValues: graphqlResolveInfo.variableValues,
+        });
+
+        // Since the a contract field only accepts one "addresses" argument,
+        // then we know it is the first (and only) argument of the array
+        contractAddresses = contractArguments[0] as string[];
       }
 
       const hasDefinedAddress = !!field.contract.address;
 
       // Format arguments
-      const contractCallArguments = formatGraphQlArgs(callSelection.arguments || []);
+      const contractCallArguments = formatGraphQlArgs({
+        argumentNodes: callSelection.arguments || [],
+        variableValues: graphqlResolveInfo.variableValues,
+      });
+
       const contractFunctionSignature = formatToSignature(field.abiItem);
 
       // Shape a contract call for each contract address to call
