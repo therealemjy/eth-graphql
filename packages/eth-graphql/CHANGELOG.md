@@ -1,5 +1,11 @@
 # eth-graphql
 
+## 1.1.3
+
+### Patch Changes
+
+- 8b30030: Fix issue with argument order
+
 ## 1.1.2
 
 ### Patch Changes
