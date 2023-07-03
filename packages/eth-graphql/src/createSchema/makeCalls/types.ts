@@ -3,11 +3,15 @@ import { Contract } from 'ethers';
 
 import { SolidityValue } from '../../types';
 
+export interface ContractCallArgs {
+  [argumentName: string]: SolidityValue;
+}
+
 export interface ContractCall {
   contractName: string;
   contractInstance: Contract;
   contractFunctionSignature: string;
-  callArguments: readonly SolidityValue[];
+  callArguments: ContractCallArgs;
   fieldName: string;
   abiItem: JsonFragment;
   isMult: boolean;

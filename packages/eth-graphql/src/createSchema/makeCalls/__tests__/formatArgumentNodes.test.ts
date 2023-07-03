@@ -1,8 +1,8 @@
 import { ArgumentNode, Kind } from 'graphql';
 
-import formatGraphQlArgs from '../formatGraphQlArgs';
+import formatArgumentNodes from '../formatArgumentNodes';
 
-describe('createSchema/makeCalls/formatGraphQlArgs', () => {
+describe('createSchema/makeCalls/formatArgumentNodes', () => {
   it('converts argument nodes to valid arguments', () => {
     const fakeVariableName = 'fakeVariable';
     const argumentNodes: ArgumentNode[] = [
@@ -133,7 +133,7 @@ describe('createSchema/makeCalls/formatGraphQlArgs', () => {
       },
     ];
 
-    const res = formatGraphQlArgs({
+    const res = formatArgumentNodes({
       argumentNodes,
       variableValues: {
         [fakeVariableName]: 'fake variable value',

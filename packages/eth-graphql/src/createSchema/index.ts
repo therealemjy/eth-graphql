@@ -13,6 +13,12 @@ import {
 import EthGraphQlError from '../EthGraphQlError';
 import { Config, SolidityValue } from '../types';
 import filterAbiItems from '../utilities/filterAbiItems';
+import {
+  MULT_FIELD_SINGLE_ARGUMENT_NAME,
+  MULT_FIELD_SUFFIX,
+  ROOT_FIELD_NAME,
+  ROOT_FIELD_SINGLE_ARGUMENT_NAME,
+} from './constants';
 import createGraphQlInputTypes from './createGraphQlInputTypes';
 import createGraphQlMultInputTypes from './createGraphQlMultInputTypes';
 import createGraphQlMultOutputType from './createGraphQlMultOutputType';
@@ -23,8 +29,6 @@ import resolve from './resolve';
 import { FieldNameMapping, SharedGraphQlTypes } from './types';
 import validateConfig from './validateConfig';
 
-const ROOT_FIELD_NAME = 'contracts';
-const MULT_CONTRACT_FIELD_SUFFIX = '_MULT';
 const addressesGraphQlInputType = new GraphQLNonNull(
   new GraphQLList(new GraphQLNonNull(GraphQLString)),
 );
@@ -102,7 +106,7 @@ const createSchema = (config: Config) => {
 
               // Handle argument types
               if (abiInputs.length > 0) {
-                contractField.args = createGraphQlInputTypes({
+                contractField[MULT_FIELD_SINGLE_ARGUMENT_NAME] = createGraphQlInputTypes({
                   components: abiInputs,
                   contractName: contract.name,
                   sharedGraphQlTypes,
@@ -110,7 +114,7 @@ const createSchema = (config: Config) => {
 
                 // Create a MULT field that can be used to call the same method
                 // with multiple sets of arguments
-                const multContractFieldName = `${contractFieldName}${MULT_CONTRACT_FIELD_SUFFIX}`;
+                const multContractFieldName = `${contractFieldName}${MULT_FIELD_SUFFIX}`;
 
                 // Add MULT field to field mapping
                 fieldMapping[contract.name][multContractFieldName] = {
@@ -154,7 +158,7 @@ const createSchema = (config: Config) => {
       // wish to put the addresses of inside the config.
       if (!contract.address) {
         contractType.args = {
-          addresses: { type: addressesGraphQlInputType },
+          [ROOT_FIELD_SINGLE_ARGUMENT_NAME]: { type: addressesGraphQlInputType },
         };
 
         // Transform type into a list to reflect the fact an array of results

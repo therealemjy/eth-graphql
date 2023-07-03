@@ -303,14 +303,14 @@ describe('end-to-end tests', function () {
         value0
         value1
       }
-      overloadedFn2(arg0: "some-string", arg1: "10000000000000000000", arg2: "") {
+      overloadedFn2(arg0: "some-string", arg2: "", arg1: "10000000000000000000") {
         value0
         value1
       }
       overloadedFn2_MULT(
         args: [
-          { arg0: "some-string-0", arg1: "10000000000000000000", arg2: "1" }
-          { arg0: "some-string-1", arg1: "20000000000000000000", arg2: "8" }
+          { arg1: "10000000000000000000", arg0: "some-string-0", arg2: "1" }
+          { arg2: "8", arg0: "some-string-1", arg1: "20000000000000000000" }
         ]
       ) {
         value0
@@ -325,13 +325,13 @@ describe('end-to-end tests', function () {
     const data = await makeQuery(/* GraphQL */ `
       passMovie(
         someMovie: {
-          id: "0"
-          title: "fake movie"
           status: "1"
+          id: "0"
           director: {
             name: "fake director"
             walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
           }
+          title: "fake movie"
         }
       ) {
         id
@@ -346,24 +346,24 @@ describe('end-to-end tests', function () {
         args: [
           {
             someMovie: {
-              id: "0"
-              title: "fake movie 0"
-              status: "1"
               director: {
                 name: "fake director 0"
                 walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
               }
+              id: "0"
+              status: "1"
+              title: "fake movie 0"
             }
           }
           {
             someMovie: {
-              id: "1"
               title: "fake movie 1"
-              status: "0"
+              id: "1"
               director: {
                 name: "fake director 1"
                 walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
               }
+              status: "0"
             }
           }
         ]

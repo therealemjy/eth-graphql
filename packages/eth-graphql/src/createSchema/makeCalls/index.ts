@@ -3,12 +3,14 @@ import { Contract } from 'ethers';
 import { GraphQLResolveInfo, Kind } from 'graphql';
 
 import EthGraphQlError from '../../EthGraphQlError';
-import { Config, SolidityValue } from '../../types';
+import { Config } from '../../types';
 import formatToSignature from '../../utilities/formatToSignature';
+import { MULT_FIELD_SINGLE_ARGUMENT_NAME, ROOT_FIELD_SINGLE_ARGUMENT_NAME } from '../constants';
 import { FieldNameMapping } from '../types';
+import formatArgumentNodes from './formatArgumentNodes';
 import formatGraphQlArgs from './formatGraphQlArgs';
 import formatMulticallResults from './formatMulticallResults';
-import { ContractCall } from './types';
+import { ContractCall, ContractCallArgs } from './types';
 
 export interface MakeCallsInput {
   graphqlResolveInfo: GraphQLResolveInfo;
@@ -80,20 +82,20 @@ const makeCalls = async ({ graphqlResolveInfo, fieldMapping, config, chainId }: 
       // means an array of addresses to call was passed as the first and only
       // argument of the contract field
       if (!contractAddresses) {
-        const contractArguments = formatGraphQlArgs({
+        const contractArguments = formatArgumentNodes({
           argumentNodes: contractSelection.arguments || [],
           variableValues: graphqlResolveInfo.variableValues,
         });
 
         // Since the a contract field only accepts one "addresses" argument,
         // then we know it is the first (and only) argument of the array
-        contractAddresses = contractArguments[0] as string[];
+        contractAddresses = contractArguments[ROOT_FIELD_SINGLE_ARGUMENT_NAME] as string[];
       }
 
       const hasDefinedAddress = !!field.contract.address;
 
       // Format arguments
-      const contractCallArguments = formatGraphQlArgs({
+      const contractCallArguments = formatArgumentNodes({
         argumentNodes: callSelection.arguments || [],
         variableValues: graphqlResolveInfo.variableValues,
       });
@@ -110,7 +112,7 @@ const makeCalls = async ({ graphqlResolveInfo, fieldMapping, config, chainId }: 
 
         // Shape a contract call for each set of arguments
         const callArgumentSets = field.isMult
-          ? (contractCallArguments[0] as readonly SolidityValue[][])
+          ? (contractCallArguments[MULT_FIELD_SINGLE_ARGUMENT_NAME] as ContractCallArgs[])
           : [contractCallArguments];
 
         callArgumentSets.forEach(callArguments => {
@@ -136,9 +138,14 @@ const makeCalls = async ({ graphqlResolveInfo, fieldMapping, config, chainId }: 
 
   // Merge all calls into one using multicall contract
   const multicallResults = await Promise.all(
-    calls.map(({ contractInstance, contractFunctionSignature, callArguments }) =>
-      contractInstance[contractFunctionSignature](...callArguments),
-    ),
+    calls.map(({ contractInstance, contractFunctionSignature, callArguments, abiItem }) => {
+      const formattedCallArguments = formatGraphQlArgs({
+        callArguments,
+        abiItemInputs: abiItem.inputs || [],
+      });
+
+      return contractInstance[contractFunctionSignature](...formattedCallArguments);
+    }),
   );
 
   // Format and return results

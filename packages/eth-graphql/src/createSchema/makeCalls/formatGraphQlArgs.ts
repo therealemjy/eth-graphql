@@ -1,64 +1,26 @@
-import { ArgumentNode, GraphQLResolveInfo, Kind, ValueNode } from 'graphql';
+import { JsonFragmentType } from '@ethersproject/abi';
 
-import { SolidityValue } from '../../types';
-
-// Extract a node's value
-const getNodeValue = ({
-  valueNode,
-  variableValues,
-}: {
-  valueNode: ValueNode;
-  variableValues: GraphQLResolveInfo['variableValues'];
-}): SolidityValue => {
-  if (valueNode.kind === Kind.NULL) {
-    return null;
-  }
-
-  // Get variable node value
-  if (valueNode.kind === Kind.VARIABLE) {
-    const variableName = valueNode.name.value;
-    return variableValues[variableName] as SolidityValue;
-  }
-
-  // Convert list to array
-  if (valueNode.kind === Kind.LIST) {
-    return valueNode.values.map(node =>
-      getNodeValue({
-        valueNode: node,
-        variableValues,
-      }),
-    );
-  }
-
-  // Convert object to tuple
-  if (valueNode.kind === Kind.OBJECT) {
-    return valueNode.fields.map(field =>
-      getNodeValue({
-        valueNode: field.value,
-        variableValues,
-      }),
-    );
-  }
-
-  return valueNode.value;
-};
+import formatToEntityName from '../../utilities/formatToEntityName';
+import { ContractCallArgs } from './types';
 
 const formatGraphQlArgs = ({
-  argumentNodes,
-  variableValues,
+  callArguments,
+  abiItemInputs,
 }: {
-  argumentNodes: ReadonlyArray<ArgumentNode>;
-  variableValues: GraphQLResolveInfo['variableValues'];
+  callArguments: ContractCallArgs;
+  abiItemInputs: readonly JsonFragmentType[];
 }) =>
-  argumentNodes.reduce<ReadonlyArray<SolidityValue>>(
-    (accArguments, argument) => [
-      ...accArguments,
-      getNodeValue({
-        valueNode: argument.value,
-        variableValues,
-      }),
-    ],
-    [],
-  );
+  // Go through ABI item to format call args and return them in the correct
+  // order
+  abiItemInputs.map((component, componentIndex) => {
+    const argumentName = formatToEntityName({
+      name: component.name,
+      index: componentIndex,
+      type: 'arg',
+    });
+
+    const argumentValue = callArguments[argumentName];
+    return argumentValue;
+  });
 
 export default formatGraphQlArgs;

@@ -6,29 +6,29 @@ export const FINAL_BOSS_CALL_FRAGMENT = /* GraphQL */ `
   }
   movies(arg0: 0) {
     id
-    title
-    status
     director {
       name
       walletAddress
     }
+    status
+    title
   }
   getAllMovies {
     id
-    title
     status
     director {
       name
       walletAddress
     }
+    title
   }
   getMultipleValues {
     value0
-    value1
     value2 {
       name
       walletAddress
     }
+    value1
   }
   getNothing
   getString
@@ -44,10 +44,10 @@ export const FINAL_BOSS_CALL_FRAGMENT = /* GraphQL */ `
     value1
   }
   overloadedFn1 {
-    value0
     value1
+    value0
   }
-  overloadedFn2(arg0: "some-string", arg1: "10000000000000000000", arg2: "") {
+  overloadedFn2(arg1: "10000000000000000000", arg0: "some-string", arg2: "") {
     value0
     value1
   }
@@ -64,12 +64,12 @@ export const FINAL_BOSS_CALL_FRAGMENT = /* GraphQL */ `
   passMovie(
     someMovie: {
       id: "0"
-      title: "fake movie"
-      status: "1"
       director: {
         name: "fake director"
         walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
       }
+      status: "1"
+      title: "fake movie"
     }
   ) {
     id
@@ -134,8 +134,8 @@ export const FINAL_BOSS_CALL_FRAGMENT = /* GraphQL */ `
   }
   mayhem_MULT(args: [{
     arg0: "fake string 0"
-    someUint: 671432189
     arg2: ["1000000000000000000", "200000000000000000"]
+    someUint: 671432189
     someMovies: [
       {
         id: "0"
@@ -156,6 +156,7 @@ export const FINAL_BOSS_CALL_FRAGMENT = /* GraphQL */ `
         }
       }
     ]
+    someStatuses: [0, 1, 1, 1]
     someDirectors: [
       {
         name: "fake director 0"
@@ -166,11 +167,20 @@ export const FINAL_BOSS_CALL_FRAGMENT = /* GraphQL */ `
         walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
       }
     ]
-    someStatuses: [0, 1, 1, 1]
   }, {
-    arg0: "fake string 1"
     someUint: 671432189
     arg2: ["3000000000000000000", "400000000000000000"]
+    arg0: "fake string 1"
+    someDirectors: [
+      {
+        name: "fake director 2"
+        walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+      }
+      {
+        name: "fake director 3"
+        walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
+      }
+    ]
     someMovies: [
       {
         id: "2"
@@ -189,16 +199,6 @@ export const FINAL_BOSS_CALL_FRAGMENT = /* GraphQL */ `
           name: "fake director 1"
           walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
         }
-      }
-    ]
-    someDirectors: [
-      {
-        name: "fake director 2"
-        walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
-      }
-      {
-        name: "fake director 3"
-        walletAddress: "0xA5ae0b2386De51Aba852551A1EE828BfD598E111"
       }
     ]
     someStatuses: [1, 0, 1, 0]

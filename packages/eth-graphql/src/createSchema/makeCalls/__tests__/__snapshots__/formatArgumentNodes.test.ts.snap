@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createSchema/makeCalls/formatArgumentNodes converts argument nodes to valid arguments 1`] = `
+{
+  "fake name 0": [
+    [
+      "fake string 0",
+    ],
+  ],
+  "fake name 1": {
+    "fake name 2": {
+      "fake name 3": "fake string 1",
+    },
+  },
+  "fake name 4": "fake string 2",
+  "fake name 5": true,
+  "fake name 6": "100",
+  "fake name 7": "0",
+  "fake name 8": "fake variable value",
+}
+`;
